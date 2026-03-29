@@ -4,6 +4,7 @@ import { Pencil, Trash2, Globe2, Lock } from "lucide-react";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import { getLanguageColor } from "./LanguageColors";
+import ShareButton from "../ShareButton";
 
 export interface Snippet {
   id: string;
@@ -94,6 +95,9 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
 
         {/* Actions */}
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          {snippet.public && (
+            <ShareButton snippetId={snippet.id} iconSize={14} />
+          )}
           <button
             onClick={() => onEdit(snippet)}
             className="p-1.5 rounded-lg text-dracula-comment hover:text-dracula-purple hover:bg-dracula-purple/10 transition-colors"

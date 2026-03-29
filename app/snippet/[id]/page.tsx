@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Logo from "@/src/components/Logo";
 import { Calendar, Tag, User, Code2 } from "lucide-react";
 import CodeViewerClient from "@/src/components/viewer/CodeViewerClient";
+import ShareButton from "@/src/components/ShareButton";
 
 export default async function PublicSnippetPage({
   params,
@@ -65,9 +66,18 @@ export default async function PublicSnippetPage({
           )}
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-3 mt-2">
-            <div className="flex items-center gap-2 text-dracula-purple font-mono text-sm bg-dracula-purple/10 px-3 py-1.5 rounded-lg border border-dracula-purple/20">
-              <Code2 className="w-4 h-4" />
-              {snippet.language}
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 text-dracula-purple font-mono text-sm bg-dracula-purple/10 px-3 py-1.5 rounded-lg border border-dracula-purple/20">
+                <Code2 className="w-4 h-4" />
+                {snippet.language}
+              </div>
+              {snippet.public && (
+                <ShareButton 
+                  snippetId={snippet.id} 
+                  iconSize={18} 
+                  className="bg-dracula-card/30 border border-dracula-card/60 p-2" 
+                />
+              )}
             </div>
             
             {snippet.tags.length > 0 && (
