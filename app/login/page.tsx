@@ -12,11 +12,12 @@ export default async function LoginPage() {
     <div
       className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center p-4 relative"
     >
-      {/* Back button / Logo */}
-      <Logo />
+      <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 py-5 border-b border-dracula-card/60 backdrop-blur-md bg-dracula-bg/80">
+        <Logo />
+      </nav>
 
       {/* Login Box */}
-      <div 
+      <div
         className="w-full bg-dracula-bg max-w-sm rounded-3xl p-8 flex flex-col items-center shadow-2xl backdrop-blur-sm border border-white/5"
       >
         <h1 className="text-2xl font-bold mb-2">Entrar</h1>

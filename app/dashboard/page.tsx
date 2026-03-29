@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Plus, Code2, LogOut, Package, RefreshCw } from "lucide-react";
+import { Plus, Code2, LogOut, Package, RefreshCw, Globe } from "lucide-react";
 import SearchBar from "@/src/components/main/SearchBar";
 import SnippetCard, { type Snippet } from "@/src/components/dashboard/SnippetCard";
 import CreateSnippetModal from "@/src/components/dashboard/CreateSnippetModal";
@@ -26,10 +26,17 @@ function filterSnippets(snippets: Snippet[], query: string): Snippet[] {
 
 export default function DashboardPage() {
   const [query,     setQuery]     = useState("");
+  const [isGlobal,  setIsGlobal]  = useState(false);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
   const [modal,     setModal]     = useState<ModalState>("none");
   const [selected,  setSelected]  = useState<Snippet | null>(null);
 
-  const { snippets, loading, error, fetchSnippets } = useSnippets(true);
+  const { snippets, loading, error, fetchSnippets, fetchGlobalSnippets } = useSnippets(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedQuery(query), 400);
+    return () => clearTimeout(timer);
+  }, [query]);
 
   const searchRef = useRef<HTMLDivElement>(null);
 
@@ -46,7 +53,13 @@ export default function DashboardPage() {
     return () => window.removeEventListener("keydown", handler);
   }, []);
 
-  useEffect(() => { fetchSnippets(); }, [fetchSnippets]);
+  useEffect(() => {
+    if (isGlobal) {
+      fetchGlobalSnippets(debouncedQuery);
+    } else {
+      fetchSnippets();
+    }
+  }, [isGlobal, debouncedQuery, fetchSnippets, fetchGlobalSnippets]);
 
   // ── Modal helpers ────────────────────────────────────
   const openCreate = () => setModal("create");
@@ -54,7 +67,7 @@ export default function DashboardPage() {
   const openDelete = (s: Snippet) => { setSelected(s); setModal("delete"); };
   const closeModal = () => { setModal("none"); setSelected(null); };
 
-  const filtered = filterSnippets(snippets, query);
+  const filtered = isGlobal ? snippets : filterSnippets(snippets, query);
 
   return (
     <div className="min-h-screen bg-dracula-bg text-dracula-fg flex flex-col">
@@ -107,9 +120,23 @@ export default function DashboardPage() {
           </button>
         </div>
 
-        {/* Search bar */}
-        <div ref={searchRef}>
-          <SearchBar value={query} onChange={setQuery} />
+        {/* Search bar and Global Toggle */}
+        <div className="flex flex-col sm:flex-row gap-4 items-center" ref={searchRef}>
+          <div className="flex-1 w-full relative">
+            <SearchBar value={query} onChange={setQuery} />
+          </div>
+          <button
+            onClick={() => setIsGlobal(!isGlobal)}
+            className={`flex items-center gap-2 px-4 py-3 rounded-2xl border transition-all text-sm font-medium whitespace-nowrap ${
+              isGlobal
+                ? "bg-dracula-purple/10 border-dracula-purple text-dracula-purple shadow-sm shadow-dracula-purple/20"
+                : "bg-dracula-card/30 border-dracula-card text-dracula-comment hover:text-dracula-fg hover:border-dracula-comment/50"
+            }`}
+            title="Alternar busca global"
+          >
+            <Globe className="w-5 h-5" />
+            <span className="hidden sm:inline">Busca Global</span>
+          </button>
         </div>
 
         {/* ── States ──────────────────────────────────── */}

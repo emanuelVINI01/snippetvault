@@ -30,6 +30,21 @@ export function useSnippets(initialLoading = false) {
     }
   }, [router]);
 
+  const fetchGlobalSnippets = useCallback(async (query: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/snippets/search?q=${encodeURIComponent(query)}`);
+      if (!res.ok) throw new Error("Erro ao buscar snippets globais.");
+      const data = await res.json();
+      setSnippets(data);
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : "Erro inesperado.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   const createSnippet = async (data: { title: string; language: string; description?: string; code: string; public?: boolean; tags?: string[] }) => {
     const res = await fetch("/api/snippets", {
       method: "POST",
@@ -60,6 +75,7 @@ export function useSnippets(initialLoading = false) {
     loading,
     error,
     fetchSnippets,
+    fetchGlobalSnippets,
     createSnippet,
     updateSnippet,
     deleteSnippet,
