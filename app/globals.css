@@ -1,26 +1,88 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Dracula base palette */
+  --dracula-bg:      #282a36;
+  --dracula-card:    #44475a;
+  --dracula-fg:      #f8f8f2;
+  --dracula-comment: #6272a4;
+  --dracula-cyan:    #8be9fd;
+  --dracula-purple:  #bd93f9;
+  --dracula-green:   #50fa7b;
+  --dracula-red:     #ff5555;
+
+  /* Legacy aliases (keep for backward compat) */
+  --background:    var(--dracula-bg);
+  --foreground:    var(--dracula-fg);
+  --comment:       var(--dracula-comment);
+  --purple:        var(--dracula-purple);
+  --red:           var(--dracula-red);
+  --green:         var(--dracula-green);
+  --cyan:          var(--dracula-cyan);
+  --current-line:  var(--dracula-card);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* Dracula design tokens → Tailwind class suffix */
+  --color-dracula-bg:      var(--dracula-bg);
+  --color-dracula-card:    var(--dracula-card);
+  --color-dracula-fg:      var(--dracula-fg);
+  --color-dracula-comment: var(--dracula-comment);
+  --color-dracula-cyan:    var(--dracula-cyan);
+  --color-dracula-purple:  var(--dracula-purple);
+  --color-dracula-green:   var(--dracula-green);
+  --color-dracula-red:     var(--dracula-red);
+
+  /* Legacy aliases */
+  --color-background:    var(--dracula-bg);
+  --color-foreground:    var(--dracula-fg);
+  --color-comment:       var(--dracula-comment);
+  --color-purple:        var(--dracula-purple);
+  --color-red:           var(--dracula-red);
+  --color-green:         var(--dracula-green);
+  --color-cyan:          var(--dracula-cyan);
+  --color-current-line:  var(--dracula-card);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  /* Modal animation */
+  --animate-modal-in: modal-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in:  fadeIn 0.4s ease-out forwards;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--dracula-bg);
+  color: var(--dracula-fg);
 }
+
+/* ── Animations ──────────────────────────────── */
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink { animation: blink 1s step-start infinite; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-in { animation: fadeIn 0.4s ease-out forwards; }
+
+@keyframes modal-in {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes overlay-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(189, 147, 249, 0); }
+  50%       { box-shadow: 0 0 12px 4px rgba(189, 147, 249, 0.25); }
+}
+.stat-card { animation: pulse-glow 3s ease-in-out infinite; }
+
