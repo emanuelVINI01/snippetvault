@@ -2,6 +2,7 @@
 
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import CopyButton from "../CopyButton";
 
 interface CodeViewerClientProps {
   code: string;
@@ -12,7 +13,16 @@ export default function CodeViewerClient({ code, language }: CodeViewerClientPro
   const lang = language.toLowerCase();
 
   return (
-    <div className="overflow-x-auto text-sm font-mono leading-loose relative">
+    <div className="group relative">
+      <div className="absolute right-4 top-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+        <CopyButton 
+          content={code} 
+          iconSize={14} 
+          label="Copiar"
+          className="bg-dracula-bg/80 backdrop-blur-sm border-dracula-card/60 px-3 py-1.5" 
+        />
+      </div>
+      <div className="overflow-x-auto text-sm font-mono leading-loose relative">
       <SyntaxHighlighter
         language={lang}
         style={dracula}
@@ -34,5 +44,6 @@ export default function CodeViewerClient({ code, language }: CodeViewerClientPro
         {code || " "}
       </SyntaxHighlighter>
     </div>
+  </div>
   );
 }

@@ -3,6 +3,7 @@
 import { Pencil, Trash2, Globe2, Lock } from "lucide-react";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import CopyButton from "../CopyButton";
 import { getLanguageColor } from "./LanguageColors";
 import ShareButton from "../ShareButton";
 
@@ -95,6 +96,7 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
 
         {/* Actions */}
         <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+          <CopyButton content={snippet.code} iconSize={14} />
           {snippet.public && (
             <ShareButton snippetId={snippet.id} iconSize={14} />
           )}
