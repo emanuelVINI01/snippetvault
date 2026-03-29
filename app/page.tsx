@@ -1,14 +1,14 @@
-"use client";
-
 import Link from "next/link";
-import { Code2, Search, Tag, Zap, Lock, Globe2 } from "lucide-react";
+import { Search, Tag, Zap, Lock, Globe2, LayoutDashboard } from "lucide-react";
 
 import { FaGithub } from "react-icons/fa";
 
+import { auth } from "@/src/auth";
 import Features from "../src/components/main/Features";
 import HowItWorks from "../src/components/main/HowItWorks";
 import CodePreview from "../src/components/main/CodePreview";
 import FAQ from "../src/components/main/FAQ";
+import Logo from "@/src/components/Logo";
 
 
 const MOCK_SNIPPETS = [
@@ -29,23 +29,32 @@ const LANG_COLORS: Record<string, string> = {
   Go:         "text-dracula-cyan  bg-dracula-cyan/10  border-dracula-cyan/30",
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const session = await auth();
+
   return (
     <div className="min-h-screen bg-dracula-bg text-dracula-fg font-sans flex flex-col">
 
       {/* ── Nav ─────────────────────────────────────── */}
       <nav className="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-8 py-5 border-b border-dracula-card/60 backdrop-blur-md bg-dracula-bg/80">
-        <div className="flex items-center gap-2.5">
-          <Code2 className="w-5 h-5 text-dracula-purple" />
-          <span className="font-bold text-base tracking-tight text-dracula-fg">SnippetVault</span>
-        </div>
-        <Link
-          href="/login"
-          className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-dracula-purple/15 text-dracula-purple border border-dracula-purple/30 hover:bg-dracula-purple/25 transition-all duration-200"
-        >
-          <FaGithub className="w-4 h-4" />
-          Entrar
-        </Link>
+        <Logo />
+        {session ? (
+          <Link
+            href="/dashboard"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-dracula-purple/15 text-dracula-purple border border-dracula-purple/30 hover:bg-dracula-purple/25 transition-all duration-200"
+          >
+            <LayoutDashboard className="w-4 h-4" />
+            Dashboard
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-dracula-purple/15 text-dracula-purple border border-dracula-purple/30 hover:bg-dracula-purple/25 transition-all duration-200"
+          >
+            <FaGithub className="w-4 h-4" />
+            Entrar
+          </Link>
+        )}
       </nav>
 
       {/* ── Hero ────────────────────────────────────── */}
@@ -72,13 +81,23 @@ export default function HomePage() {
         </p>
 
         {/* CTA */}
-        <Link
-          href="/login"
-          className="group flex items-center gap-3 px-7 py-4 rounded-xl bg-dracula-purple text-dracula-bg font-bold text-base shadow-lg shadow-dracula-purple/25 hover:shadow-dracula-purple/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
-        >
-          <FaGithub className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-          Entrar com GitHub
-        </Link>
+        {session ? (
+          <Link
+            href="/dashboard"
+            className="group flex items-center gap-3 px-8 py-4 rounded-xl bg-dracula-purple text-dracula-bg font-bold text-lg shadow-lg shadow-dracula-purple/25 hover:shadow-dracula-purple/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+          >
+            <LayoutDashboard className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+            Acessar meu Dashboard
+          </Link>
+        ) : (
+          <Link
+            href="/login"
+            className="group flex items-center gap-3 px-7 py-4 rounded-xl bg-dracula-purple text-dracula-bg font-bold text-base shadow-lg shadow-dracula-purple/25 hover:shadow-dracula-purple/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
+          >
+            <FaGithub className="w-5 h-5 group-hover:rotate-12 transition-transform" />
+            Entrar com GitHub
+          </Link>
+        )}
 
         {/* Trust tags */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-5 text-sm text-dracula-comment">

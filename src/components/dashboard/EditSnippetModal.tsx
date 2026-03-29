@@ -3,6 +3,8 @@
 import { useState, useRef, KeyboardEvent, useEffect } from "react";
 import Modal from "./Modal";
 import { X } from "lucide-react";
+import CodeEditor from "./CodeEditor";
+import { COMMON_LANGUAGES } from "./LanguageColors";
 import type { Snippet } from "./SnippetCard";
 import { useSnippets } from "@/src/hook/use-snippets-hook";
 
@@ -13,11 +15,7 @@ interface EditSnippetModalProps {
   snippet: Snippet | null;
 }
 
-const COMMON_LANGUAGES = [
-  "TypeScript", "JavaScript", "Python", "Go", "Rust", "SQL",
-  "Bash", "Shell", "CSS", "SCSS", "HTML", "JSON", "YAML",
-  "C", "C++", "Java", "PHP", "Ruby", "Swift", "Kotlin",
-];
+
 
 const INPUT_CLASS =
   "w-full rounded-xl bg-dracula-card/40 border border-dracula-card text-dracula-fg text-sm px-3.5 py-2.5 placeholder:text-dracula-comment/60 outline-none focus:border-dracula-purple focus:ring-2 focus:ring-dracula-purple/20 transition-all duration-150";
@@ -108,16 +106,16 @@ export default function EditSnippetModal({ isOpen, onClose, onUpdated, snippet }
           <input className={INPUT_CLASS} placeholder="Uma breve descrição" value={description} onChange={(e) => setDescription(e.target.value)} />
         </div>
 
-        {/* Code */}
         <div className="flex flex-col gap-1.5">
           <label className="text-xs font-medium text-dracula-comment">Código *</label>
-          <textarea
-            className={`${INPUT_CLASS} font-mono resize-y min-h-[160px]`}
+          <CodeEditor
             value={code}
-            onChange={(e) => setCode(e.target.value)}
-            spellCheck={false}
+            onChange={setCode}
+            language={language}
+            placeholder="Cole ou escreva seu código aqui..."
           />
         </div>
+
 
         {/* Tags */}
         <div className="flex flex-col gap-1.5">

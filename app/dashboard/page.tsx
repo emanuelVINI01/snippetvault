@@ -8,6 +8,7 @@ import CreateSnippetModal from "@/src/components/dashboard/CreateSnippetModal";
 import EditSnippetModal from "@/src/components/dashboard/EditSnippetModal";
 import ConfirmDeleteModal from "@/src/components/dashboard/ConfirmDeleteModal";
 import { useSnippets } from "@/src/hook/use-snippets-hook";
+import Logo from "@/src/components/Logo";
 
 type ModalState = "none" | "create" | "edit" | "delete";
 
@@ -60,10 +61,7 @@ export default function DashboardPage() {
 
       {/* ── Topbar ────────────────────────────────────── */}
       <header className="sticky top-0 z-40 flex items-center justify-between px-6 py-4 border-b border-dracula-card/60 bg-dracula-bg/90 backdrop-blur-md">
-        <div className="flex items-center gap-2.5">
-          <Code2 className="w-5 h-5 text-dracula-purple" />
-          <span className="font-bold text-base tracking-tight">SnippetVault</span>
-        </div>
+        <Logo />
         <div className="flex items-center gap-3">
           <button
             onClick={fetchSnippets}

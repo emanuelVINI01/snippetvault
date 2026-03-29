@@ -3,6 +3,7 @@
 import { Pencil, Trash2, Globe2, Lock } from "lucide-react";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { getLanguageColor } from "./LanguageColors";
 
 export interface Snippet {
   id: string;
@@ -22,18 +23,6 @@ interface SnippetCardProps {
   onDelete: (snippet: Snippet) => void;
 }
 
-const LANG_COLORS: Record<string, string> = {
-  typescript: "text-dracula-cyan  bg-dracula-cyan/10  border-dracula-cyan/30",
-  javascript: "text-dracula-green bg-dracula-green/10 border-dracula-green/30",
-  python:     "text-dracula-green bg-dracula-green/10 border-dracula-green/30",
-  sql:        "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
-  bash:       "text-dracula-comment bg-dracula-comment/10 border-dracula-comment/30",
-  shell:      "text-dracula-comment bg-dracula-comment/10 border-dracula-comment/30",
-  css:        "text-dracula-red  bg-dracula-red/10  border-dracula-red/30",
-  go:         "text-dracula-cyan  bg-dracula-cyan/10  border-dracula-cyan/30",
-  rust:       "text-dracula-red  bg-dracula-red/10  border-dracula-red/30",
-};
-
 // Trim code preview to first 15 lines
 function previewCode(code: string): string {
   const lines = code.split("\n");
@@ -43,7 +32,7 @@ function previewCode(code: string): string {
 
 export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardProps) {
   const langKey = snippet.language.toLowerCase();
-  const langClass = LANG_COLORS[langKey] ?? "text-dracula-comment bg-dracula-comment/10 border-dracula-comment/30";
+  const langClass = getLanguageColor(snippet.language);
 
   return (
     <article className="group flex flex-col rounded-2xl border border-dracula-card hover:border-dracula-purple/40 bg-dracula-card/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-dracula-purple/10 overflow-hidden">
