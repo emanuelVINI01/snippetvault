@@ -13,7 +13,7 @@ export default function Footer() {
                         <span>SnippetVault</span>
                     </div>
                     <p className="text-sm text-dracula-comment text-center md:text-left max-w-sm leading-relaxed">
-                        Sua abóboda de snippets. Organize, salve e compartilhe seu código com segurança e estilo.
+                        Case full-stack de portfólio para demonstrar autenticação, dados, dashboard, busca e compartilhamento com uma interface Dracula.
                     </p>
                 </div>
 
@@ -27,6 +27,14 @@ export default function Footer() {
                     >
                         <FaGithub className="w-4 h-4" />
                         <span className="font-medium">emanuelVINI01/snippetvault</span>
+                    </a>
+                    <a
+                        href="https://snippetvault.emanuelvini.dev"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-dracula-purple hover:text-dracula-fg transition-colors font-medium underline decoration-dracula-purple/30 hover:decoration-dracula-purple underline-offset-4"
+                    >
+                        snippetvault.emanuelvini.dev
                     </a>
 
                     <div className="flex items-center gap-1.5 mt-2">

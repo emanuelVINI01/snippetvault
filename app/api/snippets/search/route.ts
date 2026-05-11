@@ -8,7 +8,7 @@ export async function GET(req: Request) {
 
     const snippets = await SnippetService.searchPublic(query);
     return NextResponse.json(snippets);
-  } catch (error) {
+  } catch {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }

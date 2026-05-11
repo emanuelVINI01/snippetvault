@@ -3,18 +3,18 @@ import { LogIn, Save, Search } from "lucide-react";
 const STEPS = [
   {
     icon: <LogIn className="w-5 h-5 text-dracula-purple" />,
-    title: "Faça Login",
-    description: "Entre rapidamente usando sua conta do GitHub em poucos cliques.",
+    title: "Autenticação",
+    description: "O usuário entra com GitHub e acessa um ambiente privado para gerenciar seus registros.",
   },
   {
     icon: <Save className="w-5 h-5 text-dracula-green" />,
-    title: "Salve seu Código",
-    description: "Cole o snippet, escolha a linguagem, adicione tags e pronto.",
+    title: "Cadastro Estruturado",
+    description: "Cada snippet passa por campos claros, linguagem, tags, visibilidade e validação de dados.",
   },
   {
     icon: <Search className="w-5 h-5 text-dracula-cyan" />,
-    title: "Encontre Sempre",
-    description: "Sempre que precisar, busque e copie seu código num piscar de olhos.",
+    title: "Consulta e Compartilhamento",
+    description: "O dashboard permite busca rápida, cópia, edição e páginas públicas para itens compartilháveis.",
   },
 ];
 
@@ -26,7 +26,7 @@ export default function HowItWorks() {
 
       <div className="max-w-4xl mx-auto relative z-10 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold mb-16 text-dracula-fg">
-          Como funciona?
+          Fluxo do produto
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">

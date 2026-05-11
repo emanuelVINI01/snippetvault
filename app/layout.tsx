@@ -16,14 +16,15 @@ const geistMono = Geist_Mono({
 
 
 export const metadata: Metadata = {
-  title: 'SnippetVault | Seu Cofre de Código Pessoal',
-  description: 'Organize, armazene e recupere seus trechos de código favoritos instantaneamente. Otimizado para desenvolvedores poliglotas com tema Dracula.',
-  keywords: ['code snippets', 'gerenciador de código', 'programação', 'dracula theme', 'developer tools', 'github auth'],
-  authors: [{ name: 'Emanuel', url: 'https://github.com/emanuelVINI01' }],
+  metadataBase: new URL('https://snippetvault.emanuelvini.dev'),
+  title: 'SnippetVault | Case Full-Stack de Portfólio',
+  description: 'Case de portfólio full-stack para organização de conhecimento técnico, com autenticação GitHub, dashboard, busca pública e tema Dracula.',
+  keywords: ['code snippets', 'portfolio full-stack', 'next.js', 'prisma', 'nextauth', 'developer tools', 'github auth'],
+  authors: [{ name: 'emanuelVINI', url: 'https://github.com/emanuelVINI01' }],
   openGraph: {
-    title: 'SnippetVault - Proteja seu conhecimento',
-    description: 'Nunca mais perca aquele comando de Git ou configuração de banco de dados. Salve tudo no seu cofre pessoal.',
-    url: 'https://snippetvault-delta.vercel.app', // Sua URL real aqui
+    title: 'SnippetVault - Case Full-Stack',
+    description: 'Aplicação de portfólio com autenticação, CRUD, busca pública, dashboard e experiência dark-first para desenvolvedores.',
+    url: 'https://snippetvault.emanuelvini.dev',
     siteName: 'SnippetVault',
     images: [
       {
@@ -38,8 +39,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SnippetVault | O cofre do desenvolvedor',
-    description: 'Gerencie seus snippets com tags e busca instantânea.',
+    title: 'SnippetVault | Case Full-Stack',
+    description: 'Projeto para demonstrar arquitetura, autenticação, dados e UX em uma aplicação real.',
     images: ['/snippet_dash.png'],
   },
 }

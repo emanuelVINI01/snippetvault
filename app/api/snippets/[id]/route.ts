@@ -2,6 +2,7 @@ import { auth } from "@/src/auth";
 import { SnippetService } from "@/src/services/snippet-service";
 import { updateSnippetSchema } from "@/src/lib/validations/snippet";
 import { NextResponse } from "next/server";
+import { ZodError } from "zod";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
@@ -13,7 +14,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     // We could check if it's public, and if not, check session user id.
     // For now returning it as per requirements.
     return NextResponse.json(snippet);
-  } catch (error) {
+  } catch {
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
@@ -28,9 +29,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
     const validatedData = updateSnippetSchema.parse(body);
     const updated = await SnippetService.update(id, session.user.id, validatedData);
     return NextResponse.json(updated);
-  } catch (error: any) {
-    if (error.name === "ZodError") {
-      return NextResponse.json({ errors: error.errors }, { status: 400 });
+  } catch (error) {
+    if (error instanceof ZodError) {
+      return NextResponse.json({ errors: error.issues }, { status: 400 });
     }
     return new NextResponse("Internal Server Error", { status: 500 });
   }

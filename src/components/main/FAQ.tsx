@@ -5,20 +5,20 @@ import { ChevronDown } from "lucide-react";
 
 const FAQS = [
   {
-    q: "O SnippetVault é gratuito?",
-    a: "Sim! Criamos o SnippetVault para a comunidade de desenvolvedores e suas as funções básicas são totalmente gratuitas."
+    q: "Por que o SnippetVault existe?",
+    a: "Ele funciona como um case de portfólio para demonstrar uma aplicação full-stack completa, com autenticação, persistência, dashboard, busca pública e compartilhamento."
   },
   {
-    q: "Preciso ter uma conta no GitHub para usar?",
-    a: "No momento sim, usamos a autenticação via GitHub para agilizar o login e garantir a segurança dos desenvolvedores na plataforma."
+    q: "Quais decisões técnicas ele demonstra?",
+    a: "O projeto mostra integração com NextAuth, modelagem com Prisma, validação com Zod, rotas de API, separação entre dados privados e públicos, e UI dark responsiva."
   },
   {
-    q: "Os meus snippets ficam públicos para todos?",
-    a: "Você que decide. É possível marcar os snippets como privados (só você vê) ou públicos (outras pessoas podem ver através da busca global)."
+    q: "É um produto real ou apenas uma landing page?",
+    a: "É uma aplicação funcional. A landing explica o projeto, mas o dashboard permite criar, editar, buscar, copiar e compartilhar snippets."
   },
   {
-    q: "Quais linguagens são suportadas?",
-    a: "Aceitamos qualquer tipo de texto ou código no salvamento, e fazemos o highlight inteligente para dezenas das principais linguagens: TypeScript, Python, Go, Rust, SQL, Bash e muitas outras."
+    q: "O que um recrutador consegue avaliar no projeto?",
+    a: "Domínio de produto, backend, autenticação, banco de dados, validação, organização de código e acabamento visual em um projeto pequeno o suficiente para avaliação rápida."
   }
 ];
 
@@ -33,7 +33,7 @@ export default function FAQ() {
     <section className="py-24 px-6 relative">
       <div className="max-w-3xl mx-auto">
         <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center text-dracula-fg">
-          Dúvidas Frequentes
+          Perguntas do case
         </h2>
 
         <div className="space-y-4">

@@ -62,22 +62,23 @@ export default async function HomePage() {
         {/* Badge */}
         <div className="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-dracula-purple/25 bg-dracula-purple/8 text-dracula-purple text-xs font-semibold tracking-widest uppercase">
           <Zap className="w-3 h-3" />
-          Seus snippets, organizados
+          Case full-stack de portfólio
         </div>
 
         {/* Headline */}
         <h1 className="max-w-3xl text-5xl sm:text-6xl lg:text-7xl font-extrabold leading-[1.1] tracking-tight mb-6">
-          O cofre dos seus{" "}
+          Plataforma para organizar{" "}
           <span className="relative">
-            <span className="text-dracula-purple">melhores</span>
+            <span className="text-dracula-purple">conhecimento</span>
           </span>
-          {" "}snippets
+          {" "}técnico
         </h1>
 
         {/* Subtitle */}
         <p className="max-w-xl text-lg sm:text-xl text-dracula-comment leading-relaxed mb-10">
-          Salve, organize e encontre qualquer trecho de código em segundos.
-          Suporte a múltiplas linguagens, tags e busca instantânea.
+          O SnippetVault mostra uma aplicação full-stack real em escala de portfólio:
+          autenticação GitHub, dashboard, CRUD validado, busca pública e uma
+          experiência dark-first pensada para desenvolvedores.
         </p>
 
         {/* CTA */}
@@ -87,7 +88,7 @@ export default async function HomePage() {
             className="group flex items-center gap-3 px-8 py-4 rounded-xl bg-dracula-purple text-dracula-bg font-bold text-lg shadow-lg shadow-dracula-purple/25 hover:shadow-dracula-purple/40 hover:scale-[1.03] active:scale-[0.98] transition-all duration-200"
           >
             <LayoutDashboard className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-            Acessar meu Dashboard
+            Acessar dashboard
           </Link>
         ) : (
           <Link
@@ -101,11 +102,11 @@ export default async function HomePage() {
 
         {/* Trust tags */}
         <div className="mt-8 flex flex-wrap items-center justify-center gap-5 text-sm text-dracula-comment">
-          <span className="flex items-center gap-1.5"><Lock className="w-3.5 h-3.5 text-dracula-green" /> Autenticação segura</span>
+          <span className="flex items-center gap-1.5"><Lock className="w-3.5 h-3.5 text-dracula-green" /> NextAuth + GitHub</span>
           <span className="h-4 w-px bg-dracula-card" />
-          <span className="flex items-center gap-1.5"><Globe2 className="w-3.5 h-3.5 text-dracula-cyan" /> Snippets públicos</span>
+          <span className="flex items-center gap-1.5"><Globe2 className="w-3.5 h-3.5 text-dracula-cyan" /> Busca pública</span>
           <span className="h-4 w-px bg-dracula-card" />
-          <span className="flex items-center gap-1.5"><Tag className="w-3.5 h-3.5 text-dracula-purple" /> Tags & busca avançada</span>
+          <span className="flex items-center gap-1.5"><Tag className="w-3.5 h-3.5 text-dracula-purple" /> Prisma + Zod</span>
         </div>
       </section>
 
@@ -120,7 +121,7 @@ export default async function HomePage() {
               <span className="w-3 h-3 rounded-full bg-dracula-green/50" />
               <span className="w-3 h-3 rounded-full bg-dracula-comment/40" />
               <div className="flex-1 mx-4 h-6 rounded-md bg-dracula-bg/60 border border-dracula-card flex items-center px-3">
-                <span className="text-xs text-dracula-comment">snippetvault.app/dashboard</span>
+                <span className="text-xs text-dracula-comment">snippetvault.emanuelvini.dev/dashboard</span>
               </div>
             </div>
 
@@ -129,7 +130,7 @@ export default async function HomePage() {
               {/* Search bar mock */}
               <div className="flex items-center gap-3 mb-5 px-4 py-3 rounded-xl bg-dracula-card/50 border border-dracula-card text-dracula-comment text-sm">
                 <Search className="w-4 h-4 shrink-0" />
-                <span className="flex-1">Buscar snippets...</span>
+                <span className="flex-1">Buscar conhecimento técnico...</span>
                 <span className="px-2 py-0.5 rounded border border-dracula-comment/30 text-xs font-mono">⌘ K</span>
               </div>
 
@@ -164,7 +165,7 @@ export default async function HomePage() {
               </div>
             </div>
           </div>
-          <p className="text-center text-xs text-dracula-comment mt-4 tracking-wide">Mockup ilustrativo do dashboard</p>
+          <p className="text-center text-xs text-dracula-comment mt-4 tracking-wide">Recorte ilustrativo do dashboard do case</p>
         </div>
       </section>
 

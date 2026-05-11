@@ -28,7 +28,7 @@ export default function ShareButton({ snippetId, className, iconSize = 14 }: Sha
       });
 
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       toast.error("Erro ao copiar o link.", {
         description: "Tente copiar manualmente da barra de endereços.",
       });

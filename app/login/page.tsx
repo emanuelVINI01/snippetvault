@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { Keyboard } from "lucide-react";
 import { signIn } from "@/src/auth";
 import Logo from "@/src/components/Logo";
 import { auth } from "@/src/auth";

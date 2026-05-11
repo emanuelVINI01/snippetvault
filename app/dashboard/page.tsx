@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { Plus, Code2, LogOut, Package, RefreshCw, Globe } from "lucide-react";
+import { Plus, LogOut, Package, RefreshCw, Globe } from "lucide-react";
 import SearchBar from "@/src/components/main/SearchBar";
 import SnippetCard, { type Snippet } from "@/src/components/dashboard/SnippetCard";
 import CreateSnippetModal from "@/src/components/dashboard/CreateSnippetModal";
@@ -83,14 +83,17 @@ export default function DashboardPage() {
           >
             <RefreshCw className="w-4 h-4" />
           </button>
-          <a
-            href="/api/auth/signout"
+          <button
+            type="button"
+            onClick={() => {
+              window.location.href = "/api/auth/signout";
+            }}
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm text-dracula-comment hover:text-dracula-red hover:bg-dracula-red/8 transition-colors"
             title="Sair"
           >
             <LogOut className="w-4 h-4" />
             <span className="hidden sm:inline">Sair</span>
-          </a>
+          </button>
         </div>
       </header>
 
