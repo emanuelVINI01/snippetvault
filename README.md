@@ -10,7 +10,7 @@ Produto full-stack para organização, busca e compartilhamento de snippets téc
 
 ## Stack identificada
 
-Docker, Framer Motion, KSP, Next.js, NextAuth/Auth.js, Node.js, Prisma, React, Tailwind CSS, Transactions, TypeScript, Zod
+Docker, Framer Motion, Next.js, NextAuth/Auth.js, Node.js, Prisma, React, Tailwind CSS, Transactions, TypeScript, Zod
 
 ## Decisões de engenharia
 
