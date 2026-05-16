@@ -54,7 +54,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = "ma
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 14, scale: 0.97 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative w-full ${maxWidth} rounded-2xl border border-dracula-card bg-dracula-bg shadow-2xl shadow-black/50`}
+            className={`relative max-h-[calc(100dvh-2rem)] w-full ${maxWidth} overflow-hidden rounded-2xl border border-dracula-card bg-dracula-bg shadow-2xl shadow-black/50`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
@@ -74,7 +74,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = "ma
             </div>
 
             {/* Body */}
-            <div className="px-6 py-5">
+            <div className="max-h-[calc(100dvh-6rem)] overflow-y-auto px-6 py-5">
               {children}
             </div>
           </motion.div>

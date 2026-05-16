@@ -1,10 +1,9 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyButton from "../CopyButton";
 import { useLanguage } from "@/src/context/LanguageContext";
+import { dracula, normalizeSnippetLanguage, SyntaxHighlighter } from "@/src/lib/syntax-highlighting";
 
 interface CodeViewerClientProps {
   code: string;
@@ -12,7 +11,7 @@ interface CodeViewerClientProps {
 }
 
 export default function CodeViewerClient({ code, language }: CodeViewerClientProps) {
-  const lang = language.toLowerCase();
+  const lang = normalizeSnippetLanguage(language);
   const { t } = useLanguage();
 
   return (
@@ -34,6 +33,15 @@ export default function CodeViewerClient({ code, language }: CodeViewerClientPro
       <SyntaxHighlighter
         language={lang}
         style={dracula}
+        showLineNumbers
+        wrapLongLines={false}
+        lineNumberStyle={{
+          color: "rgba(167, 176, 200, 0.45)",
+          minWidth: "2.5em",
+          paddingRight: "1em",
+          textAlign: "right",
+          userSelect: "none",
+        }}
         customStyle={{
           margin: 0,
           padding: "1.25rem",

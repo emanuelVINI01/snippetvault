@@ -2,12 +2,11 @@
 
 import { motion } from "framer-motion";
 import { Pencil, Trash2, Globe2, Lock } from "lucide-react";
-import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
-import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyButton from "../CopyButton";
 import { getLanguageColor } from "./LanguageColors";
 import ShareButton from "../ShareButton";
 import { useLanguage } from "@/src/context/LanguageContext";
+import { dracula, normalizeSnippetLanguage, SyntaxHighlighter } from "@/src/lib/syntax-highlighting";
 
 export interface Snippet {
   id: string;
@@ -35,7 +34,7 @@ function previewCode(code: string): string {
 }
 
 export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardProps) {
-  const langKey = snippet.language.toLowerCase();
+  const langKey = normalizeSnippetLanguage(snippet.language);
   const langClass = getLanguageColor(snippet.language);
   const { t } = useLanguage();
 
