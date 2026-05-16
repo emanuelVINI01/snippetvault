@@ -3,9 +3,11 @@
 import { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import type { Snippet } from "@/src/components/dashboard/SnippetCard";
+import { useLanguage } from "@/src/context/LanguageContext";
 
 export function useSnippets(initialLoading = false) {
   const router = useRouter();
+  const { t } = useLanguage();
 
   const [snippets, setSnippets] = useState<Snippet[]>([]);
   const [loading, setLoading] = useState(initialLoading);
@@ -20,30 +22,30 @@ export function useSnippets(initialLoading = false) {
         router.replace("/login");
         return;
       }
-      if (!res.ok) throw new Error("Erro ao carregar snippets.");
+      if (!res.ok) throw new Error(t.errors.loadSnippets);
       const data = await res.json();
       setSnippets(data);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Erro inesperado.");
+      setError(e instanceof Error ? e.message : t.errors.unexpected);
     } finally {
       setLoading(false);
     }
-  }, [router]);
+  }, [router, t.errors.loadSnippets, t.errors.unexpected]);
 
   const fetchGlobalSnippets = useCallback(async (query: string) => {
     setLoading(true);
     setError(null);
     try {
       const res = await fetch(`/api/snippets/search?q=${encodeURIComponent(query)}`);
-      if (!res.ok) throw new Error("Erro ao buscar snippets globais.");
+      if (!res.ok) throw new Error(t.errors.searchSnippets);
       const data = await res.json();
       setSnippets(data);
     } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : "Erro inesperado.");
+      setError(e instanceof Error ? e.message : t.errors.unexpected);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [t.errors.searchSnippets, t.errors.unexpected]);
 
   const createSnippet = async (data: { title: string; language: string; description?: string; code: string; public?: boolean; tags?: string[] }) => {
     const res = await fetch("/api/snippets", {
@@ -51,7 +53,7 @@ export function useSnippets(initialLoading = false) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Erro ao criar snippet.");
+    if (!res.ok) throw new Error(t.errors.createSnippet);
     return res.json();
   };
 
@@ -61,13 +63,13 @@ export function useSnippets(initialLoading = false) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error("Erro ao atualizar snippet.");
+    if (!res.ok) throw new Error(t.errors.updateSnippet);
     return res.json();
   };
 
   const deleteSnippet = async (id: string) => {
     const res = await fetch(`/api/snippets/${id}`, { method: "DELETE" });
-    if (!res.ok && res.status !== 204) throw new Error("Erro ao excluir snippet.");
+    if (!res.ok && res.status !== 204) throw new Error(t.errors.deleteSnippet);
   };
 
   return {

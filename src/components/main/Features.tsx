@@ -1,79 +1,92 @@
-import { Search, Tag, Globe2, Lock, Zap, Code2 } from "lucide-react";
+"use client";
 
-const FEATURES = [
+import { motion } from "framer-motion";
+import { Code2, Globe2, Lock, Search, Tag, Zap } from "lucide-react";
+import { useLanguage } from "@/src/context/LanguageContext";
+
+const FEATURE_STYLES = [
   {
-    icon: <Search className="w-6 h-6 text-dracula-cyan" />,
-    title: "Busca Pública",
-    description: "Demonstra uma camada de descoberta para snippets públicos, com pesquisa por conteúdo, linguagem e tags.",
-    colorClass: "group-hover:border-dracula-cyan/50",
+    icon: Search,
+    iconClass: "text-dracula-cyan",
     bgClass: "bg-dracula-cyan/10",
+    borderClass: "group-hover:border-dracula-cyan/50",
   },
   {
-    icon: <Tag className="w-6 h-6 text-dracula-purple" />,
-    title: "Modelagem Organizada",
-    description: "Estrutura dados de snippets, autores, visibilidade e tags em uma base persistente com Prisma.",
-    colorClass: "group-hover:border-dracula-purple/50",
+    icon: Tag,
+    iconClass: "text-dracula-purple",
     bgClass: "bg-dracula-purple/10",
+    borderClass: "group-hover:border-dracula-purple/50",
   },
   {
-    icon: <Code2 className="w-6 h-6 text-dracula-green" />,
-    title: "Dashboard de Produto",
-    description: "Interface operacional para criar, editar, filtrar e compartilhar conhecimento técnico em poucos passos.",
-    colorClass: "group-hover:border-dracula-green/50",
+    icon: Code2,
+    iconClass: "text-dracula-green",
     bgClass: "bg-dracula-green/10",
+    borderClass: "group-hover:border-dracula-green/50",
   },
   {
-    icon: <Lock className="w-6 h-6 text-dracula-red" />,
-    title: "Autenticação GitHub",
-    description: "Fluxo de login com NextAuth, separando áreas privadas e recursos públicos do produto.",
-    colorClass: "group-hover:border-dracula-red/50",
+    icon: Lock,
+    iconClass: "text-dracula-red",
     bgClass: "bg-dracula-red/10",
+    borderClass: "group-hover:border-dracula-red/50",
   },
   {
-    icon: <Globe2 className="w-6 h-6 text-dracula-orange" />,
-    title: "Compartilhamento Público",
-    description: "Links públicos transformam snippets em páginas apresentáveis, úteis para demonstração e consulta.",
-    colorClass: "group-hover:border-dracula-orange/50",
+    icon: Globe2,
+    iconClass: "text-dracula-orange",
     bgClass: "bg-dracula-orange/10",
+    borderClass: "group-hover:border-dracula-orange/50",
   },
   {
-    icon: <Zap className="w-6 h-6 text-dracula-yellow" />,
-    title: "Case de Portfólio",
-    description: "Projeto pensado para evidenciar arquitetura full-stack, UX, validação de dados e acabamento visual para avaliação técnica.",
-    colorClass: "group-hover:border-dracula-yellow/50",
+    icon: Zap,
+    iconClass: "text-dracula-yellow",
     bgClass: "bg-dracula-yellow/10",
+    borderClass: "group-hover:border-dracula-yellow/50",
   },
 ];
 
 export default function Features() {
-  return (
-    <section className="py-24 px-6 bg-dracula-bg">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-dracula-fg">
-            Um produto pequeno com decisões de <span className="text-dracula-purple">sistema real</span>
-          </h2>
-          <p className="text-dracula-comment max-w-2xl mx-auto">
-            O SnippetVault apresenta uma aplicação completa em escala de portfólio: autenticação,
-            persistência, validação, busca, dashboard e compartilhamento em uma experiência coesa.
-          </p>
-        </div>
+  const { t } = useLanguage();
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {FEATURES.map((feat) => (
-            <div
-              key={feat.title}
-              className={`group p-6 rounded-2xl bg-dracula-card/40 border border-dracula-card/80 transition-all duration-300 hover:shadow-lg hover:-translate-y-1 ${feat.colorClass}`}
-            >
-              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-6 ${feat.bgClass}`}>
-                {feat.icon}
-              </div>
-              <h3 className="text-xl font-semibold text-dracula-fg mb-3">{feat.title}</h3>
-              <p className="text-dracula-comment leading-relaxed text-sm">
-                {feat.description}
-              </p>
-            </div>
-          ))}
+  return (
+    <section className="px-4 py-24 sm:px-6">
+      <div className="mx-auto max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          className="mb-16 text-center"
+        >
+          <h2 className="text-3xl font-bold text-dracula-fg sm:text-4xl">
+            {t.home.featuresTitlePrefix}{" "}
+            <span className="text-dracula-purple">{t.home.featuresTitleHighlight}</span>
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-dracula-comment sm:text-base">
+            {t.home.featuresSubtitle}
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          {t.home.features.map((feature, index) => {
+            const style = FEATURE_STYLES[index];
+            const Icon = style.icon;
+
+            return (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 22 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-70px" }}
+                transition={{ delay: index * 0.055, duration: 0.35, ease: "easeOut" }}
+                className={`group rounded-2xl border border-dracula-card/80 bg-dracula-surface/55 p-6 shadow-lg shadow-black/10 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-dracula-purple/10 ${style.borderClass}`}
+              >
+                <div className={`mb-6 flex h-12 w-12 items-center justify-center rounded-xl ${style.bgClass}`}>
+                  <Icon className={`h-6 w-6 ${style.iconClass}`} />
+                </div>
+                <h3 className="mb-3 text-xl font-semibold text-dracula-fg">{feature.title}</h3>
+                <p className="text-sm leading-relaxed text-dracula-comment">{feature.description}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

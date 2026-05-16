@@ -1,54 +1,63 @@
-import { LogIn, Save, Search } from "lucide-react";
+"use client";
 
-const STEPS = [
-  {
-    icon: <LogIn className="w-5 h-5 text-dracula-purple" />,
-    title: "Autenticação",
-    description: "O usuário entra com GitHub e acessa um ambiente privado para gerenciar seus registros.",
-  },
-  {
-    icon: <Save className="w-5 h-5 text-dracula-green" />,
-    title: "Cadastro Estruturado",
-    description: "Cada snippet passa por campos claros, linguagem, tags, visibilidade e validação de dados.",
-  },
-  {
-    icon: <Search className="w-5 h-5 text-dracula-cyan" />,
-    title: "Consulta e Compartilhamento",
-    description: "O dashboard permite busca rápida, cópia, edição e páginas públicas para itens compartilháveis.",
-  },
+import { motion } from "framer-motion";
+import { LogIn, Save, Search } from "lucide-react";
+import { useLanguage } from "@/src/context/LanguageContext";
+
+const STEP_STYLES = [
+  { icon: LogIn, iconClass: "text-dracula-purple", glow: "rgba(189,147,249,0.24)" },
+  { icon: Save, iconClass: "text-dracula-green", glow: "rgba(80,250,123,0.2)" },
+  { icon: Search, iconClass: "text-dracula-cyan", glow: "rgba(139,233,253,0.2)" },
 ];
 
 export default function HowItWorks() {
+  const { t } = useLanguage();
+
   return (
-    <section className="py-24 px-6 relative overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-dracula-purple/5 blur-[120px] rounded-full pointer-events-none" />
+    <section className="relative overflow-hidden px-4 py-24 sm:px-6">
+      <div className="relative z-10 mx-auto max-w-4xl text-center">
+        <motion.h2
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="mb-16 text-3xl font-bold text-dracula-fg sm:text-4xl"
+        >
+          {t.home.flowTitle}
+        </motion.h2>
 
-      <div className="max-w-4xl mx-auto relative z-10 text-center">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-16 text-dracula-fg">
-          Fluxo do produto
-        </h2>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
-          {/* Connecting line for desktop */}
-          <div className="hidden md:block absolute top-10 left-[16%] right-[16%] h-px bg-dracula-card/80">
-            <div className="absolute inset-0 bg-gradient-to-r from-dracula-purple via-dracula-cyan to-dracula-green opacity-30"></div>
+        <div className="relative grid grid-cols-1 gap-12 md:grid-cols-3">
+          <div className="absolute left-[16%] right-[16%] top-10 hidden h-px bg-dracula-card/80 md:block">
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,var(--dracula-purple),var(--dracula-cyan),var(--dracula-green))] opacity-35" />
           </div>
 
-          {STEPS.map((step, idx) => (
-            <div key={idx} className="relative flex flex-col items-center">
-              <div className="w-20 h-20 rounded-2xl bg-dracula-card/80 border border-dracula-card flex items-center justify-center mb-6 z-10 shadow-lg shadow-black/20">
-                {step.icon}
-              </div>
-              <div className="absolute top-0 right-0 -mt-2 -mr-2 w-6 h-6 rounded-full bg-dracula-bg border border-dracula-card text-xs flex items-center justify-center text-dracula-comment font-mono z-20">
-                {idx + 1}
-              </div>
-              <h3 className="text-xl font-semibold text-dracula-fg mb-3">{step.title}</h3>
-              <p className="text-dracula-comment text-sm leading-relaxed px-4">
-                {step.description}
-              </p>
-            </div>
-          ))}
+          {t.home.steps.map((step, index) => {
+            const style = STEP_STYLES[index];
+            const Icon = style.icon;
+
+            return (
+              <motion.div
+                key={step.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-70px" }}
+                transition={{ delay: index * 0.08, duration: 0.35, ease: "easeOut" }}
+                className="relative flex flex-col items-center"
+              >
+                <div
+                  className="z-10 mb-6 flex h-20 w-20 items-center justify-center rounded-2xl border border-dracula-card bg-dracula-surface shadow-lg shadow-black/20"
+                  style={{ boxShadow: `0 18px 52px rgba(0,0,0,0.24), 0 0 32px ${style.glow}` }}
+                >
+                  <Icon className={`h-5 w-5 ${style.iconClass}`} />
+                </div>
+                <div className="absolute right-[calc(50%-3rem)] top-0 z-20 -mr-2 -mt-2 flex h-6 w-6 items-center justify-center rounded-full border border-dracula-card bg-dracula-bg font-mono text-xs text-dracula-comment md:right-0">
+                  {index + 1}
+                </div>
+                <h3 className="mb-3 text-xl font-semibold text-dracula-fg">{step.title}</h3>
+                <p className="px-4 text-sm leading-relaxed text-dracula-comment">{step.description}</p>
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </section>

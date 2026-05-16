@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Fira_Code, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Footer from "@/src/components/main/Footer";
 import { Toaster } from "sonner";
+import Providers from "@/src/components/Providers";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const jetbrains = JetBrains_Mono({
   subsets: ["latin"],
+  variable: "--font-jetbrains",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const firaCode = Fira_Code({
   subsets: ["latin"],
+  variable: "--font-fira",
 });
-
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://snippetvault.emanuelvini.dev'),
@@ -52,13 +52,15 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="PT-br"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      lang="pt-BR"
+      className={`${jetbrains.variable} ${firaCode.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        {children}
-        <Toaster closeButton position="top-right" theme="dark" richColors />
-        <Footer />
+      <body className={`${jetbrains.className} min-h-full`}>
+        <Providers>
+          {children}
+          <Toaster closeButton position="top-right" theme="dark" richColors />
+          <Footer />
+        </Providers>
       </body>
     </html>
   );

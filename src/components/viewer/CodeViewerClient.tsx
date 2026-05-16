@@ -1,8 +1,10 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyButton from "../CopyButton";
+import { useLanguage } from "@/src/context/LanguageContext";
 
 interface CodeViewerClientProps {
   code: string;
@@ -11,6 +13,7 @@ interface CodeViewerClientProps {
 
 export default function CodeViewerClient({ code, language }: CodeViewerClientProps) {
   const lang = language.toLowerCase();
+  const { t } = useLanguage();
 
   return (
     <div className="group relative">
@@ -18,11 +21,16 @@ export default function CodeViewerClient({ code, language }: CodeViewerClientPro
         <CopyButton 
           content={code} 
           iconSize={14} 
-          label="Copiar"
+          label={t.common.copy}
           className="bg-dracula-bg/80 backdrop-blur-sm border-dracula-card/60 px-3 py-1.5" 
         />
       </div>
-      <div className="overflow-x-auto text-sm font-mono leading-loose relative">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.08, duration: 0.22 }}
+        className="overflow-x-auto text-sm font-mono leading-loose relative"
+      >
       <SyntaxHighlighter
         language={lang}
         style={dracula}
@@ -43,7 +51,7 @@ export default function CodeViewerClient({ code, language }: CodeViewerClientPro
       >
         {code || " "}
       </SyntaxHighlighter>
-    </div>
+    </motion.div>
   </div>
   );
 }

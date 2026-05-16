@@ -1,8 +1,10 @@
 "use client";
 
+import { AnimatePresence, motion } from "framer-motion";
 import { Copy, Check } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useLanguage } from "@/src/context/LanguageContext";
 
 interface CopyButtonProps {
   content: string;
@@ -13,6 +15,7 @@ interface CopyButtonProps {
 
 export default function CopyButton({ content, className, iconSize = 14, label }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
+  const { t } = useLanguage();
 
   const handleCopy = async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -21,33 +24,40 @@ export default function CopyButton({ content, className, iconSize = 14, label }:
     try {
       await navigator.clipboard.writeText(content);
       setCopied(true);
-      toast.success("Código copiado!", {
-        description: "O conteúdo do snippet agora está na sua área de transferência.",
+      toast.success(t.toasts.codeCopied, {
+        description: t.toasts.codeCopiedDescription,
         duration: 2500,
       });
 
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      toast.error("Erro ao copiar o código.");
+      toast.error(t.toasts.copyCodeError);
     }
   };
 
   return (
-    <button
+    <motion.button
       onClick={handleCopy}
+      whileTap={{ scale: 0.94 }}
       className={`flex items-center gap-1.5 p-1.5 rounded-lg transition-all duration-200 ${
         copied 
           ? "text-dracula-green bg-dracula-green/10 border border-dracula-green/20" 
           : "text-dracula-comment hover:text-dracula-fg hover:bg-dracula-card border border-transparent"
       } ${className}`}
-      title={copied ? "Copiado!" : "Copiar código"}
+      title={copied ? t.common.copied : t.common.copyCode}
     >
-      {copied ? (
-        <Check size={iconSize} className="animate-in fade-in zoom-in duration-200" />
-      ) : (
-        <Copy size={iconSize} />
-      )}
+      <AnimatePresence mode="wait" initial={false}>
+        <motion.span
+          key={copied ? "done" : "copy"}
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -4 }}
+          transition={{ duration: 0.14 }}
+        >
+          {copied ? <Check size={iconSize} /> : <Copy size={iconSize} />}
+        </motion.span>
+      </AnimatePresence>
       {label && <span className="text-xs font-medium">{label}</span>}
-    </button>
+    </motion.button>
   );
 }

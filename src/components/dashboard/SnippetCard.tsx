@@ -1,11 +1,13 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { Pencil, Trash2, Globe2, Lock } from "lucide-react";
 import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter";
 import { dracula } from "react-syntax-highlighter/dist/cjs/styles/prism";
 import CopyButton from "../CopyButton";
 import { getLanguageColor } from "./LanguageColors";
 import ShareButton from "../ShareButton";
+import { useLanguage } from "@/src/context/LanguageContext";
 
 export interface Snippet {
   id: string;
@@ -35,9 +37,18 @@ function previewCode(code: string): string {
 export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardProps) {
   const langKey = snippet.language.toLowerCase();
   const langClass = getLanguageColor(snippet.language);
+  const { t } = useLanguage();
 
   return (
-    <article className="group flex flex-col rounded-2xl border border-dracula-card hover:border-dracula-purple/40 bg-dracula-card/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-dracula-purple/10 overflow-hidden">
+    <motion.article
+      layout
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -12 }}
+      whileHover={{ y: -3 }}
+      transition={{ duration: 0.22, ease: "easeOut" }}
+      className="group flex flex-col rounded-2xl border border-dracula-card hover:border-dracula-purple/40 bg-dracula-card/25 transition-shadow duration-200 hover:shadow-xl hover:shadow-dracula-purple/10 overflow-hidden"
+    >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 px-4 pt-4 pb-3">
         <div className="min-w-0">
@@ -52,8 +63,8 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
             {snippet.language}
           </span>
           {snippet.public
-            ? <Globe2 className="w-3.5 h-3.5 text-dracula-green" aria-label="Público" />
-            : <Lock    className="w-3.5 h-3.5 text-dracula-comment" aria-label="Privado" />
+            ? <Globe2 className="w-3.5 h-3.5 text-dracula-green" aria-label={t.common.public} />
+            : <Lock    className="w-3.5 h-3.5 text-dracula-comment" aria-label={t.common.private} />
           }
         </div>
       </div>
@@ -103,19 +114,19 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
           <button
             onClick={() => onEdit(snippet)}
             className="p-1.5 rounded-lg text-dracula-comment hover:text-dracula-purple hover:bg-dracula-purple/10 transition-colors"
-            title="Editar"
+            title={t.form.editTitle}
           >
             <Pencil className="w-3.5 h-3.5" />
           </button>
           <button
             onClick={() => onDelete(snippet)}
             className="p-1.5 rounded-lg text-dracula-comment hover:text-dracula-red hover:bg-dracula-red/10 transition-colors"
-            title="Excluir"
+            title={t.form.delete}
           >
             <Trash2 className="w-3.5 h-3.5" />
           </button>
         </div>
       </div>
-    </article>
+    </motion.article>
   );
 }

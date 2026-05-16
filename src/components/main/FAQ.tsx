@@ -1,64 +1,72 @@
 "use client";
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import { ChevronDown } from "lucide-react";
-
-const FAQS = [
-  {
-    q: "Por que o SnippetVault existe?",
-    a: "Ele funciona como um case de portfólio para demonstrar uma aplicação full-stack completa, com autenticação, persistência, dashboard, busca pública e compartilhamento."
-  },
-  {
-    q: "Quais decisões técnicas ele demonstra?",
-    a: "O projeto mostra integração com NextAuth, modelagem com Prisma, validação com Zod, rotas de API, separação entre dados privados e públicos, e UI dark responsiva."
-  },
-  {
-    q: "É um produto real ou apenas uma landing page?",
-    a: "É uma aplicação funcional. A landing explica o projeto, mas o dashboard permite criar, editar, buscar, copiar e compartilhar snippets."
-  },
-  {
-    q: "O que um recrutador consegue avaliar no projeto?",
-    a: "Domínio de produto, backend, autenticação, banco de dados, validação, organização de código e acabamento visual em um projeto pequeno o suficiente para avaliação rápida."
-  }
-];
+import { useLanguage } from "@/src/context/LanguageContext";
 
 export default function FAQ() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
-
-  const toggleFAQ = (idx: number) => {
-    setOpenIdx(openIdx === idx ? null : idx);
-  };
+  const { t } = useLanguage();
 
   return (
-    <section className="py-24 px-6 relative">
-      <div className="max-w-3xl mx-auto">
-        <h2 className="text-3xl sm:text-4xl font-bold mb-12 text-center text-dracula-fg">
-          Perguntas do case
-        </h2>
+    <section className="relative px-4 py-24 sm:px-6">
+      <div className="mx-auto max-w-3xl">
+        <motion.h2
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-80px" }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="mb-12 text-center text-3xl font-bold text-dracula-fg sm:text-4xl"
+        >
+          {t.home.faqTitle}
+        </motion.h2>
 
         <div className="space-y-4">
-          {FAQS.map((faq, idx) => {
-            const isOpen = openIdx === idx;
+          {t.home.faqs.map((faq, index) => {
+            const isOpen = openIdx === index;
+
             return (
-              <div 
-                key={idx} 
-                className={`rounded-xl border transition-colors duration-200 overflow-hidden ${isOpen ? 'bg-dracula-card/40 border-dracula-purple/30' : 'bg-dracula-bg border-dracula-card/60 hover:border-dracula-card'}`}
+              <motion.div
+                key={faq.q}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.045, duration: 0.28 }}
+                className={`overflow-hidden rounded-xl border transition-colors duration-200 ${
+                  isOpen
+                    ? "border-dracula-purple/30 bg-dracula-surface/70"
+                    : "border-dracula-card/60 bg-dracula-bg/55 hover:border-dracula-card"
+                }`}
               >
                 <button
-                  onClick={() => toggleFAQ(idx)}
-                  className="w-full flex items-center justify-between p-5 text-left focus:outline-none"
+                  type="button"
+                  onClick={() => setOpenIdx(isOpen ? null : index)}
+                  className="flex w-full items-center justify-between gap-4 p-5 text-left outline-none"
                 >
                   <span className="font-medium text-dracula-fg">{faq.q}</span>
-                  <ChevronDown className={`w-5 h-5 text-dracula-comment transition-transform duration-300 ${isOpen ? 'rotate-180 text-dracula-purple' : ''}`} />
+                  <ChevronDown
+                    className={`h-5 w-5 shrink-0 text-dracula-comment transition-transform duration-300 ${
+                      isOpen ? "rotate-180 text-dracula-purple" : ""
+                    }`}
+                  />
                 </button>
-                <div 
-                  className={`px-5 overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-48 pb-5 opacity-100' : 'max-h-0 opacity-0'}`}
-                >
-                  <p className="text-dracula-comment text-sm leading-relaxed">
-                    {faq.a}
-                  </p>
-                </div>
-              </div>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.22, ease: "easeOut" }}
+                      className="overflow-hidden"
+                    >
+                      <p className="px-5 pb-5 text-sm leading-relaxed text-dracula-comment">
+                        {faq.a}
+                      </p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
             );
           })}
         </div>
