@@ -1,8 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { LockKeyhole } from "lucide-react";
-import { FaGithub } from "react-icons/fa";
+import { LogIn, LockKeyhole } from "lucide-react";
 import Logo from "@/src/components/Logo";
 import LanguageToggle from "@/src/components/LanguageToggle";
 import { useLanguage } from "@/src/context/LanguageContext";
@@ -56,8 +55,8 @@ export default function LoginClient({ signInAction }: LoginClientProps) {
               whileTap={{ scale: 0.98 }}
               className="flex w-full items-center justify-center gap-3 rounded-xl border border-dracula-card bg-dracula-card/65 px-4 py-3 text-sm font-semibold text-dracula-fg transition-all duration-200 hover:border-dracula-purple/50 hover:bg-dracula-purple/15 hover:text-dracula-purple"
             >
-              <FaGithub className="h-5 w-5" />
-              {t.login.github}
+              <LogIn className="h-5 w-5" />
+              {t.login.accountContinue}
             </motion.button>
           </form>
         </motion.div>

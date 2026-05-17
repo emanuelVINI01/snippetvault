@@ -1,32 +1,49 @@
 import { notFound } from "next/navigation";
 import { SnippetService } from "@/src/services/snippet-service";
 import PublicSnippetClient from "@/src/components/viewer/PublicSnippetClient";
+import { mapPublicSnippetView } from "@/src/mappers/public-snippet-mapper";
+import {
+  getMissingSnippetMetadata,
+  getPublicSnippetJsonLd,
+  getPublicSnippetMetadata,
+} from "@/src/lib/snippet-seo";
+import type { Metadata } from "next";
+import { cache } from "react";
 
-export default async function PublicSnippetPage({
-  params,
-}: {
+type SnippetPageProps = {
   params: Promise<{ id: string }>;
-}) {
+};
+
+const getPublicSnippet = cache(async (id: string) => {
+  return SnippetService.getPublicById(id);
+});
+
+export async function generateMetadata({ params }: SnippetPageProps): Promise<Metadata> {
   const { id } = await params;
-  const snippet = await SnippetService.getById(id);
+  const snippet = await getPublicSnippet(id);
+
+  return snippet ? getPublicSnippetMetadata(snippet) : getMissingSnippetMetadata();
+}
+
+export default async function PublicSnippetPage({ params }: SnippetPageProps) {
+  const { id } = await params;
+  const snippet = await getPublicSnippet(id);
 
   if (!snippet) {
     notFound();
   }
 
+  const jsonLd = getPublicSnippetJsonLd(snippet);
+
   return (
-    <PublicSnippetClient
-      snippet={{
-        id: snippet.id,
-        title: snippet.title,
-        code: snippet.code,
-        language: snippet.language,
-        description: snippet.description,
-        tags: snippet.tags,
-        public: snippet.public,
-        createdAt: snippet.createdAt.toISOString(),
-        user: snippet.user,
-      }}
-    />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <PublicSnippetClient snippet={mapPublicSnippetView(snippet)} />
+    </>
   );
 }

@@ -1,73 +1,89 @@
 import { prisma } from "@/src/prisma";
+import type { CreateSnippetInput, UpdateSnippetInput } from "@/src/lib/validations/snippet";
 
-export const SnippetService = {
-  // Ler todos os snippets do usuário
-  async getAll(userId: string) {
-    return await prisma.snippet.findMany({
+const AUTHOR_SELECT = {
+  id: true,
+  image: true,
+  name: true,
+};
+
+class SnippetRepository {
+  getAll(userId: string) {
+    return prisma.snippet.findMany({
       where: { userId },
       orderBy: { createdAt: "desc" },
     });
-  },
+  }
 
-  // Criar um novo snippet
-  async create(userId: string, data: { 
-    title: string; 
-    code: string; 
-    language: string; 
-    description?: string; 
-    tags: string[] 
-  }) {
-    return await prisma.snippet.create({
+  create(userId: string, data: CreateSnippetInput) {
+    return prisma.snippet.create({
       data: { ...data, userId },
     });
-  },
+  }
 
-  // Atualizar um snippet existente
-  async update(id: string, userId: string, data: Partial<{
-    title: string;
-    code: string;
-    language: string;
-    description: string;
-    tags: string[];
-  }>) {
-    return await prisma.snippet.update({
+  update(id: string, userId: string, data: UpdateSnippetInput) {
+    return prisma.snippet.update({
       where: { id, userId },
       data,
     });
-  },
+  }
 
-  // Deletar um snippet
-  async delete(id: string, userId: string) {
-    return await prisma.snippet.delete({
+  delete(id: string, userId: string) {
+    return prisma.snippet.delete({
       where: { id, userId },
     });
-  },
+  }
 
-  // Procurar snippets públicos globais
-  async searchPublic(query: string) {
-    const q = query.trim();
-    return await prisma.snippet.findMany({
-      where: {
-        public: true,
-        OR: q
-          ? [
-              { title: { contains: q, mode: "insensitive" } },
-              { description: { contains: q, mode: "insensitive" } },
-              { language: { contains: q, mode: "insensitive" } },
-              { tags: { hasSome: [q] } }, // for single match, or we could handle arbitrary text better. However, Prisma hasSome requires exact array match, so we might need has if we just want to match a tag exactly, or we can use raw query if we need insensitive match inside string array. Let's use string operations: `has: q` to check if tags array contains the exactly `q` or since tags are an array of strings we should probably stick to exact match for tags or omit it to avoid issues, Prisma supports `has` for single element, let's just omit tags string search or map it if needed. Actually we can just do title, description, language. Let's include `has` for tag if applicable. Wait, title/description/language are usually enough. I'll add title, description, and language. Let's add tags if possible using `has: q` although insensitive might be tricky.
-            ]
-          : undefined,
-      },
+  searchPublic(query: string) {
+    return prisma.snippet.findMany({
+      where: getPublicSearchWhere(query),
       orderBy: { createdAt: "desc" },
-      include: { user: { select: { name: true, image: true, id: true } } }, // include author info
+      include: { user: { select: AUTHOR_SELECT } },
     });
-  },
+  }
 
-  // Buscar um snippet pelo ID
-  async getById(id: string) {
-    return await prisma.snippet.findUnique({
+  getById(id: string) {
+    return prisma.snippet.findUnique({
       where: { id },
-      include: { user: { select: { name: true, image: true, id: true } } },
+      include: { user: { select: AUTHOR_SELECT } },
     });
-  },
-};
+  }
+
+  getPublicById(id: string) {
+    return prisma.snippet.findFirst({
+      where: { id, public: true },
+      include: { user: { select: AUTHOR_SELECT } },
+    });
+  }
+
+  getPublicForSitemap() {
+    return prisma.snippet.findMany({
+      where: { public: true },
+      orderBy: { updatedAt: "desc" },
+      select: {
+        id: true,
+        updatedAt: true,
+        createdAt: true,
+      },
+      take: 5000,
+    });
+  }
+}
+
+function getPublicSearchWhere(query: string) {
+  const trimmedQuery = query.trim();
+
+  return {
+    public: true,
+    OR: trimmedQuery
+      ? [
+          { title: { contains: trimmedQuery, mode: "insensitive" as const } },
+          { description: { contains: trimmedQuery, mode: "insensitive" as const } },
+          { language: { contains: trimmedQuery, mode: "insensitive" as const } },
+          { tags: { hasSome: [trimmedQuery] } },
+        ]
+      : undefined,
+  };
+}
+
+export const SnippetService = new SnippetRepository();

@@ -4,10 +4,9 @@ export const dictionaries = {
   pt: {
     common: {
       appName: "SnippetVault",
-      repository: "emanuelVINI01/snippetvault",
+      repository: "Perfil do criador",
       website: "snippetvault.emanuelvini.dev",
-      github: "GitHub",
-      dashboard: "Dashboard",
+      dashboard: "Minha área",
       login: "Entrar",
       logout: "Sair",
       refresh: "Atualizar",
@@ -23,24 +22,24 @@ export const dictionaries = {
       tryAgain: "Tentar novamente",
       clearSearch: "Limpar busca",
       navigation: "Navegação",
-      project: "Projeto",
+      project: "Produto",
       contact: "Contato",
       allRightsReserved: "Todos os direitos reservados.",
     },
     home: {
-      badge: "Ferramenta full-stack para devs",
-      titlePrefix: "Plataforma para organizar",
-      titleHighlight: "conhecimento",
-      titleSuffix: "técnico",
+      badge: "Organizador de snippets",
+      titlePrefix: "Organize seus",
+      titleHighlight: "snippets",
+      titleSuffix: "de código",
       subtitle:
-        "O SnippetVault mostra uma aplicação full-stack real: autenticação GitHub, dashboard, CRUD validado, busca pública e uma experiência dark-first pensada para desenvolvedores.",
-      ctaDashboard: "Acessar dashboard",
-      ctaLogin: "Entrar com GitHub",
-      trustAuth: "NextAuth + GitHub",
-      trustSearch: "Busca pública",
-      trustData: "Prisma + Zod",
-      mockSearch: "Buscar conhecimento técnico...",
-      mockCaption: "Recorte ilustrativo do dashboard técnico",
+        "Salve trechos de código, encontre rapidamente por linguagem ou tag e compartilhe exemplos públicos em páginas limpas e fáceis de ler.",
+      ctaDashboard: "Abrir minha área",
+      ctaLogin: "Entrar e começar",
+      trustAuth: "Área privada",
+      trustSearch: "Busca rápida",
+      trustData: "Tags organizadas",
+      mockSearch: "Buscar snippets, linguagem ou tag...",
+      mockCaption: "Prévia da área de organização",
       mockSnippets: [
         { lang: "TypeScript", title: "useDebounce hook", tags: ["react", "hooks"] },
         { lang: "Python", title: "Async rate limiter", tags: ["async", "api"] },
@@ -49,83 +48,83 @@ export const dictionaries = {
         { lang: "CSS", title: "Glassmorphism card", tags: ["ui", "design"] },
         { lang: "Go", title: "HTTP middleware", tags: ["server"] },
       ],
-      featuresTitlePrefix: "Um produto pequeno com decisões de",
-      featuresTitleHighlight: "sistema real",
+      featuresTitlePrefix: "Tudo para manter seus",
+      featuresTitleHighlight: "snippets à mão",
       featuresSubtitle:
-        "O SnippetVault apresenta uma aplicação completa: autenticação, persistência, validação, busca, dashboard e compartilhamento em uma experiência coesa.",
+        "Guarde comandos, funções, consultas e padrões em um só lugar, com busca simples e links públicos quando precisar compartilhar.",
       features: [
         {
-          title: "Busca pública",
+          title: "Busca de snippets",
           description:
-            "Demonstra uma camada de descoberta para snippets públicos, com pesquisa por conteúdo, linguagem e tags.",
+            "Encontre rapidamente o que você salvou pesquisando por título, descrição, linguagem ou tag.",
         },
         {
-          title: "Modelagem organizada",
+          title: "Organização por tags",
           description:
-            "Estrutura dados de snippets, autores, visibilidade e tags em uma base persistente com Prisma.",
+            "Agrupe exemplos por assunto, projeto ou linguagem para recuperar cada trecho sem perder tempo.",
         },
         {
-          title: "Dashboard de produto",
+          title: "Área pessoal",
           description:
-            "Interface operacional para criar, editar, filtrar e compartilhar conhecimento técnico em poucos passos.",
+            "Crie, edite, copie e gerencie seus snippets em uma interface direta para uso diário.",
         },
         {
-          title: "Autenticação GitHub",
+          title: "Acesso privado",
           description:
-            "Fluxo de login com NextAuth, separando áreas privadas e recursos públicos do produto.",
+            "Mantenha seus snippets privados por padrão e escolha quando um item deve ficar disponível por link.",
         },
         {
-          title: "Compartilhamento público",
+          title: "Links públicos",
           description:
-            "Links públicos transformam snippets em páginas apresentáveis, úteis para demonstração e consulta.",
+            "Transforme um snippet em uma página compartilhável para enviar a colegas, guardar referências ou montar exemplos.",
         },
         {
-          title: "Stack demonstrada",
+          title: "Leitura confortável",
           description:
-            "Projeto pensado para evidenciar arquitetura full-stack, UX, validação de dados e acabamento visual com uma stack moderna.",
+            "Visualize o código com contraste, espaçamento e destaque pensados para leitura sem esforço.",
         },
       ],
-      flowTitle: "Fluxo do produto",
+      flowTitle: "Como funciona",
       steps: [
         {
-          title: "Autenticação",
+          title: "Entre na sua área",
           description:
-            "O usuário entra com GitHub e acessa um ambiente privado para gerenciar seus registros.",
+            "Acesse seu espaço pessoal para manter snippets privados e organizar tudo em um só lugar.",
         },
         {
-          title: "Cadastro estruturado",
+          title: "Salve o snippet",
           description:
-            "Cada snippet passa por campos claros, linguagem, tags, visibilidade e validação de dados.",
+            "Adicione título, linguagem, descrição, tags e o trecho de código que você quer reutilizar.",
         },
         {
-          title: "Consulta e compartilhamento",
+          title: "Encontre e compartilhe",
           description:
-            "O dashboard permite busca rápida, cópia, edição e páginas públicas para itens compartilháveis.",
+            "Use a busca para recuperar exemplos e gere um link público quando quiser mostrar um snippet.",
         },
       ],
       codePreview: {
         badge: "Editor bonito",
         title: "Leia como se estivesse no seu editor.",
         description:
-          "Nada de interfaces feias ou formatações quebradas. Ao salvar seu código, ele recebe syntax highlighting fiel às suas cores favoritas, preservando cada vírgula e indentação.",
+          "Nada de interfaces feias ou formatações quebradas. Ao salvar seu código, ele mantém destaque visual, espaçamento e indentação para ficar fácil de consultar depois.",
       },
-      faqTitle: "Perguntas técnicas",
+      faqTitle: "Perguntas frequentes",
       faqs: [
         {
-          q: "Por que o SnippetVault existe?",
-          a: "Ele demonstra uma aplicação full-stack completa, com autenticação, persistência, dashboard, busca pública e compartilhamento.",
+          q: "Para que serve o SnippetVault?",
+          a: "Ele ajuda você a salvar, organizar, encontrar e compartilhar snippets de código sem depender de arquivos soltos ou conversas antigas.",
         },
         {
-          q: "Quais decisões técnicas ele demonstra?",
-          a: "O projeto mostra integração com NextAuth, modelagem com Prisma, validação com Zod, rotas de API, separação entre dados privados e públicos, e UI dark responsiva.",
+          q: "Meus snippets ficam públicos?",
+          a: "Não. Você decide quando um snippet deve ser público. Itens privados continuam acessíveis apenas na sua área pessoal.",
         },
         {
-          q: "É um produto real ou apenas uma landing page?",
-          a: "É uma aplicação funcional. A landing explica o projeto, mas o dashboard permite criar, editar, buscar, copiar e compartilhar snippets.",
+          q: "Posso compartilhar um snippet específico?",
+          a: "Sim. Ao marcar um snippet como público, ele ganha uma página própria com leitura limpa e botão de compartilhamento.",
         },
         {
-          q: "Quais tecnologias ficam evidentes no projeto?",
-          a: "Next.js, Auth.js, Prisma, PostgreSQL, Zod, rotas de API, organização de código e acabamento visual em um produto pequeno o suficiente para análise rápida.",
+          q: "Consigo encontrar snippets antigos com facilidade?",
+          a: "Sim. A busca considera título, descrição, linguagem e tags para recuperar o trecho certo rapidamente.",
         },
       ],
     },
@@ -177,17 +176,17 @@ export const dictionaries = {
     login: {
       title: "Entrar",
       subtitle: "Faça login para salvar e compartilhar seus snippets.",
-      github: "Continuar com GitHub",
+      accountContinue: "Continuar com minha conta",
       badge: "Acesso privado",
     },
     snippetPage: {
-      dashboardLink: "Ir para Dashboard",
+      dashboardLink: "Ir para minha área",
       languageFile: "arquivo",
       sharedSnippet: "Snippet compartilhado",
     },
     footer: {
       description:
-        "Ferramenta full-stack para demonstrar autenticação, dados, dashboard, busca e compartilhamento com uma interface Dracula.",
+        "Organize, encontre e compartilhe snippets de código em uma área simples, privada e fácil de usar.",
       madeByPrefix: "Desenvolvido por",
       version: "v1.0.0",
     },
@@ -212,10 +211,9 @@ export const dictionaries = {
   en: {
     common: {
       appName: "SnippetVault",
-      repository: "emanuelVINI01/snippetvault",
+      repository: "Creator profile",
       website: "snippetvault.emanuelvini.dev",
-      github: "GitHub",
-      dashboard: "Dashboard",
+      dashboard: "My space",
       login: "Sign in",
       logout: "Sign out",
       refresh: "Refresh",
@@ -231,24 +229,24 @@ export const dictionaries = {
       tryAgain: "Try again",
       clearSearch: "Clear search",
       navigation: "Navigation",
-      project: "Project",
+      project: "Product",
       contact: "Contact",
       allRightsReserved: "All rights reserved.",
     },
     home: {
-      badge: "Full-stack developer tool",
-      titlePrefix: "A platform to organize",
-      titleHighlight: "technical",
-      titleSuffix: "knowledge",
+      badge: "Snippet organizer",
+      titlePrefix: "Organize your",
+      titleHighlight: "code",
+      titleSuffix: "snippets",
       subtitle:
-        "SnippetVault presents a real full-stack application: GitHub authentication, dashboard, validated CRUD, public search, and a dark-first experience designed for developers.",
-      ctaDashboard: "Open dashboard",
-      ctaLogin: "Sign in with GitHub",
-      trustAuth: "NextAuth + GitHub",
-      trustSearch: "Public search",
-      trustData: "Prisma + Zod",
-      mockSearch: "Search technical knowledge...",
-      mockCaption: "Illustrative slice of the technical dashboard",
+        "Save code snippets, find them quickly by language or tag, and share public examples on clean, easy-to-read pages.",
+      ctaDashboard: "Open my space",
+      ctaLogin: "Sign in and start",
+      trustAuth: "Private space",
+      trustSearch: "Fast search",
+      trustData: "Organized tags",
+      mockSearch: "Search snippets, language, or tag...",
+      mockCaption: "Preview of the organization space",
       mockSnippets: [
         { lang: "TypeScript", title: "useDebounce hook", tags: ["react", "hooks"] },
         { lang: "Python", title: "Async rate limiter", tags: ["async", "api"] },
@@ -257,83 +255,83 @@ export const dictionaries = {
         { lang: "CSS", title: "Glassmorphism card", tags: ["ui", "design"] },
         { lang: "Go", title: "HTTP middleware", tags: ["server"] },
       ],
-      featuresTitlePrefix: "A small product with",
-      featuresTitleHighlight: "real system decisions",
+      featuresTitlePrefix: "Everything to keep",
+      featuresTitleHighlight: "snippets at hand",
       featuresSubtitle:
-        "SnippetVault presents a complete application: authentication, persistence, validation, search, dashboard, and sharing in one cohesive experience.",
+        "Keep commands, functions, queries, and patterns in one place, with simple search and public links whenever you need to share.",
       features: [
         {
-          title: "Public search",
+          title: "Snippet search",
           description:
-            "Demonstrates a discovery layer for public snippets, with search by content, language, and tags.",
+            "Find saved snippets quickly by title, description, language, or tag.",
         },
         {
-          title: "Organized modeling",
+          title: "Tag organization",
           description:
-            "Structures snippets, authors, visibility, and tags in a persistent database with Prisma.",
+            "Group examples by subject, project, or language so each piece is easy to recover.",
         },
         {
-          title: "Product dashboard",
+          title: "Personal space",
           description:
-            "Operational interface to create, edit, filter, and share technical knowledge in a few steps.",
+            "Create, edit, copy, and manage snippets in a direct interface for daily use.",
         },
         {
-          title: "GitHub authentication",
+          title: "Private access",
           description:
-            "NextAuth login flow separating private areas from public product resources.",
+            "Keep snippets private by default and choose when an item should be available through a link.",
         },
         {
-          title: "Public sharing",
+          title: "Public links",
           description:
-            "Public links turn snippets into presentable pages for demos and reference.",
+            "Turn a snippet into a shareable page for teammates, references, or examples.",
         },
         {
-          title: "Demonstrated stack",
+          title: "Comfortable reading",
           description:
-            "Designed to demonstrate full-stack architecture, UX, data validation, and visual polish for technical review.",
+            "View code with contrast, spacing, and highlighting tuned for low-friction reading.",
         },
       ],
-      flowTitle: "Product flow",
+      flowTitle: "How it works",
       steps: [
         {
-          title: "Authentication",
+          title: "Enter your space",
           description:
-            "The user signs in with GitHub and enters a private workspace to manage records.",
+            "Access your personal space to keep snippets private and organized in one place.",
         },
         {
-          title: "Structured entry",
+          title: "Save the snippet",
           description:
-            "Each snippet has clear fields, language, tags, visibility, and data validation.",
+            "Add a title, language, description, tags, and the code you want to reuse.",
         },
         {
           title: "Search and sharing",
           description:
-            "The dashboard enables fast search, copy, editing, and public pages for shareable items.",
+            "Use search to recover examples and create a public link when you want to share one.",
         },
       ],
       codePreview: {
         badge: "Polished editor",
         title: "Read it like you are inside your editor.",
         description:
-          "No rough interfaces or broken formatting. When you save code, it receives syntax highlighting with your favorite colors while preserving every comma and indentation.",
+          "No rough interfaces or broken formatting. When you save code, it keeps visual highlighting, spacing, and indentation so it is easy to revisit later.",
       },
-      faqTitle: "Case questions",
+      faqTitle: "Frequently asked questions",
       faqs: [
         {
-          q: "Why does SnippetVault exist?",
-          a: "It demonstrates a complete full-stack application with authentication, persistence, dashboard, public search, and sharing.",
+          q: "What is SnippetVault for?",
+          a: "It helps you save, organize, find, and share code snippets without relying on scattered files or old conversations.",
         },
         {
-          q: "Which technical decisions does it demonstrate?",
-          a: "The project shows NextAuth integration, Prisma modeling, Zod validation, API routes, separation between private and public data, and a responsive dark UI.",
+          q: "Are my snippets public?",
+          a: "No. You choose when a snippet should be public. Private items stay available only in your personal space.",
         },
         {
-          q: "Is it a real product or only a landing page?",
-          a: "It is a functional application. The landing explains the project, but the dashboard can create, edit, search, copy, and share snippets.",
+          q: "Can I share a specific snippet?",
+          a: "Yes. When you mark a snippet as public, it gets its own page with clean reading and sharing controls.",
         },
         {
-          q: "Which technologies are visible in this project?",
-          a: "Next.js, Auth.js, Prisma, PostgreSQL, Zod, API routes, code organization, and visual polish in a product small enough for quick review.",
+          q: "Can I find older snippets easily?",
+          a: "Yes. Search checks the title, description, language, and tags to help you recover the right snippet quickly.",
         },
       ],
     },
@@ -385,17 +383,17 @@ export const dictionaries = {
     login: {
       title: "Sign in",
       subtitle: "Sign in to save and share your snippets.",
-      github: "Continue with GitHub",
+      accountContinue: "Continue with my account",
       badge: "Private access",
     },
     snippetPage: {
-      dashboardLink: "Go to Dashboard",
+      dashboardLink: "Go to my space",
       languageFile: "file",
       sharedSnippet: "Shared snippet",
     },
     footer: {
       description:
-        "Full-stack developer tool demonstrating authentication, data, dashboard, search, and sharing with a Dracula interface.",
+        "Organize, find, and share code snippets in a simple, private space that is easy to use.",
       madeByPrefix: "Built by",
       version: "v1.0.0",
     },

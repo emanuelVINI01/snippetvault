@@ -1,7 +1,8 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { dictionaries, type Dictionary, type Language } from "@/src/i18n/dictionaries";
+import { languagePreferenceService } from "@/src/services/language-preference-service";
 
 interface LanguageContextProps {
   language: Language;
@@ -12,26 +13,15 @@ interface LanguageContextProps {
 
 const LanguageContext = createContext<LanguageContextProps | undefined>(undefined);
 
-function setDocumentLanguage(language: Language) {
-  document.documentElement.lang = language === "pt" ? "pt-BR" : "en";
-}
-
-export function LanguageProvider({ children }: { children: React.ReactNode }) {
+export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguageState] = useState<Language>("pt");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
-      const storedLang = localStorage.getItem("app-lang") as Language | null;
-      const nextLanguage =
-        storedLang === "pt" || storedLang === "en"
-          ? storedLang
-          : navigator.language.toLowerCase().startsWith("en")
-            ? "en"
-            : "pt";
-
+      const nextLanguage = languagePreferenceService.detect();
       setLanguageState(nextLanguage);
-      setDocumentLanguage(nextLanguage);
+      languagePreferenceService.syncDocument(nextLanguage);
       setMounted(true);
     });
 
@@ -40,15 +30,13 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem("app-lang", lang);
-    setDocumentLanguage(lang);
+    languagePreferenceService.save(lang);
   };
 
   const toggleLanguage = () => {
     setLanguageState((prev) => {
       const nextLanguage = prev === "pt" ? "en" : "pt";
-      localStorage.setItem("app-lang", nextLanguage);
-      setDocumentLanguage(nextLanguage);
+      languagePreferenceService.save(nextLanguage);
       return nextLanguage;
     });
   };

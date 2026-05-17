@@ -1,10 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { Copy, Check } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { Copy } from "lucide-react";
+import ClipboardIconButton from "@/src/components/ClipboardIconButton";
 import { useLanguage } from "@/src/context/LanguageContext";
+import { useClipboardAction } from "@/src/hooks/use-clipboard-action";
 
 interface CopyButtonProps {
   content: string;
@@ -14,50 +13,29 @@ interface CopyButtonProps {
 }
 
 export default function CopyButton({ content, className, iconSize = 14, label }: CopyButtonProps) {
-  const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
-
-  const handleCopy = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    try {
-      await navigator.clipboard.writeText(content);
-      setCopied(true);
-      toast.success(t.toasts.codeCopied, {
-        description: t.toasts.codeCopiedDescription,
-        duration: 2500,
-      });
-
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error(t.toasts.copyCodeError);
-    }
-  };
+  const { copied, copy } = useClipboardAction({
+    getText: () => content,
+    success: {
+      title: t.toasts.codeCopied,
+      description: t.toasts.codeCopiedDescription,
+    },
+    error: {
+      title: t.toasts.copyCodeError,
+    },
+  });
 
   return (
-    <motion.button
-      onClick={handleCopy}
-      whileTap={{ scale: 0.94 }}
-      className={`flex items-center gap-1.5 p-1.5 rounded-lg transition-all duration-200 ${
-        copied 
-          ? "text-dracula-green bg-dracula-green/10 border border-dracula-green/20" 
-          : "text-dracula-comment hover:text-dracula-fg hover:bg-dracula-card border border-transparent"
-      } ${className}`}
+    <ClipboardIconButton
+      activeClassName="border border-dracula-green/20 bg-dracula-green/10 text-dracula-green"
+      className={className}
+      copied={copied}
+      icon={Copy}
+      iconSize={iconSize}
+      idleClassName="border border-transparent text-dracula-comment hover:bg-dracula-card hover:text-dracula-fg"
+      label={label}
+      onClick={copy}
       title={copied ? t.common.copied : t.common.copyCode}
-    >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.span
-          key={copied ? "done" : "copy"}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.14 }}
-        >
-          {copied ? <Check size={iconSize} /> : <Copy size={iconSize} />}
-        </motion.span>
-      </AnimatePresence>
-      {label && <span className="text-xs font-medium">{label}</span>}
-    </motion.button>
+    />
   );
 }

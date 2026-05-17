@@ -1,47 +1,46 @@
-import { auth } from "@/src/auth";
 import { SnippetService } from "@/src/services/snippet-service";
 import { updateSnippetSchema } from "@/src/lib/validations/snippet";
+import { getAuthenticatedUserId } from "@/src/lib/api/auth";
+import {
+  handleApiError,
+  internalErrorResponse,
+  noContentResponse,
+  notFoundResponse,
+  unauthorizedResponse,
+} from "@/src/lib/api/responses";
 import { NextResponse } from "next/server";
-import { ZodError } from "zod";
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
   try {
     const snippet = await SnippetService.getById(id);
-    if (!snippet) return new NextResponse("Not Found", { status: 404 });
-    // Note: this returns the snippet regardless of its public status.
-    // If we want to secure private snippets from non-owners:
-    // We could check if it's public, and if not, check session user id.
-    // For now returning it as per requirements.
+    if (!snippet) return notFoundResponse();
     return NextResponse.json(snippet);
   } catch {
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return internalErrorResponse();
   }
 }
 
 export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const session = await auth();
-  if (!session?.user?.id) return new NextResponse("Unauthorized", { status: 401 });
+  const userId = await getAuthenticatedUserId();
+  if (!userId) return unauthorizedResponse();
 
   try {
     const body = await req.json();
     const validatedData = updateSnippetSchema.parse(body);
-    const updated = await SnippetService.update(id, session.user.id, validatedData);
+    const updated = await SnippetService.update(id, userId, validatedData);
     return NextResponse.json(updated);
   } catch (error) {
-    if (error instanceof ZodError) {
-      return NextResponse.json({ errors: error.issues }, { status: 400 });
-    }
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return handleApiError(error);
   }
 }
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const session = await auth();
-  if (!session?.user?.id) return new NextResponse("Unauthorized", { status: 401 });
+  const userId = await getAuthenticatedUserId();
+  if (!userId) return unauthorizedResponse();
 
-  await SnippetService.delete(id, session.user.id);
-  return new NextResponse(null, { status: 204 });
+  await SnippetService.delete(id, userId);
+  return noContentResponse();
 }

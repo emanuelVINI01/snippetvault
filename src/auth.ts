@@ -12,7 +12,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       profile(profile) {
         return {
           id: profile.id.toString(),
-          name: profile.login, // Always use username (login) for rankings
+          name: profile.login,
           email: profile.email,
           image: profile.avatar_url,
         };
@@ -20,7 +20,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-
     session({ session, user }) {
       if (session.user) {
         session.user.id = user.id;

@@ -3,34 +3,52 @@ import "./globals.css";
 import Footer from "@/src/components/main/Footer";
 import { Toaster } from "sonner";
 import Providers from "@/src/components/Providers";
+import { siteConfig } from "@/src/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://snippetvault.emanuelvini.dev'),
-  title: 'SnippetVault | Full-Stack Snippet Manager',
-  description: 'Full-stack developer tool for organizing technical knowledge with GitHub authentication, dashboard, public search and a Dracula theme.',
-  keywords: ['code snippets', 'full-stack', 'next.js', 'prisma', 'nextauth', 'developer tools', 'github auth'],
-  authors: [{ name: 'emanuelVINI', url: 'https://github.com/emanuelVINI01' }],
+  metadataBase: new URL(siteConfig.url),
+  applicationName: siteConfig.name,
+  title: {
+    default: "SnippetVault | Organizador de snippets de codigo",
+    template: `%s | ${siteConfig.name}`,
+  },
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.creator, url: siteConfig.creatorUrl }],
+  creator: siteConfig.creator,
+  publisher: siteConfig.creator,
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
-    title: 'SnippetVault - Full-Stack Developer Tool',
-    description: 'Developer application with authentication, CRUD, public search, dashboard and dark-first developer experience.',
-    url: 'https://snippetvault.emanuelvini.dev',
-    siteName: 'SnippetVault',
+    title: "SnippetVault | Organizador de snippets de codigo",
+    description: siteConfig.description,
+    url: siteConfig.url,
+    siteName: siteConfig.name,
     images: [
       {
-        url: '/snippet_dash.png', // Uma imagem do dashboard com o tema Dracula
+        url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: 'SnippetVault interface with Dracula theme',
+        alt: "Previa da area de organizacao do SnippetVault",
       },
     ],
-    locale: 'en_US',
-    type: 'website',
+    locale: "pt_BR",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
-    title: 'SnippetVault | Full-Stack Developer Tool',
-    description: 'Project demonstrating architecture, authentication, data modeling and UX in a real application.',
-    images: ['/snippet_dash.png'],
+    card: "summary_large_image",
+    title: "SnippetVault | Organizador de snippets de codigo",
+    description: siteConfig.description,
+    images: [siteConfig.ogImage],
   },
 }
 

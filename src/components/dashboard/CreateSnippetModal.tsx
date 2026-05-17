@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useRef, KeyboardEvent } from "react";
-import { motion } from "framer-motion";
-import Modal from "./Modal";
-import { X } from "lucide-react";
-import { useSnippets } from "@/src/hook/use-snippets-hook";
-import CodeEditor from "./CodeEditor";
-import { COMMON_LANGUAGES } from "./LanguageColors";
 import { useLanguage } from "@/src/context/LanguageContext";
+import { useSnippetForm } from "@/src/hooks/use-snippet-form";
+import { useSnippetFormSubmit } from "@/src/hooks/use-snippet-form-submit";
+import { useSnippetMutations } from "@/src/hooks/use-snippet-mutations";
+import Modal from "./Modal";
+import SnippetFormFields from "./SnippetFormFields";
+import SnippetModalActions from "./SnippetModalActions";
 
 interface CreateSnippetModalProps {
   isOpen: boolean;
@@ -15,180 +14,44 @@ interface CreateSnippetModalProps {
   onCreated: () => void;
 }
 
-
-
-const INPUT_CLASS =
-  "w-full rounded-xl bg-dracula-card/40 border border-dracula-card text-dracula-fg text-sm px-3.5 py-2.5 placeholder:text-dracula-comment/60 outline-none focus:border-dracula-purple focus:ring-2 focus:ring-dracula-purple/20 transition-all duration-150";
-
 export default function CreateSnippetModal({ isOpen, onClose, onCreated }: CreateSnippetModalProps) {
   const { t } = useLanguage();
-  const [title,       setTitle]       = useState("");
-  const [language,    setLanguage]    = useState("TypeScript");
-  const [description, setDescription] = useState("");
-  const [code,        setCode]        = useState("");
-  const [isPublic,    setIsPublic]    = useState(false);
-  const [tags,        setTags]        = useState<string[]>([]);
-  const [tagInput,    setTagInput]    = useState("");
-  const [loading,     setLoading]     = useState(false);
-  const [error,       setError]       = useState<string | null>(null);
-  const tagRef = useRef<HTMLInputElement>(null);
-  const { createSnippet } = useSnippets();
-
-  const addTag = (raw: string) => {
-    const value = raw.trim().toLowerCase().replace(/,+$/, "");
-    if (value && !tags.includes(value)) setTags((prev) => [...prev, value]);
-    setTagInput("");
-  };
-
-  const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" || e.key === ",") {
-      e.preventDefault();
-      addTag(tagInput);
-    } else if (e.key === "Backspace" && tagInput === "" && tags.length > 0) {
-      setTags((prev) => prev.slice(0, -1));
-    }
-  };
-
-  const removeTag = (tag: string) => setTags((prev) => prev.filter((t) => t !== tag));
-
-  const reset = () => {
-    setTitle(""); setLanguage("TypeScript"); setDescription("");
-    setCode(""); setIsPublic(false); setTags([]); setTagInput("");
-    setError(null);
-  };
-
-  const handleClose = () => { reset(); onClose(); };
-
-  const handleSubmit = async () => {
-    if (!title.trim() || !code.trim()) {
-      setError(t.form.requiredError);
-      return;
-    }
-    setLoading(true); setError(null);
-    try {
-      await createSnippet({ title, language, description, code, public: isPublic, tags });
-      reset();
+  const form = useSnippetForm();
+  const { createSnippet } = useSnippetMutations();
+  const submit = useSnippetFormSubmit({
+    form,
+    requiredError: t.form.requiredError,
+    unexpectedError: t.form.unexpectedError,
+    submit: createSnippet,
+    onSuccess: () => {
+      form.reset();
       onCreated();
       onClose();
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : t.form.unexpectedError);
-    } finally {
-      setLoading(false);
-    }
+    },
+  });
+
+  const close = () => {
+    form.reset();
+    submit.clearError();
+    onClose();
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title={t.form.createTitle} maxWidth="max-w-6xl">
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.35fr)_minmax(320px,0.65fr)]">
-        <div className="flex min-w-0 flex-col gap-1.5">
-          <label className="text-xs font-medium text-dracula-comment">{t.form.code}</label>
-          <CodeEditor
-            value={code}
-            onChange={setCode}
-            language={language}
-            placeholder={t.form.codePlaceholder}
-            ariaLabel={t.form.code}
-            minHeight="min(58vh, 560px)"
-          />
-        </div>
-
-        <div className="flex min-w-0 flex-col gap-4">
-          {/* Title + Language row */}
-          <div className="grid grid-cols-2 gap-3">
-            <div className="col-span-2 sm:col-span-1 flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-dracula-comment">{t.form.title}</label>
-              <input
-                className={INPUT_CLASS}
-                placeholder={t.form.titlePlaceholder}
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </div>
-            <div className="col-span-2 sm:col-span-1 flex flex-col gap-1.5">
-              <label className="text-xs font-medium text-dracula-comment">{t.form.language}</label>
-              <input
-                className={INPUT_CLASS}
-                list="lang-list"
-                placeholder="TypeScript"
-                value={language}
-                onChange={(e) => setLanguage(e.target.value)}
-              />
-              <datalist id="lang-list">
-                {COMMON_LANGUAGES.map((l) => <option key={l} value={l} />)}
-              </datalist>
-            </div>
-          </div>
-
-          {/* Description */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-dracula-comment">{t.form.description}</label>
-            <input
-              className={INPUT_CLASS}
-              placeholder={t.form.descriptionPlaceholder}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-          </div>
-
-          {/* Tags */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-medium text-dracula-comment">{t.form.tags} <span className="text-dracula-comment/50">({t.form.tagsHint})</span></label>
-            <div
-              className="flex flex-wrap gap-1.5 min-h-[42px] items-center rounded-xl bg-dracula-card/40 border border-dracula-card px-3 py-2 focus-within:border-dracula-purple focus-within:ring-2 focus-within:ring-dracula-purple/20 transition-all duration-150 cursor-text"
-              onClick={() => tagRef.current?.focus()}
-            >
-              {tags.map((tag) => (
-                <span key={tag} className="flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-dracula-purple/15 text-dracula-purple border border-dracula-purple/30">
-                  #{tag}
-                  <button onClick={(e) => { e.stopPropagation(); removeTag(tag); }} className="hover:text-dracula-red transition-colors ml-0.5">
-                    <X className="w-2.5 h-2.5" />
-                  </button>
-                </span>
-              ))}
-              <input
-                ref={tagRef}
-                value={tagInput}
-                onChange={(e) => setTagInput(e.target.value)}
-                onKeyDown={handleTagKeyDown}
-                onBlur={() => { if (tagInput.trim()) addTag(tagInput); }}
-                placeholder={tags.length === 0 ? t.form.tagsPlaceholder : ""}
-                className="flex-1 min-w-[80px] bg-transparent text-sm text-dracula-fg placeholder:text-dracula-comment/50 outline-none"
-              />
-            </div>
-          </div>
-
-          {/* Public toggle */}
-          <label className="flex items-center gap-3 cursor-pointer select-none">
-            <motion.div
-              layout
-              className={`relative w-10 h-5.5 rounded-full transition-colors duration-200 ${isPublic ? "bg-dracula-purple" : "bg-dracula-card"}`}
-              onClick={() => setIsPublic((v) => !v)}
-            >
-              <motion.span layout className={`absolute top-0.5 left-0.5 w-4.5 h-4.5 rounded-full bg-dracula-fg shadow transition-transform duration-200 ${isPublic ? "translate-x-[18px]" : ""}`} />
-            </motion.div>
-            <span className="text-sm text-dracula-comment">{t.form.publicSnippet}</span>
-          </label>
-
-          {/* Error */}
-          {error && <p className="text-sm text-dracula-red">{error}</p>}
-
-          {/* Actions */}
-          <div className="flex justify-end gap-3 pt-1">
-            <button
-              onClick={handleClose}
-              className="px-4 py-2 rounded-xl text-sm text-dracula-comment hover:text-dracula-fg hover:bg-dracula-card transition-colors"
-            >
-              {t.common.cancel}
-            </button>
-            <button
-              onClick={handleSubmit}
-              disabled={loading}
-              className="px-5 py-2 rounded-xl text-sm font-semibold bg-dracula-purple text-dracula-bg hover:brightness-110 active:scale-[0.98] disabled:opacity-50 transition-all duration-150"
-            >
-              {loading ? t.form.creating : t.form.create}
-            </button>
-          </div>
-        </div>
+    <Modal isOpen={isOpen} onClose={close} title={t.form.createTitle} maxWidth="max-w-6xl">
+      <div className="flex flex-col gap-4">
+        <SnippetFormFields
+          descriptionPlaceholder={t.form.descriptionPlaceholder}
+          form={form}
+          languageListId="create-lang-list"
+        />
+        {submit.error && <p className="text-sm text-dracula-red">{submit.error}</p>}
+        <SnippetModalActions
+          loading={submit.loading}
+          loadingLabel={t.form.creating}
+          submitLabel={t.form.create}
+          onCancel={close}
+          onSubmit={submit.submit}
+        />
       </div>
     </Modal>
   );

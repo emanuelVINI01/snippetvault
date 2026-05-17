@@ -1,4 +1,5 @@
 import { SnippetService } from "@/src/services/snippet-service";
+import { internalErrorResponse } from "@/src/lib/api/responses";
 import { NextResponse } from "next/server";
 
 export async function GET(req: Request) {
@@ -9,6 +10,6 @@ export async function GET(req: Request) {
     const snippets = await SnippetService.searchPublic(query);
     return NextResponse.json(snippets);
   } catch {
-    return new NextResponse("Internal Server Error", { status: 500 });
+    return internalErrorResponse();
   }
 }

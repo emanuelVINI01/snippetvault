@@ -1,10 +1,4 @@
-/**
- * Dracula-themed language colors for snippet cards.
- * Combines Tailwind classes for text color, background (with opacity), and border.
- */
-
 export const LANG_COLORS: Record<string, string> = {
-  // Web & JavaScript Ecosystem
   typescript:  "text-dracula-cyan   bg-dracula-cyan/10   border-dracula-cyan/30",
   javascript:  "text-dracula-green  bg-dracula-green/10  border-dracula-green/30",
   react:       "text-dracula-cyan   bg-dracula-cyan/10   border-dracula-cyan/30",
@@ -19,8 +13,6 @@ export const LANG_COLORS: Record<string, string> = {
   scss:        "text-dracula-red    bg-dracula-red/10    border-dracula-red/30",
   sass:        "text-dracula-red    bg-dracula-red/10    border-dracula-red/30",
   tailwind:    "text-dracula-cyan   bg-dracula-cyan/10   border-dracula-cyan/30",
-
-  // Systems & Backend
   python:      "text-dracula-green  bg-dracula-green/10  border-dracula-green/30",
   go:          "text-dracula-cyan   bg-dracula-cyan/10   border-dracula-cyan/30",
   rust:        "text-dracula-red    bg-dracula-red/10    border-dracula-red/30",
@@ -36,16 +28,12 @@ export const LANG_COLORS: Record<string, string> = {
   kotlin:      "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
   dart:        "text-dracula-cyan   bg-dracula-cyan/10   border-dracula-cyan/30",
   elixir:      "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
-
-  // Data, AI & Scripting
   sql:         "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
   r:           "text-dracula-cyan   bg-dracula-cyan/10   border-dracula-cyan/30",
   bash:        "text-dracula-comment bg-dracula-comment/10 border-dracula-comment/30",
   shell:       "text-dracula-comment bg-dracula-comment/10 border-dracula-comment/30",
   powershell:  "text-dracula-cyan   bg-dracula-cyan/10   border-dracula-cyan/30",
   lua:         "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
-
-  // Data Formats & Config
   json:        "text-dracula-green  bg-dracula-green/10  border-dracula-green/30",
   yaml:        "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
   yml:         "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
@@ -57,10 +45,6 @@ export const LANG_COLORS: Record<string, string> = {
   graphql:     "text-dracula-purple bg-dracula-purple/10 border-dracula-purple/30",
 };
 
-/**
- * Gets the Tailwind CSS utility classes for a given language.
- * Defaults to a comment-colored style if the language is unknown.
- */
 export function getLanguageColor(lang: string = ""): string {
   const key = lang.toLowerCase().trim();
   return LANG_COLORS[key] ?? "text-dracula-comment bg-dracula-comment/10 border-dracula-comment/30";

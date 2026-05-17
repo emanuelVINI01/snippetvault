@@ -1,10 +1,10 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
-import { Link, Check } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { Link } from "lucide-react";
+import ClipboardIconButton from "@/src/components/ClipboardIconButton";
 import { useLanguage } from "@/src/context/LanguageContext";
+import { useClipboardAction } from "@/src/hooks/use-clipboard-action";
+import { getSnippetUrl } from "@/src/utils/routes";
 
 interface ShareButtonProps {
   snippetId: string;
@@ -13,53 +13,29 @@ interface ShareButtonProps {
 }
 
 export default function ShareButton({ snippetId, className, iconSize = 14 }: ShareButtonProps) {
-  const [copied, setCopied] = useState(false);
   const { t } = useLanguage();
-
-  const handleShare = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const url = `${window.location.origin}/snippet/${snippetId}`;
-
-    try {
-      await navigator.clipboard.writeText(url);
-      setCopied(true);
-      toast.success(t.toasts.linkCopied, {
-        description: t.toasts.linkCopiedDescription,
-        duration: 3000,
-      });
-
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      toast.error(t.toasts.copyLinkError, {
-        description: t.toasts.copyLinkErrorDescription,
-      });
-    }
-  };
+  const { copied, copy } = useClipboardAction({
+    getText: () => getSnippetUrl(snippetId, window.location.origin),
+    success: {
+      title: t.toasts.linkCopied,
+      description: t.toasts.linkCopiedDescription,
+    },
+    error: {
+      title: t.toasts.copyLinkError,
+      description: t.toasts.copyLinkErrorDescription,
+    },
+  });
 
   return (
-    <motion.button
-      onClick={handleShare}
-      whileTap={{ scale: 0.94 }}
-      className={`p-1.5 rounded-lg transition-all duration-200 ${
-        copied 
-          ? "text-dracula-green bg-dracula-green/10" 
-          : "text-dracula-comment hover:text-dracula-cyan hover:bg-dracula-cyan/10"
-      } ${className}`}
+    <ClipboardIconButton
+      activeClassName="bg-dracula-green/10 text-dracula-green"
+      className={className}
+      copied={copied}
+      icon={Link}
+      iconSize={iconSize}
+      idleClassName="text-dracula-comment hover:bg-dracula-cyan/10 hover:text-dracula-cyan"
+      onClick={copy}
       title={copied ? t.common.copied : t.common.shareSnippet}
-    >
-      <AnimatePresence mode="wait" initial={false}>
-        <motion.span
-          key={copied ? "done" : "link"}
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.14 }}
-        >
-          {copied ? <Check size={iconSize} /> : <Link size={iconSize} />}
-        </motion.span>
-      </AnimatePresence>
-    </motion.button>
+    />
   );
 }
