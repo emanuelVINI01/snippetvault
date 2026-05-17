@@ -11,6 +11,7 @@ import Features from "@/src/components/main/Features";
 import HowItWorks from "@/src/components/main/HowItWorks";
 import CodePreview from "@/src/components/main/CodePreview";
 import FAQ from "@/src/components/main/FAQ";
+import MobileBottomNav from "@/src/components/main/MobileBottomNav";
 
 const LANG_COLORS: Record<string, string> = {
   TypeScript: "text-dracula-cyan bg-dracula-cyan/10 border-dracula-cyan/30",
@@ -29,7 +30,7 @@ export default function HomeClient({ isAuthenticated }: HomeClientProps) {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen text-dracula-fg">
+    <div className="min-h-screen pb-24 text-dracula-fg md:pb-0">
       <motion.nav
         initial={{ y: -48, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -203,6 +204,7 @@ export default function HomeClient({ isAuthenticated }: HomeClientProps) {
         <CodePreview />
         <FAQ />
       </main>
+      <MobileBottomNav />
     </div>
   );
 }

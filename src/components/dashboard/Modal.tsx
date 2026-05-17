@@ -35,7 +35,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = "ma
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 flex items-end justify-center p-0 sm:items-center sm:p-4"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -54,14 +54,14 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = "ma
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 14, scale: 0.97 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className={`relative max-h-[calc(100dvh-2rem)] w-full ${maxWidth} overflow-hidden rounded-2xl border border-dracula-card bg-dracula-bg shadow-2xl shadow-black/50`}
+            className={`relative max-h-[calc(100dvh-0.75rem)] w-full min-w-0 ${maxWidth} overflow-hidden rounded-t-3xl border border-dracula-card bg-dracula-bg shadow-2xl shadow-black/50 sm:max-h-[calc(100dvh-2rem)] sm:rounded-2xl`}
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-dracula-card">
-              <h2 id="modal-title" className="text-base font-semibold text-dracula-fg">
+            <div className="flex min-w-0 items-center justify-between gap-3 border-b border-dracula-card px-4 py-4 sm:px-6">
+              <h2 id="modal-title" className="min-w-0 text-base font-semibold text-dracula-fg">
                 {title}
               </h2>
               <button
@@ -74,7 +74,7 @@ export default function Modal({ isOpen, onClose, title, children, maxWidth = "ma
             </div>
 
             {/* Body */}
-            <div className="max-h-[calc(100dvh-6rem)] overflow-y-auto px-6 py-5">
+            <div className="max-h-[calc(100dvh-6rem)] min-w-0 overflow-y-auto px-4 py-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] sm:px-6 sm:pb-5">
               {children}
             </div>
           </motion.div>

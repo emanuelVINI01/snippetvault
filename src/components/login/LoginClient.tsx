@@ -6,6 +6,7 @@ import { FaGithub } from "react-icons/fa";
 import Logo from "@/src/components/Logo";
 import LanguageToggle from "@/src/components/LanguageToggle";
 import { useLanguage } from "@/src/context/LanguageContext";
+import MobileBottomNav from "@/src/components/main/MobileBottomNav";
 
 interface LoginClientProps {
   signInAction: () => Promise<void>;
@@ -15,7 +16,7 @@ export default function LoginClient({ signInAction }: LoginClientProps) {
   const { t } = useLanguage();
 
   return (
-    <div className="min-h-screen text-dracula-fg">
+    <div className="min-h-screen pb-24 text-dracula-fg md:pb-0">
       <motion.nav
         initial={{ y: -48, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -61,6 +62,7 @@ export default function LoginClient({ signInAction }: LoginClientProps) {
           </form>
         </motion.div>
       </main>
+      <MobileBottomNav />
     </div>
   );
 }

@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
 :root {
+  --font-jetbrains: "JetBrains Mono";
+  --font-fira: "Fira Code";
   --dracula-bg: #282a36;
   --dracula-surface: #343746;
   --dracula-card: #44475a;
@@ -63,16 +65,42 @@
 }
 
 html {
+  width: 100%;
+  max-width: 100%;
   scroll-behavior: smooth;
 }
 
 body {
+  width: 100%;
+  max-width: 100%;
   min-height: 100dvh;
   overflow-x: hidden;
   background: var(--dracula-bg);
   color: var(--dracula-fg);
   font-family: var(--font-jetbrains), var(--font-fira), monospace;
   position: relative;
+}
+
+:where(main, section, article, header, footer, nav, aside, div, form, label, ul, ol, li) {
+  min-width: 0;
+}
+
+:where(h1, h2, h3, h4, p, a, span, button, code, pre) {
+  overflow-wrap: anywhere;
+}
+
+:where(img, video, canvas, svg, table) {
+  max-width: 100%;
+}
+
+:where(pre, code) {
+  white-space: pre-wrap;
+}
+
+@media (max-width: 640px) {
+  :where(input, select, textarea) {
+    font-size: 16px;
+  }
 }
 
 body::before {

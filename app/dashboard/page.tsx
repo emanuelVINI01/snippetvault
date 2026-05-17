@@ -12,6 +12,7 @@ import { useSnippets } from "@/src/hook/use-snippets-hook";
 import Logo from "@/src/components/Logo";
 import LanguageToggle from "@/src/components/LanguageToggle";
 import { useLanguage } from "@/src/context/LanguageContext";
+import MobileBottomNav from "@/src/components/main/MobileBottomNav";
 
 type ModalState = "none" | "create" | "edit" | "delete";
 
@@ -75,7 +76,7 @@ export default function DashboardPage() {
   const visibleCount = filterSnippets(snippets, query).length;
 
   return (
-    <div className="min-h-screen text-dracula-fg flex flex-col">
+    <div className="min-h-screen pb-24 text-dracula-fg flex flex-col md:pb-0">
 
       {/* ── Topbar ────────────────────────────────────── */}
       <motion.header
@@ -135,7 +136,7 @@ export default function DashboardPage() {
 
           <button
             onClick={openCreate}
-            className="self-start sm:self-auto flex items-center gap-2 px-4 py-2.5 rounded-xl bg-dracula-purple text-dracula-bg font-semibold text-sm hover:brightness-110 hover:scale-[1.02] active:scale-[0.98] transition-all duration-150 shadow-lg shadow-dracula-purple/20"
+            className="flex min-w-0 items-center gap-2 rounded-xl bg-dracula-purple px-4 py-2.5 text-sm font-semibold text-dracula-bg shadow-lg shadow-dracula-purple/20 transition-all duration-150 hover:scale-[1.02] hover:brightness-110 active:scale-[0.98] sm:self-auto"
           >
             <Plus className="w-4 h-4" />
             {t.dashboard.newSnippet}
@@ -147,15 +148,15 @@ export default function DashboardPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12, duration: 0.35, ease: "easeOut" }}
-          className="flex flex-col sm:flex-row gap-4 items-center"
+          className="flex min-w-0 flex-col items-center gap-4 sm:flex-row"
           ref={searchRef}
         >
-          <div className="flex-1 w-full relative">
+          <div className="relative w-full min-w-0 flex-1">
             <SearchBar value={query} onChange={setQuery} />
           </div>
           <button
             onClick={() => setIsGlobal(!isGlobal)}
-            className={`flex items-center gap-2 px-4 py-3 rounded-2xl border transition-all text-sm font-medium whitespace-nowrap ${
+            className={`flex min-w-0 items-center justify-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition-all ${
               isGlobal
                 ? "bg-dracula-purple/10 border-dracula-purple text-dracula-purple shadow-sm shadow-dracula-purple/20"
                 : "bg-dracula-card/30 border-dracula-card text-dracula-comment hover:text-dracula-fg hover:border-dracula-comment/50"
@@ -286,6 +287,7 @@ export default function DashboardPage() {
         onDeleted={fetchSnippets}
         snippet={selected}
       />
+      <MobileBottomNav />
     </div>
   );
 }

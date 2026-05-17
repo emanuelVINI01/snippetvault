@@ -28,19 +28,19 @@ export const dictionaries = {
       allRightsReserved: "Todos os direitos reservados.",
     },
     home: {
-      badge: "Case full-stack de portfólio",
+      badge: "Ferramenta full-stack para devs",
       titlePrefix: "Plataforma para organizar",
       titleHighlight: "conhecimento",
       titleSuffix: "técnico",
       subtitle:
-        "O SnippetVault mostra uma aplicação full-stack real em escala de portfólio: autenticação GitHub, dashboard, CRUD validado, busca pública e uma experiência dark-first pensada para desenvolvedores.",
+        "O SnippetVault mostra uma aplicação full-stack real: autenticação GitHub, dashboard, CRUD validado, busca pública e uma experiência dark-first pensada para desenvolvedores.",
       ctaDashboard: "Acessar dashboard",
       ctaLogin: "Entrar com GitHub",
       trustAuth: "NextAuth + GitHub",
       trustSearch: "Busca pública",
       trustData: "Prisma + Zod",
       mockSearch: "Buscar conhecimento técnico...",
-      mockCaption: "Recorte ilustrativo do dashboard do case",
+      mockCaption: "Recorte ilustrativo do dashboard técnico",
       mockSnippets: [
         { lang: "TypeScript", title: "useDebounce hook", tags: ["react", "hooks"] },
         { lang: "Python", title: "Async rate limiter", tags: ["async", "api"] },
@@ -52,7 +52,7 @@ export const dictionaries = {
       featuresTitlePrefix: "Um produto pequeno com decisões de",
       featuresTitleHighlight: "sistema real",
       featuresSubtitle:
-        "O SnippetVault apresenta uma aplicação completa em escala de portfólio: autenticação, persistência, validação, busca, dashboard e compartilhamento em uma experiência coesa.",
+        "O SnippetVault apresenta uma aplicação completa: autenticação, persistência, validação, busca, dashboard e compartilhamento em uma experiência coesa.",
       features: [
         {
           title: "Busca pública",
@@ -80,9 +80,9 @@ export const dictionaries = {
             "Links públicos transformam snippets em páginas apresentáveis, úteis para demonstração e consulta.",
         },
         {
-          title: "Case de portfólio",
+          title: "Stack demonstrada",
           description:
-            "Projeto pensado para evidenciar arquitetura full-stack, UX, validação de dados e acabamento visual para avaliação técnica.",
+            "Projeto pensado para evidenciar arquitetura full-stack, UX, validação de dados e acabamento visual com uma stack moderna.",
         },
       ],
       flowTitle: "Fluxo do produto",
@@ -109,11 +109,11 @@ export const dictionaries = {
         description:
           "Nada de interfaces feias ou formatações quebradas. Ao salvar seu código, ele recebe syntax highlighting fiel às suas cores favoritas, preservando cada vírgula e indentação.",
       },
-      faqTitle: "Perguntas do case",
+      faqTitle: "Perguntas técnicas",
       faqs: [
         {
           q: "Por que o SnippetVault existe?",
-          a: "Ele funciona como um case de portfólio para demonstrar uma aplicação full-stack completa, com autenticação, persistência, dashboard, busca pública e compartilhamento.",
+          a: "Ele demonstra uma aplicação full-stack completa, com autenticação, persistência, dashboard, busca pública e compartilhamento.",
         },
         {
           q: "Quais decisões técnicas ele demonstra?",
@@ -124,8 +124,8 @@ export const dictionaries = {
           a: "É uma aplicação funcional. A landing explica o projeto, mas o dashboard permite criar, editar, buscar, copiar e compartilhar snippets.",
         },
         {
-          q: "O que um recrutador consegue avaliar no projeto?",
-          a: "Domínio de produto, backend, autenticação, banco de dados, validação, organização de código e acabamento visual em um projeto pequeno o suficiente para avaliação rápida.",
+          q: "Quais tecnologias ficam evidentes no projeto?",
+          a: "Next.js, Auth.js, Prisma, PostgreSQL, Zod, rotas de API, organização de código e acabamento visual em um produto pequeno o suficiente para análise rápida.",
         },
       ],
     },
@@ -187,7 +187,7 @@ export const dictionaries = {
     },
     footer: {
       description:
-        "Case full-stack de portfólio para demonstrar autenticação, dados, dashboard, busca e compartilhamento com uma interface Dracula.",
+        "Ferramenta full-stack para demonstrar autenticação, dados, dashboard, busca e compartilhamento com uma interface Dracula.",
       madeByPrefix: "Desenvolvido por",
       version: "v1.0.0",
     },
@@ -236,19 +236,19 @@ export const dictionaries = {
       allRightsReserved: "All rights reserved.",
     },
     home: {
-      badge: "Full-stack portfolio case",
+      badge: "Full-stack developer tool",
       titlePrefix: "A platform to organize",
       titleHighlight: "technical",
       titleSuffix: "knowledge",
       subtitle:
-        "SnippetVault presents a real full-stack application at portfolio scale: GitHub authentication, dashboard, validated CRUD, public search, and a dark-first experience designed for developers.",
+        "SnippetVault presents a real full-stack application: GitHub authentication, dashboard, validated CRUD, public search, and a dark-first experience designed for developers.",
       ctaDashboard: "Open dashboard",
       ctaLogin: "Sign in with GitHub",
       trustAuth: "NextAuth + GitHub",
       trustSearch: "Public search",
       trustData: "Prisma + Zod",
       mockSearch: "Search technical knowledge...",
-      mockCaption: "Illustrative slice of the case dashboard",
+      mockCaption: "Illustrative slice of the technical dashboard",
       mockSnippets: [
         { lang: "TypeScript", title: "useDebounce hook", tags: ["react", "hooks"] },
         { lang: "Python", title: "Async rate limiter", tags: ["async", "api"] },
@@ -260,7 +260,7 @@ export const dictionaries = {
       featuresTitlePrefix: "A small product with",
       featuresTitleHighlight: "real system decisions",
       featuresSubtitle:
-        "SnippetVault presents a complete application at portfolio scale: authentication, persistence, validation, search, dashboard, and sharing in one cohesive experience.",
+        "SnippetVault presents a complete application: authentication, persistence, validation, search, dashboard, and sharing in one cohesive experience.",
       features: [
         {
           title: "Public search",
@@ -288,7 +288,7 @@ export const dictionaries = {
             "Public links turn snippets into presentable pages for demos and reference.",
         },
         {
-          title: "Portfolio case",
+          title: "Demonstrated stack",
           description:
             "Designed to demonstrate full-stack architecture, UX, data validation, and visual polish for technical review.",
         },
@@ -321,7 +321,7 @@ export const dictionaries = {
       faqs: [
         {
           q: "Why does SnippetVault exist?",
-          a: "It works as a portfolio case to demonstrate a complete full-stack application with authentication, persistence, dashboard, public search, and sharing.",
+          a: "It demonstrates a complete full-stack application with authentication, persistence, dashboard, public search, and sharing.",
         },
         {
           q: "Which technical decisions does it demonstrate?",
@@ -332,8 +332,8 @@ export const dictionaries = {
           a: "It is a functional application. The landing explains the project, but the dashboard can create, edit, search, copy, and share snippets.",
         },
         {
-          q: "What can a recruiter evaluate in this project?",
-          a: "Product thinking, backend, authentication, database work, validation, code organization, and visual polish in a project small enough for quick review.",
+          q: "Which technologies are visible in this project?",
+          a: "Next.js, Auth.js, Prisma, PostgreSQL, Zod, API routes, code organization, and visual polish in a product small enough for quick review.",
         },
       ],
     },
@@ -395,7 +395,7 @@ export const dictionaries = {
     },
     footer: {
       description:
-        "Full-stack portfolio case demonstrating authentication, data, dashboard, search, and sharing with a Dracula interface.",
+        "Full-stack developer tool demonstrating authentication, data, dashboard, search, and sharing with a Dracula interface.",
       madeByPrefix: "Built by",
       version: "v1.0.0",
     },

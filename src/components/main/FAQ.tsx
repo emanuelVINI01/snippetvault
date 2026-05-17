@@ -10,7 +10,7 @@ export default function FAQ() {
   const { t } = useLanguage();
 
   return (
-    <section className="relative px-4 py-24 sm:px-6">
+    <section id="faq" className="relative scroll-mt-20 px-4 py-24 sm:px-6">
       <div className="mx-auto max-w-3xl">
         <motion.h2
           initial={{ opacity: 0, y: 22 }}

@@ -46,19 +46,19 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
       exit={{ opacity: 0, y: -12 }}
       whileHover={{ y: -3 }}
       transition={{ duration: 0.22, ease: "easeOut" }}
-      className="group flex flex-col rounded-2xl border border-dracula-card hover:border-dracula-purple/40 bg-dracula-card/25 transition-shadow duration-200 hover:shadow-xl hover:shadow-dracula-purple/10 overflow-hidden"
+      className="group flex min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-dracula-card bg-dracula-card/25 transition-shadow duration-200 hover:border-dracula-purple/40 hover:shadow-xl hover:shadow-dracula-purple/10"
     >
       {/* Header */}
       <div className="flex items-start justify-between gap-3 px-4 pt-4 pb-3">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <h3 className="font-semibold text-dracula-fg text-sm truncate leading-snug">{snippet.title}</h3>
           {snippet.description && (
             <p className="text-xs text-dracula-comment mt-0.5 line-clamp-1">{snippet.description}</p>
           )}
         </div>
 
-        <div className="flex items-center gap-1.5 shrink-0">
-          <span className={`text-xs font-mono px-2 py-0.5 rounded border ${langClass}`}>
+        <div className="flex min-w-0 shrink-0 items-center gap-1.5">
+          <span className={`max-w-[7rem] truncate rounded border px-2 py-0.5 font-mono text-xs ${langClass}`}>
             {snippet.language}
           </span>
           {snippet.public
@@ -69,7 +69,7 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
       </div>
 
       {/* Code preview */}
-      <div className="mx-4 mb-3 rounded-xl overflow-hidden border border-dracula-card text-xs">
+      <div className="mx-4 mb-3 max-w-full overflow-hidden rounded-xl border border-dracula-card text-xs">
         <SyntaxHighlighter
           language={langKey}
           style={dracula}
@@ -88,13 +88,13 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between px-4 pb-4 pt-1">
+      <div className="flex min-w-0 items-center justify-between gap-3 px-4 pb-4 pt-1">
         {/* Tags */}
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex min-w-0 flex-wrap gap-1.5">
           {snippet.tags.slice(0, 4).map((tag) => (
             <span
               key={tag}
-              className="text-xs px-2 py-0.5 rounded-full bg-dracula-purple/10 text-dracula-purple border border-dracula-purple/20"
+              className="max-w-full rounded-full border border-dracula-purple/20 bg-dracula-purple/10 px-2 py-0.5 text-xs text-dracula-purple"
             >
               #{tag}
             </span>
@@ -105,7 +105,7 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+        <div className="flex shrink-0 items-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
           <CopyButton content={snippet.code} iconSize={14} />
           {snippet.public && (
             <ShareButton snippetId={snippet.id} iconSize={14} />
