@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { LogOut, RefreshCw } from "lucide-react";
-import LanguageToggle from "@/src/components/LanguageToggle";
-import Logo from "@/src/components/Logo";
+import LanguageToggle from "@/src/components/shared/i18n/LanguageToggle";
+import Logo from "@/src/components/shared/brand/Logo";
 import { useLanguage } from "@/src/context/LanguageContext";
 
 interface DashboardHeaderProps {

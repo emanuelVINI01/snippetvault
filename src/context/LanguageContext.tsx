@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { dictionaries, type Dictionary, type Language } from "@/src/i18n/dictionaries";
-import { languagePreferenceService } from "@/src/services/language-preference-service";
+import { languagePreferenceService } from "@/src/services/preferences/language-preference-service";
 
 interface LanguageContextProps {
   language: Language;

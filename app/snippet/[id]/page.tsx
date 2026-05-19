@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
-import { SnippetService } from "@/src/services/snippet-service";
-import PublicSnippetClient from "@/src/components/viewer/PublicSnippetClient";
+import { SnippetService } from "@/src/services/snippets/snippet-service";
+import PublicSnippetClient from "@/src/components/snippet/PublicSnippetClient";
 import { mapPublicSnippetView } from "@/src/mappers/public-snippet-mapper";
 import {
   getMissingSnippetMetadata,

@@ -1,5 +1,5 @@
 import { auth } from "@/src/auth";
-import HomeClient from "@/src/components/main/HomeClient";
+import HomeClient from "@/src/components/home/HomeClient";
 import { getHomeJsonLd } from "@/src/lib/home-seo";
 import type { Metadata } from "next";
 

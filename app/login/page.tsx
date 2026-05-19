@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { auth, signIn } from "@/src/auth";
-import LoginClient from "@/src/components/login/LoginClient";
+import LoginClient from "@/src/components/auth/LoginClient";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {

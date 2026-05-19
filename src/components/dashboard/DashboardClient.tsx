@@ -1,10 +1,10 @@
 "use client";
 
-import MobileBottomNav from "@/src/components/main/MobileBottomNav";
-import { useDashboardSnippets } from "@/src/hooks/use-dashboard-snippets";
+import MobileBottomNav from "@/src/components/shared/navigation/MobileBottomNav";
+import { useDashboardSnippets } from "@/src/hooks/dashboard/use-dashboard-snippets";
 import DashboardContent from "./DashboardContent";
 import DashboardHeader from "./DashboardHeader";
-import DashboardModals from "./DashboardModals";
+import DashboardModals from "./modals/DashboardModals";
 import DashboardSearchControls from "./DashboardSearchControls";
 import DashboardSummary from "./DashboardSummary";
 

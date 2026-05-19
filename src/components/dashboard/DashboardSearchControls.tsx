@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { Globe } from "lucide-react";
 import type { RefObject } from "react";
-import SearchBar from "@/src/components/main/SearchBar";
+import SearchBar from "@/src/components/shared/navigation/SearchBar";
 import { useLanguage } from "@/src/context/LanguageContext";
 
 interface DashboardSearchControlsProps {

@@ -6,7 +6,7 @@ import DashboardEmptySearchState from "./states/DashboardEmptySearchState";
 import DashboardEmptyState from "./states/DashboardEmptyState";
 import DashboardErrorState from "./states/DashboardErrorState";
 import DashboardLoadingState from "./states/DashboardLoadingState";
-import SnippetGrid from "./SnippetGrid";
+import SnippetGrid from "./cards/SnippetGrid";
 
 interface DashboardContentProps {
   error: string | null;

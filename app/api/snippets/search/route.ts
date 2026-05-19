@@ -1,4 +1,4 @@
-import { SnippetService } from "@/src/services/snippet-service";
+import { SnippetService } from "@/src/services/snippets/snippet-service";
 import { internalErrorResponse } from "@/src/lib/api/responses";
 import { NextResponse } from "next/server";
 

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { getSnippetPath, getSnippetUrl } from "@/src/utils/routes";
+import { getSnippetPath, getSnippetUrl } from "@/src/utils/snippets/routes";
 import { siteConfig } from "@/src/lib/site";
 import type { PublicSnippetSource } from "@/src/types/public-snippet";
 

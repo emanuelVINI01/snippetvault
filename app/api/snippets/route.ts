@@ -1,4 +1,4 @@
-import { SnippetService } from "@/src/services/snippet-service";
+import { SnippetService } from "@/src/services/snippets/snippet-service";
 import { createSnippetSchema } from "@/src/lib/validations/snippet";
 import { getAuthenticatedUserId } from "@/src/lib/api/auth";
 import { handleApiError, unauthorizedResponse } from "@/src/lib/api/responses";

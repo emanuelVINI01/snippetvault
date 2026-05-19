@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { connection } from "next/server";
 import { siteConfig } from "@/src/lib/site";
-import { SnippetService } from "@/src/services/snippet-service";
+import { SnippetService } from "@/src/services/snippets/snippet-service";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   await connection();
