@@ -16,13 +16,6 @@ export default function CopyButton({ content, className, iconSize = 14, label }:
   const { t } = useLanguage();
   const { copied, copy } = useClipboardAction({
     getText: () => content,
-    success: {
-      title: t.toasts.codeCopied,
-      description: t.toasts.codeCopiedDescription,
-    },
-    error: {
-      title: t.toasts.copyCodeError,
-    },
   });
 
   return (

@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/src/components/home/footer/Footer";
-import { Toaster } from "sonner";
 import Providers from "@/src/components/shared/layout/Providers";
 import { siteConfig } from "@/src/lib/site";
 
@@ -65,7 +64,6 @@ export default function RootLayout({
       <body className="min-h-full">
         <Providers>
           {children}
-          <Toaster closeButton position="top-right" theme="dark" richColors />
           <Footer />
         </Providers>
       </body>

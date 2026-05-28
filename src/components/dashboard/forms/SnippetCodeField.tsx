@@ -21,7 +21,7 @@ export default function SnippetCodeField({ code, language, onChange }: SnippetCo
         language={language}
         placeholder={t.form.codePlaceholder}
         ariaLabel={t.form.code}
-        minHeight="min(58vh, 560px)"
+        minHeight="clamp(220px, 42dvh, 560px)"
       />
     </div>
   );

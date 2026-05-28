@@ -16,14 +16,6 @@ export default function ShareButton({ snippetId, className, iconSize = 14 }: Sha
   const { t } = useLanguage();
   const { copied, copy } = useClipboardAction({
     getText: () => getSnippetUrl(snippetId, window.location.origin),
-    success: {
-      title: t.toasts.linkCopied,
-      description: t.toasts.linkCopiedDescription,
-    },
-    error: {
-      title: t.toasts.copyLinkError,
-      description: t.toasts.copyLinkErrorDescription,
-    },
   });
 
   return (

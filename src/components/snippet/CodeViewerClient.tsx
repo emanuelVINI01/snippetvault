@@ -28,7 +28,7 @@ export default function CodeViewerClient({ code, language }: CodeViewerClientPro
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.08, duration: 0.22 }}
-        className="relative min-h-0 flex-1 overflow-x-hidden text-sm font-mono leading-loose"
+        className="relative min-h-0 flex-1 overflow-x-auto text-sm font-mono leading-loose"
       >
         <SyntaxHighlighter
           language={lang}
@@ -45,21 +45,23 @@ export default function CodeViewerClient({ code, language }: CodeViewerClientPro
           customStyle={{
             margin: 0,
             minHeight: "100%",
-            overflowX: "hidden",
+            overflowX: "auto",
             padding: "1rem",
             fontSize: "0.875rem",
             lineHeight: "1.625",
             background: "transparent",
             fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
             whiteSpace: "pre-wrap",
-            wordBreak: "break-word",
+            wordBreak: "normal",
+            overflowWrap: "normal",
           }}
           codeTagProps={{
             style: {
               fontFamily: "inherit",
               lineHeight: "inherit",
               whiteSpace: "pre-wrap",
-              overflowWrap: "anywhere",
+              wordBreak: "normal",
+              overflowWrap: "normal",
             },
           }}
         >

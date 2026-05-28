@@ -33,6 +33,16 @@ SnippetVault is a full-stack code snippet manager for developers who want a fast
 
 ![Snippet delete confirmation](images/dashboard/Screenshot_2026-05-28_15-55-49.png)
 
+### Mobile
+
+| Home | Features | Dashboard |
+| --- | --- | --- |
+| <img src="images/mobile/Screenshot_2026-05-28_16-06-35.png" alt="SnippetVault mobile home" width="180"> | <img src="images/mobile/Screenshot_2026-05-28_16-06-41.png" alt="SnippetVault mobile features" width="180"> | <img src="images/mobile/Screenshot_2026-05-28_16-06-43.png" alt="SnippetVault mobile dashboard" width="180"> |
+
+| Create Snippet | Shared Snippet |
+| --- | --- |
+| <img src="images/mobile/Screenshot_2026-05-28_16-06-47.png" alt="SnippetVault mobile create snippet modal" width="180"> | <img src="images/mobile/Screenshot_2026-05-28_16-08-36.png" alt="SnippetVault mobile shared snippet" width="180"> |
+
 ## Tech Stack
 
 - Next.js 16 App Router
@@ -46,7 +56,6 @@ SnippetVault is a full-stack code snippet manager for developers who want a fast
 - Zod
 - Lucide React
 - React Syntax Highlighter
-- Sonner
 
 ## Project Structure
 
@@ -79,6 +88,7 @@ prisma/
 images/
   dashboard/
   landing/
+  mobile/
 public/
   snippet_dash.png
 ```

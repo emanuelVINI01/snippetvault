@@ -190,15 +190,6 @@ export const dictionaries = {
       madeByPrefix: "Desenvolvido por",
       version: "v1.0.0",
     },
-    toasts: {
-      codeCopied: "Código copiado!",
-      codeCopiedDescription: "O conteúdo do snippet agora está na sua área de transferência.",
-      copyCodeError: "Erro ao copiar o código.",
-      linkCopied: "Link copiado para a área de transferência!",
-      linkCopiedDescription: "Agora você pode compartilhar este snippet publicamente.",
-      copyLinkError: "Erro ao copiar o link.",
-      copyLinkErrorDescription: "Tente copiar manualmente da barra de endereços.",
-    },
     errors: {
       loadSnippets: "Erro ao carregar snippets.",
       searchSnippets: "Erro ao buscar snippets globais.",
@@ -396,15 +387,6 @@ export const dictionaries = {
         "Organize, find, and share code snippets in a simple, private space that is easy to use.",
       madeByPrefix: "Built by",
       version: "v1.0.0",
-    },
-    toasts: {
-      codeCopied: "Code copied!",
-      codeCopiedDescription: "The snippet content is now in your clipboard.",
-      copyCodeError: "Could not copy the code.",
-      linkCopied: "Link copied to clipboard!",
-      linkCopiedDescription: "You can now share this snippet publicly.",
-      copyLinkError: "Could not copy the link.",
-      copyLinkErrorDescription: "Try copying it manually from the address bar.",
     },
     errors: {
       loadSnippets: "Could not load snippets.",

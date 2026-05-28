@@ -1,25 +1,15 @@
 "use client";
 
 import { MouseEvent, MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
-
-interface ClipboardToast {
-  title: string;
-  description?: string;
-}
 
 interface ClipboardActionOptions {
   getText: () => string;
-  success: ClipboardToast;
-  error: ClipboardToast;
   resetDelayMs?: number;
 }
 
 export function useClipboardAction({
-  error,
   getText,
   resetDelayMs = 2000,
-  success,
 }: ClipboardActionOptions) {
   const [copied, setCopied] = useState(false);
   const resetTimer = useRef<number | null>(null);
@@ -34,13 +24,12 @@ export function useClipboardAction({
       try {
         await navigator.clipboard.writeText(getText());
         setCopied(true);
-        toast.success(success.title, { description: success.description, duration: 2500 });
         scheduleReset(resetTimer, resetDelayMs, setCopied);
       } catch {
-        toast.error(error.title, { description: error.description });
+        setCopied(false);
       }
     },
-    [error.description, error.title, getText, resetDelayMs, success.description, success.title],
+    [getText, resetDelayMs],
   );
 
   return { copied, copy };
