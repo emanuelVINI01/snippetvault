@@ -1,22 +1,37 @@
 # SnippetVault
 
-SnippetVault is a full-stack snippet manager for developers who need a fast place to save, search, edit, copy and share reusable code. It combines GitHub authentication, a private CRUD dashboard, public snippet discovery and a polished mobile-first Dracula interface.
+SnippetVault is a full-stack code snippet manager for developers who want a fast private vault for reusable code, plus public sharing when a snippet is worth sending to someone else. It combines GitHub authentication, a CRUD dashboard, public snippet search, syntax highlighting, responsive modals, and a compact Dracula-inspired interface.
 
-## Short Description
-
-Full-stack code snippet vault with GitHub authentication, Prisma/PostgreSQL persistence, public sharing, global search, syntax highlighting, responsive modals, Framer Motion transitions and a mobile bottom bar.
+![SnippetVault landing page](images/landing/landing-desktop.png)
 
 ## Features
 
-- GitHub sign-in through Auth.js / NextAuth.
-- Private dashboard for creating, editing, deleting and copying snippets.
-- Public visibility toggle for shareable snippets.
-- Global search for public snippets.
-- Language labels, tags, descriptions and syntax-highlighted code previews.
-- Responsive create/edit/delete modals with mobile bottom-sheet behavior.
-- Mobile-first navigation with a fixed bottom bar.
+- GitHub authentication with Auth.js / NextAuth.
+- Private dashboard for creating, editing, deleting, copying, and filtering snippets.
+- Public visibility controls for shareable snippets.
+- Public snippet search through `GET /api/snippets/search`.
+- Syntax-highlighted code previews with language labels, descriptions, and tags.
+- Responsive create, edit, and delete modals.
+- Mobile bottom navigation for the main application areas.
 - English and Portuguese UI dictionaries.
-- Dracula theme tokens, glass surfaces, animated cards and Framer Motion transitions.
+- SEO metadata, sitemap, robots configuration, and JSON-LD for public snippets.
+- Dracula theme tokens, glass surfaces, animated cards, and Framer Motion transitions.
+
+## Screenshots
+
+### Landing Page
+
+![Landing hero and snippet browser preview](images/landing/Screenshot_2026-05-28_15-53-52.png)
+
+![Landing feature section](images/landing/Screenshot_2026-05-28_15-53-59.png)
+
+### Dashboard
+
+![SnippetVault dashboard](images/dashboard/Screenshot_2026-05-28_15-54-58.png)
+
+![Snippet editor modal](images/dashboard/Screenshot_2026-05-28_15-55-21.png)
+
+![Snippet delete confirmation](images/dashboard/Screenshot_2026-05-28_15-55-49.png)
 
 ## Tech Stack
 
@@ -37,42 +52,52 @@ Full-stack code snippet vault with GitHub authentication, Prisma/PostgreSQL pers
 
 ```txt
 app/
+  api/
+    auth/[...nextauth]/route.ts
+    snippets/
   dashboard/page.tsx
   login/page.tsx
+  snippet/[id]/page.tsx
   page.tsx
 src/
   auth.ts
   prisma.ts
   components/
     dashboard/
-    login/
-    main/
-    viewer/
+    home/
+    shared/
+    snippet/
   context/
-  hook/
+  hooks/
   i18n/
   lib/
   services/
+  utils/
 prisma/
   schema.prisma
+  migrations/
+images/
+  dashboard/
+  landing/
 public/
   snippet_dash.png
 ```
 
-## Environment
+## Environment Variables
 
-Create `.env` in the project root:
+Copy `.env.example` to `.env` and replace the placeholder values:
 
 ```env
-DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
-PRISMA_DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE"
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
+PRISMA_DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public"
 
-AUTH_SECRET="your-auth-secret"
-AUTH_GITHUB_ID="your-github-oauth-client-id"
-AUTH_GITHUB_SECRET="your-github-oauth-client-secret"
+AUTH_SECRET="replace-with-output-from-openssl-rand-base64-32"
+AUTH_URL="http://localhost:3000"
+AUTH_GITHUB_ID="replace-with-github-oauth-client-id"
+AUTH_GITHUB_SECRET="replace-with-github-oauth-client-secret"
 ```
 
-For local GitHub OAuth, configure the callback URL:
+For local GitHub OAuth, configure this callback URL in the GitHub OAuth app:
 
 ```txt
 http://localhost:3000/api/auth/callback/github
@@ -97,19 +122,19 @@ npm run start
 npm run lint
 ```
 
-## Product Notes
+## API Routes
 
-SnippetVault is built as a technology-focused developer product, not only a CRUD demo. The UI is intentionally dark-first, touch-friendly and compact. Modals are usable on small screens, snippet actions remain visible on touch devices, and the bottom navigation follows the same compact mobile pattern as the rest of the app suite.
+- `GET /api/snippets` lists snippets owned by the authenticated user.
+- `POST /api/snippets` creates a snippet for the authenticated user.
+- `GET /api/snippets/[id]` fetches one snippet.
+- `PATCH /api/snippets/[id]` updates a snippet owned by the authenticated user.
+- `DELETE /api/snippets/[id]` deletes a snippet owned by the authenticated user.
+- `GET /api/snippets/search?q=term` searches public snippets.
+- `/api/auth/[...nextauth]` handles Auth.js / NextAuth authentication.
 
-## API Surface
+## Notes
 
-- `GET /api/snippets` - list the authenticated user's snippets.
-- `POST /api/snippets` - create a snippet.
-- `GET /api/snippets/[id]` - fetch a snippet.
-- `PATCH /api/snippets/[id]` - update a snippet owned by the current user.
-- `DELETE /api/snippets/[id]` - delete a snippet owned by the current user.
-- `GET /api/snippets/search?q=term` - search public snippets.
-- `/api/auth/[...nextauth]` - Auth.js route handler.
+SnippetVault is designed as a real developer tool rather than a minimal CRUD demo. The interface is dark-first, touch-friendly, and compact. Public snippets are readable on desktop and mobile, while dashboard actions remain accessible on touch devices.
 
 ## License
 

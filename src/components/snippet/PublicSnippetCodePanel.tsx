@@ -15,9 +15,9 @@ export default function PublicSnippetCodePanel({ snippet }: PublicSnippetCodePan
       initial={{ opacity: 0, y: 26, scale: 0.99 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 0.12, duration: 0.42, ease: "easeOut" }}
-      className="overflow-hidden rounded-xl border border-dracula-card/70 bg-[#282a36] shadow-2xl shadow-black/20"
+      className="mx-auto flex min-h-[calc(100dvh-18rem)] w-full max-w-[min(100%,96rem)] flex-col overflow-hidden rounded-xl border border-dracula-card/70 bg-[#282a36] shadow-2xl shadow-black/20 sm:min-h-[calc(100dvh-20rem)]"
     >
-      <div className="flex items-center justify-between border-b border-dracula-card/60 bg-[#21222c] px-4 py-3">
+      <div className="flex shrink-0 items-center justify-between border-b border-dracula-card/60 bg-[#21222c] px-4 py-3">
         <div className="flex items-center gap-2">
           <span className="h-3 w-3 rounded-full bg-dracula-red" />
           <span className="h-3 w-3 rounded-full bg-dracula-yellow" />

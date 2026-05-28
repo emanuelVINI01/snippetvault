@@ -13,8 +13,10 @@ export default function PublicSnippetClient({ snippet }: PublicSnippetClientProp
   return (
     <div className="min-h-screen text-dracula-fg">
       <PublicSnippetHeader />
-      <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-4 py-10 sm:px-6">
-        <PublicSnippetHero snippet={snippet} />
+      <main className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-6 px-3 py-6 sm:gap-8 sm:px-6 sm:py-10 lg:px-8">
+        <div className="mx-auto w-full max-w-4xl">
+          <PublicSnippetHero snippet={snippet} />
+        </div>
         <PublicSnippetCodePanel snippet={snippet} />
       </main>
     </div>
