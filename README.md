@@ -8,6 +8,10 @@ SnippetVault is a full-stack code snippet manager for developers who want a fast
 
 - GitHub authentication with Auth.js / NextAuth.
 - Private dashboard for creating, editing, deleting, copying, and filtering snippets.
+- AI Snippet Assistant powered by Gemini, with one request for explanation, description, tags, bug review, refactor, and usage example.
+- AI response cache by normalized code hash, without storing code in the cache table.
+- Daily per-user AI usage tracking with cache-hit visibility.
+- Snippet collections/playbooks for grouping reusable flows and recipes.
 - Public visibility controls for shareable snippets.
 - Public snippet search through `GET /api/snippets/search`.
 - Syntax-highlighted code previews with language labels, descriptions, and tags.
@@ -35,11 +39,11 @@ SnippetVault is a full-stack code snippet manager for developers who want a fast
 
 ### Mobile
 
-| Home | Features | Dashboard |
+| Home | Features | Home |
 | --- | --- | --- |
 | <img src="images/mobile/Screenshot_2026-05-28_16-06-35.png" alt="SnippetVault mobile home" width="180"> | <img src="images/mobile/Screenshot_2026-05-28_16-06-41.png" alt="SnippetVault mobile features" width="180"> | <img src="images/mobile/Screenshot_2026-05-28_16-06-43.png" alt="SnippetVault mobile dashboard" width="180"> |
 
-| Create Snippet | Shared Snippet |
+| Snippet Example | Dashboard |
 | --- | --- |
 | <img src="images/mobile/Screenshot_2026-05-28_16-06-47.png" alt="SnippetVault mobile create snippet modal" width="180"> | <img src="images/mobile/Screenshot_2026-05-28_16-08-36.png" alt="SnippetVault mobile shared snippet" width="180"> |
 
@@ -56,6 +60,7 @@ SnippetVault is a full-stack code snippet manager for developers who want a fast
 - Zod
 - Lucide React
 - React Syntax Highlighter
+- Google Gen AI SDK
 
 ## Project Structure
 
@@ -76,11 +81,14 @@ src/
     home/
     shared/
     snippet/
+  services/
+    ai/
+    collections/
+    snippets/
   context/
   hooks/
   i18n/
   lib/
-  services/
   utils/
 prisma/
   schema.prisma
@@ -105,6 +113,10 @@ AUTH_SECRET="replace-with-output-from-openssl-rand-base64-32"
 AUTH_URL="http://localhost:3000"
 AUTH_GITHUB_ID="replace-with-github-oauth-client-id"
 AUTH_GITHUB_SECRET="replace-with-github-oauth-client-secret"
+
+GEMINI_API_KEY="replace-with-gemini-api-key"
+GEMINI_MODEL="gemini-2.5-flash"
+AI_DAILY_LIMIT="50"
 ```
 
 For local GitHub OAuth, configure this callback URL in the GitHub OAuth app:
@@ -140,6 +152,14 @@ npm run lint
 - `PATCH /api/snippets/[id]` updates a snippet owned by the authenticated user.
 - `DELETE /api/snippets/[id]` deletes a snippet owned by the authenticated user.
 - `GET /api/snippets/search?q=term` searches public snippets.
+- `POST /api/ai/snippets/[id]` returns the full AI assistant analysis for one snippet.
+- `GET /api/ai/usage` returns the authenticated user's daily AI usage.
+- `GET /api/collections` lists the authenticated user's playbooks.
+- `POST /api/collections` creates a playbook.
+- `PATCH /api/collections/[id]` updates a playbook.
+- `DELETE /api/collections/[id]` deletes a playbook.
+- `POST /api/collections/[id]/snippets` adds a snippet to a playbook.
+- `DELETE /api/collections/[id]/snippets/[snippetId]` removes a snippet from a playbook.
 - `/api/auth/[...nextauth]` handles Auth.js / NextAuth authentication.
 
 ## Notes

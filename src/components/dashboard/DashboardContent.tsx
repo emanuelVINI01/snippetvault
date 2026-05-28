@@ -14,6 +14,7 @@ interface DashboardContentProps {
   loading: boolean;
   query: string;
   totalSnippets: number;
+  onAi: (snippet: Snippet) => void;
   onClearSearch: () => void;
   onCreate: () => void;
   onDelete: (snippet: Snippet) => void;
@@ -36,6 +37,7 @@ function getDashboardContent(props: DashboardContentProps) {
   return (
     <SnippetGrid
       snippets={props.filteredSnippets}
+      onAi={props.onAi}
       onDelete={props.onDelete}
       onEdit={props.onEdit}
     />

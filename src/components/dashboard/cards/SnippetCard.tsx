@@ -10,11 +10,12 @@ export type { Snippet };
 
 interface SnippetCardProps {
   snippet: Snippet;
+  onAi: (snippet: Snippet) => void;
   onEdit: (snippet: Snippet) => void;
   onDelete: (snippet: Snippet) => void;
 }
 
-export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardProps) {
+export default function SnippetCard({ snippet, onAi, onEdit, onDelete }: SnippetCardProps) {
   return (
     <motion.article
       layout
@@ -27,7 +28,7 @@ export default function SnippetCard({ snippet, onEdit, onDelete }: SnippetCardPr
     >
       <SnippetCardHeader snippet={snippet} />
       <SnippetCardCodePreview code={snippet.code} language={snippet.language} />
-      <SnippetCardFooter snippet={snippet} onEdit={onEdit} onDelete={onDelete} />
+      <SnippetCardFooter snippet={snippet} onAi={onAi} onEdit={onEdit} onDelete={onDelete} />
     </motion.article>
   );
 }

@@ -49,6 +49,12 @@ class SnippetRepository {
     });
   }
 
+  getOwnedById(id: string, userId: string) {
+    return prisma.snippet.findFirst({
+      where: { id, userId },
+    });
+  }
+
   getPublicById(id: string) {
     return prisma.snippet.findFirst({
       where: { id, public: true },

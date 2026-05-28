@@ -7,7 +7,7 @@ import { useDebouncedValue } from "../shared/use-debounced-value";
 import { useFocusShortcut } from "../shared/use-focus-shortcut";
 import { useSnippetList } from "../snippets/use-snippet-list";
 
-export type DashboardModal = "none" | "create" | "edit" | "delete";
+export type DashboardModal = "none" | "create" | "edit" | "delete" | "ai";
 
 export function useDashboardSnippets() {
   const searchRef = useRef<HTMLDivElement>(null);
@@ -46,6 +46,7 @@ export function useDashboardSnippets() {
     clearQuery: () => setQuery(""),
     closeModal: () => closeModal(setModal, setSelected),
     openCreate: () => setModal("create"),
+    openAi: (snippet: Snippet) => openSelectedModal(snippet, "ai", setSelected, setModal),
     openDelete: (snippet: Snippet) => openSelectedModal(snippet, "delete", setSelected, setModal),
     openEdit: (snippet: Snippet) => openSelectedModal(snippet, "edit", setSelected, setModal),
     refreshSnippets: fetchSnippets,

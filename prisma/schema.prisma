@@ -45,6 +45,8 @@ model User {
   emailVerified DateTime?
   image         String?
   accounts      Account[]
+  aiUsageEvents AiUsageEvent[]
+  collections    SnippetCollection[]
   sessions      Session[]
   snippets      Snippet[]
 }
@@ -66,10 +68,70 @@ model Snippet {
   language    String
   public      Boolean  @default(false)
   description String?
-  tags        String[] // <--- Aqui está a mágica
+  tags        String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  collectionItems SnippetCollectionItem[]
   
   userId      String
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model SnippetCollection {
+  id          String                  @id @default(cuid())
+  title       String
+  description String?
+  accent      String                  @default("purple")
+  public      Boolean                 @default(false)
+  createdAt   DateTime                @default(now())
+  updatedAt   DateTime                @updatedAt
+
+  userId      String
+  user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       SnippetCollectionItem[]
+
+  @@index([userId, createdAt])
+}
+
+model SnippetCollectionItem {
+  id           String             @id @default(cuid())
+  collectionId String
+  snippetId    String
+  position     Int                @default(0)
+  createdAt    DateTime           @default(now())
+
+  collection   SnippetCollection  @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+  snippet      Snippet            @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, snippetId])
+  @@index([collectionId, position])
+  @@index([snippetId])
+}
+
+model AiSnippetAnalysis {
+  id               String         @id @default(cuid())
+  codeHash         String         @unique
+  model            String
+  normalizedLength Int
+  result           Json
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  usageEvents      AiUsageEvent[]
+}
+
+model AiUsageEvent {
+  id        String            @id @default(cuid())
+  userId    String
+  snippetId String?
+  codeHash  String
+  model     String
+  cacheHit  Boolean           @default(false)
+  createdAt DateTime          @default(now())
+
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  analysis  AiSnippetAnalysis @relation(fields: [codeHash], references: [codeHash], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([codeHash])
 }

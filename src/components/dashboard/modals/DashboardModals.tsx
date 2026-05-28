@@ -3,6 +3,7 @@
 import type { DashboardModal } from "@/src/hooks/dashboard/use-dashboard-snippets";
 import type { Snippet } from "@/src/types/snippet";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import AiSnippetModal from "./AiSnippetModal";
 import CreateSnippetModal from "./CreateSnippetModal";
 import EditSnippetModal from "./EditSnippetModal";
 
@@ -32,6 +33,11 @@ export default function DashboardModals({
         isOpen={activeModal === "delete"}
         onClose={onClose}
         onDeleted={onMutated}
+        snippet={selectedSnippet}
+      />
+      <AiSnippetModal
+        isOpen={activeModal === "ai"}
+        onClose={onClose}
         snippet={selectedSnippet}
       />
     </>
