@@ -108,6 +108,67 @@ export const dictionaries = {
         description:
           "Nada de interfaces feias ou formatações quebradas. Ao salvar seu código, ele mantém destaque visual, espaçamento e indentação para ficar fácil de consultar depois.",
       },
+      intelligenceTitlePrefix: "Um vault com",
+      intelligenceTitleHighlight: "camada inteligente",
+      intelligenceSubtitle:
+        "A IA não é um enfeite separado: ela aparece dentro do fluxo de trabalho para explicar, revisar, classificar, sugerir e transformar snippets em conhecimento reutilizável.",
+      intelligenceCards: [
+        {
+          title: "Assistente Gemini",
+          description:
+            "Uma única chamada gera explicação, descrição, linguagem, tags, riscos, refatoração e exemplo de uso.",
+        },
+        {
+          title: "Descrição automática",
+          description:
+            "Transforme um bloco de código sem contexto em uma descrição pronta para salvar no vault.",
+        },
+        {
+          title: "Tags e linguagem",
+          description:
+            "Receba sugestões de classificação para manter a busca útil sem preencher tudo manualmente.",
+        },
+        {
+          title: "Bugs e melhorias",
+          description:
+            "A análise destaca riscos, pontos frágeis e oportunidades de refatoração antes do snippet virar referência.",
+        },
+        {
+          title: "Refatoração copiável",
+          description:
+            "O retorno vem com uma versão alternativa do código e notas curtas do que mudou.",
+        },
+        {
+          title: "Playbooks",
+          description:
+            "Agrupe snippets em coleções como setups, receitas, toolkits e fluxos completos de trabalho.",
+        },
+        {
+          title: "Cache por hash",
+          description:
+            "O sistema guarda respostas por hash do código normalizado, sem salvar o código bruto no cache.",
+        },
+        {
+          title: "Limite consciente",
+          description:
+            "Cada usuário tem limite diário de chamadas reais, enquanto cache hits economizam a cota da Gemini API.",
+        },
+      ],
+      aiPills: [
+        "Explica o código em linguagem simples",
+        "Sugere uma descrição pronta para usar",
+        "Aponta bugs, riscos e melhorias",
+        "Cria refatoração e exemplo copiável",
+      ],
+      collectionsSpotlightTitle: "Playbooks transformam snippets soltos em fluxos",
+      collectionsSpotlightDescription:
+        "Em vez de deixar cada snippet isolado, você pode montar coleções como guias práticos: um setup de autenticação, comandos de deploy, receitas Prisma, padrões de UI ou qualquer sequência que faça sentido repetir.",
+      collectionExamples: [
+        "Next.js Auth Setup",
+        "Prisma Recipes",
+        "Deploy Commands",
+        "React Hooks Toolkit",
+      ],
       faqTitle: "Perguntas frequentes",
       faqs: [
         {
@@ -357,6 +418,67 @@ export const dictionaries = {
         description:
           "No rough interfaces or broken formatting. When you save code, it keeps visual highlighting, spacing, and indentation so it is easy to revisit later.",
       },
+      intelligenceTitlePrefix: "A vault with an",
+      intelligenceTitleHighlight: "intelligent layer",
+      intelligenceSubtitle:
+        "AI is not a separate gimmick: it appears inside the workflow to explain, review, classify, suggest, and turn snippets into reusable knowledge.",
+      intelligenceCards: [
+        {
+          title: "Gemini assistant",
+          description:
+            "One call generates explanation, description, language, tags, risks, refactor, and usage example.",
+        },
+        {
+          title: "Automatic description",
+          description:
+            "Turn a contextless code block into a description that is ready to save in the vault.",
+        },
+        {
+          title: "Tags and language",
+          description:
+            "Get classification suggestions so search stays useful without filling everything manually.",
+        },
+        {
+          title: "Bugs and improvements",
+          description:
+            "The analysis highlights risks, weak spots, and refactor opportunities before the snippet becomes a reference.",
+        },
+        {
+          title: "Copy-ready refactor",
+          description:
+            "The result includes an alternate version of the code and short notes about what changed.",
+        },
+        {
+          title: "Playbooks",
+          description:
+            "Group snippets into collections such as setups, recipes, toolkits, and full workflow paths.",
+        },
+        {
+          title: "Hash cache",
+          description:
+            "The system stores answers by normalized code hash, without saving raw code in the cache.",
+        },
+        {
+          title: "Careful limits",
+          description:
+            "Each user has a daily real-call limit, while cache hits preserve the Gemini API quota.",
+        },
+      ],
+      aiPills: [
+        "Explains code in simple language",
+        "Suggests a ready-to-use description",
+        "Finds bugs, risks, and improvements",
+        "Creates a copy-ready refactor and example",
+      ],
+      collectionsSpotlightTitle: "Playbooks turn loose snippets into flows",
+      collectionsSpotlightDescription:
+        "Instead of leaving each snippet isolated, you can build practical guides: an auth setup, deploy commands, Prisma recipes, UI patterns, or any sequence worth repeating.",
+      collectionExamples: [
+        "Next.js Auth Setup",
+        "Prisma Recipes",
+        "Deploy Commands",
+        "React Hooks Toolkit",
+      ],
       faqTitle: "Frequently asked questions",
       faqs: [
         {

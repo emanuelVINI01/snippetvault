@@ -6,6 +6,7 @@ import Features from "@/src/components/home/sections/Features";
 import HomeHero from "@/src/components/home/hero/HomeHero";
 import HomeNav from "@/src/components/home/HomeNav";
 import HowItWorks from "@/src/components/home/sections/HowItWorks";
+import Intelligence from "@/src/components/home/sections/Intelligence";
 import MobileBottomNav from "@/src/components/shared/navigation/MobileBottomNav";
 import SnippetBrowserMockup from "@/src/components/home/mockups/SnippetBrowserMockup";
 
@@ -27,6 +28,7 @@ export default function HomeClient({ isAuthenticated }: HomeClientProps) {
           </div>
         </div>
         <CodePreview />
+        <Intelligence />
         <Features />
         <HowItWorks />
         <FAQ />
@@ -35,4 +37,3 @@ export default function HomeClient({ isAuthenticated }: HomeClientProps) {
     </div>
   );
 }
-

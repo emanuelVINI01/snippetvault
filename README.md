@@ -12,6 +12,9 @@ SnippetVault is a full-stack code snippet manager for developers who want a fast
 - AI response cache by normalized code hash, without storing code in the cache table.
 - Daily per-user AI usage tracking with cache-hit visibility.
 - Snippet collections/playbooks for grouping reusable flows and recipes.
+- Dedicated AI usage tab with real calls, cache hits, remaining daily calls, and an animated usage meter.
+- Magic-themed AI modal with animated accents, cache badges, copy-ready generated text, review cards, refactor code, and usage examples.
+- Collection workbench for building setup guides, command packs, framework recipes, and reusable snippet paths.
 - Public visibility controls for shareable snippets.
 - Public snippet search through `GET /api/snippets/search`.
 - Syntax-highlighted code previews with language labels, descriptions, and tags.
@@ -46,6 +49,72 @@ SnippetVault is a full-stack code snippet manager for developers who want a fast
 | Snippet Example | Dashboard |
 | --- | --- |
 | <img src="images/mobile/Screenshot_2026-05-28_16-06-47.png" alt="SnippetVault mobile create snippet modal" width="180"> | <img src="images/mobile/Screenshot_2026-05-28_16-08-36.png" alt="SnippetVault mobile shared snippet" width="180"> |
+
+## AI Snippet Assistant
+
+The AI assistant is designed to make SnippetVault feel like a code knowledge tool instead of a plain CRUD app. Each snippet card has an AI action that opens a responsive modal with a more immersive interface: animated light passes, floating surfaces, cache status, generated cards, copy actions, and code blocks that fit the Dracula theme.
+
+In a single Gemini request, the assistant returns:
+
+- A plain-language explanation of the snippet.
+- A suggested description that can be copied into the snippet metadata.
+- Suggested language and tags for better search.
+- Possible bugs, risks, and improvement points with severity.
+- A refactored version of the code.
+- A usage example with notes.
+
+The goal is to turn saved snippets into reusable knowledge. A raw utility function can become a documented reference with tags, examples, review notes, and a cleaner alternative implementation.
+
+## AI Caching and Limits
+
+The assistant is built to avoid unnecessary Gemini API usage. Before calling Gemini, SnippetVault normalizes the snippet code by standardizing line endings and trimming leading/trailing whitespace. It then creates a SHA-256 hash from that normalized code.
+
+The cache stores:
+
+- The code hash.
+- The Gemini model used.
+- The normalized code length.
+- The structured AI result.
+- Timestamps.
+
+The cache does not store the raw code. If another request uses the same normalized code hash, SnippetVault reuses the cached answer and records a cache hit instead of making another Gemini call.
+
+Each user has a configurable daily limit of real AI calls. The default is `50` real calls per user per day through `AI_DAILY_LIMIT`. Cache hits are still recorded for visibility, but they do not consume the real-call quota. The dashboard usage tab shows real calls, cache hits, remaining calls, and progress for the current daily window.
+
+## Snippet Collections / Playbooks
+
+Collections turn loose snippets into reusable workflows. Instead of storing isolated cards forever, you can build playbooks around real developer tasks.
+
+Example playbooks:
+
+- `Next.js Auth Setup`
+- `Prisma PostgreSQL Recipes`
+- `Docker Deploy Commands`
+- `React Hooks Toolkit`
+- `API Error Handling`
+- `Frontend Form Patterns`
+- `Production Checklist`
+
+Each playbook can have:
+
+- A title.
+- A short description.
+- A visual accent color.
+- Ordered snippet items.
+- Add/remove controls for snippets.
+- A responsive dashboard layout for desktop and mobile.
+
+This makes SnippetVault useful for repeatable engineering flows: onboarding a project, setting up auth, keeping deployment commands together, collecting reusable hooks, or building a personal cookbook of backend and frontend recipes.
+
+## Product Experience
+
+SnippetVault uses AI and collections as first-class product surfaces:
+
+- The landing page highlights the intelligent layer with floating badges, animated cards, and AI/collection messaging.
+- The dashboard has tabs for snippets, playbooks, and AI usage.
+- The AI modal uses motion and theme-aware panels so the feature feels integrated with the Dracula interface.
+- The playbook workbench is intentionally direct: create a collection, pick an accent, add snippets, and build a reusable flow.
+- Copy actions use inline button animations instead of toast notifications.
 
 ## Tech Stack
 
