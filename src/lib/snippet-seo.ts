@@ -8,13 +8,13 @@ export function getPublicSnippetDescription(snippet: Pick<PublicSnippetSource, "
 
   return (
     snippet.description ||
-    `Snippet de ${snippet.language} compartilhado no SnippetVault para consulta e reutilizacao.`
+    `Snippet de ${snippet.language} compartilhado no SnippetVault para consulta e reutilização.`
   );
 }
 
 export function getMissingSnippetMetadata(): Metadata {
   return {
-    title: "Snippet nao encontrado",
+    title: "Snippet não encontrado",
     robots: {
       index: false,
       follow: false,
@@ -32,8 +32,8 @@ export function getPublicSnippetMetadata(snippet: PublicSnippetSource): Metadata
     keywords: [
       snippet.title,
       snippet.language,
-      "snippet de codigo",
-      "exemplo de codigo",
+      "snippet de código",
+      "exemplo de código",
       ...snippet.tags,
     ],
     alternates: {

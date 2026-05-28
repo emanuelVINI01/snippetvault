@@ -5,15 +5,15 @@ export const siteConfig = {
   creator: "emanuelVINI",
   creatorUrl: "https://github.com/emanuelVINI01",
   description:
-    "Salve, organize, encontre e compartilhe snippets de codigo em uma area simples, rapida e privada.",
+    "Salve, organize, encontre e compartilhe snippets de código em uma área simples, rápida e privada.",
   keywords: [
     "snippetvault",
-    "snippets de codigo",
+    "snippets de código",
     "organizador de snippets",
     "gerenciador de snippets",
-    "biblioteca de codigo",
+    "biblioteca de código",
     "compartilhar snippets",
-    "salvar codigo",
-    "trechos de codigo",
+    "salvar código",
+    "trechos de código",
   ],
 };

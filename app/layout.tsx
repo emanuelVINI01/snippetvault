@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
   applicationName: siteConfig.name,
   title: {
-    default: "SnippetVault | Organizador de snippets de codigo",
+    default: "SnippetVault | Organizador de snippets de código",
     template: `%s | ${siteConfig.name}`,
   },
   description: siteConfig.description,
@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     },
   },
   openGraph: {
-    title: "SnippetVault | Organizador de snippets de codigo",
+    title: "SnippetVault | Organizador de snippets de código",
     description: siteConfig.description,
     url: siteConfig.url,
     siteName: siteConfig.name,
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
         url: siteConfig.ogImage,
         width: 1200,
         height: 630,
-        alt: "Previa da area de organizacao do SnippetVault",
+        alt: "Prévia da área de organização do SnippetVault",
       },
     ],
     locale: "pt_BR",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "SnippetVault | Organizador de snippets de codigo",
+    title: "SnippetVault | Organizador de snippets de código",
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
