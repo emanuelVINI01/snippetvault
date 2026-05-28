@@ -138,4 +138,4 @@ SnippetVault is designed as a real developer tool rather than a minimal CRUD dem
 
 ## License
 
-No open-source license is declared yet.
+This project is open source under the [MIT License](LICENSE).
