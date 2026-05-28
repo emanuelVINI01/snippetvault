@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
@@ -13,15 +14,58 @@ const navItems = [
   { href: "/login", label: "Login", icon: LogIn },
 ];
 
+const observedSections = ["features", "faq"];
+
 export default function MobileBottomNav() {
   const pathname = usePathname();
+  const [activeSection, setActiveSection] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (pathname !== "/") {
+      return;
+    }
+
+    let frame = 0;
+
+    const updateActiveSection = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const anchorLine = window.innerHeight * 0.45;
+        const currentSection =
+          observedSections.find((sectionId) => {
+            const section = document.getElementById(sectionId);
+            if (!section) return false;
+
+            const rect = section.getBoundingClientRect();
+            return rect.top <= anchorLine && rect.bottom >= anchorLine;
+          }) ?? null;
+
+        setActiveSection(currentSection);
+      });
+    };
+
+    updateActiveSection();
+    window.addEventListener("scroll", updateActiveSection, { passive: true });
+    window.addEventListener("resize", updateActiveSection);
+    window.addEventListener("hashchange", updateActiveSection);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", updateActiveSection);
+      window.removeEventListener("resize", updateActiveSection);
+      window.removeEventListener("hashchange", updateActiveSection);
+    };
+  }, [pathname]);
 
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 border-t border-dracula-card/80 bg-dracula-bg/95 px-2 pb-[calc(env(safe-area-inset-bottom)+0.55rem)] pt-2 shadow-[0_-16px_34px_rgba(0,0,0,0.35)] backdrop-blur-xl md:hidden">
       <div className="mx-auto grid h-16 max-w-md grid-cols-5 items-stretch gap-0.5 sm:gap-1">
         {navItems.map(({ href, icon: Icon, label }) => {
           const hrefPath = href.split("#")[0] || "/";
-          const isActive = href.includes("#") ? false : pathname === hrefPath;
+          const hrefSection = href.split("#")[1];
+          const isActive = hrefSection
+            ? pathname === "/" && activeSection === hrefSection
+            : pathname === hrefPath && (hrefPath !== "/" || activeSection === null);
 
           return (
             <Link
