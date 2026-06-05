@@ -47,6 +47,13 @@ class CollectionApiClient {
     });
   }
 
+  updateSnippetFilePath(collectionId: string, snippetId: string, filePath: string | null): Promise<SnippetCollection> {
+    return this.fetchJson(`/api/collections/${collectionId}/snippets/${snippetId}`, {
+      method: "PATCH",
+      body: JSON.stringify({ filePath }),
+    });
+  }
+
   private async fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
     const response = await fetch(url, {
       ...init,

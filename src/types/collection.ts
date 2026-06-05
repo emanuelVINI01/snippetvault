@@ -4,6 +4,7 @@ export interface SnippetCollectionItem {
   id: string;
   position: number;
   snippet: Snippet;
+  filePath?: string | null;
 }
 
 export interface SnippetCollection {

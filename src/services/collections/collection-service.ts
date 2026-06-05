@@ -208,6 +208,24 @@ class CollectionRepository {
       });
     });
   }
+
+  async updateCollectionItem(
+    collectionId: string,
+    snippetId: string,
+    userId: string,
+    filePath: string | null
+  ) {
+    await prisma.snippetCollection.findUniqueOrThrow({
+      where: { id: collectionId, userId },
+    });
+
+    await prisma.snippetCollectionItem.update({
+      where: { collectionId_snippetId: { collectionId, snippetId } },
+      data: { filePath },
+    });
+
+    return this.getById(collectionId, userId);
+  }
 }
 
 export const CollectionService = new CollectionRepository();

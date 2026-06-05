@@ -111,6 +111,9 @@ export default function CollectionWorkbench({ snippets }: CollectionWorkbenchPro
   );
 }
 
+import PlaybookRunModal from "../modals/PlaybookRunModal";
+import { Play } from "lucide-react";
+
 function CollectionCard({
   collection,
   snippets,
@@ -122,6 +125,7 @@ function CollectionCard({
 }) {
   const { t } = useLanguage();
   const [selectedSnippet, setSelectedSnippet] = useState("");
+  const [runModalOpen, setRunModalOpen] = useState(false);
   const existingIds = useMemo(
     () => new Set(collection.items.map((item) => item.snippet.id)),
     [collection.items],
@@ -164,6 +168,45 @@ function CollectionCard({
             <Trash2 className="h-4 w-4" />
           </button>
         </div>
+
+        {/* Playbook runs / Export buttons */}
+        <div className="mt-3 flex flex-wrap gap-1.5 border-t border-b border-dracula-card/30 py-2.5 my-3">
+          <button
+            onClick={() => setRunModalOpen(true)}
+            className="flex items-center gap-1.5 px-3 py-1.5 bg-dracula-purple/20 text-dracula-purple border border-dracula-purple/30 text-xs font-semibold rounded-lg hover:bg-dracula-purple/30 transition-colors"
+          >
+            <Play className="h-3.5 w-3.5 animate-pulse" />
+            <span>Executar</span>
+          </button>
+
+          <span className="text-[10px] self-center text-dracula-comment font-semibold mx-1">Exportar:</span>
+
+          <a
+            href={`/api/collections/${collection.id}/export?format=markdown`}
+            download
+            className="px-2.5 py-1.5 bg-dracula-card/45 hover:bg-dracula-card/65 text-xs text-dracula-fg border border-dracula-card/60 rounded-lg transition-colors font-medium"
+            title="Markdown"
+          >
+            MD
+          </a>
+          <a
+            href={`/api/collections/${collection.id}/export?format=json`}
+            download
+            className="px-2.5 py-1.5 bg-dracula-card/45 hover:bg-dracula-card/65 text-xs text-dracula-fg border border-dracula-card/60 rounded-lg transition-colors font-medium"
+            title="JSON"
+          >
+            JSON
+          </a>
+          <a
+            href={`/api/collections/${collection.id}/export?format=zip`}
+            download
+            className="px-2.5 py-1.5 bg-dracula-card/45 hover:bg-dracula-card/65 text-xs text-dracula-fg border border-dracula-card/60 rounded-lg transition-colors font-medium"
+            title="ZIP compilado"
+          >
+            ZIP
+          </a>
+        </div>
+
         <div className="mt-4 flex gap-2">
           <select
             className="min-w-0 flex-1 rounded-xl border border-dracula-card bg-dracula-bg/65 px-3 py-2 text-sm text-dracula-fg outline-none"
@@ -194,23 +237,48 @@ function CollectionCard({
             collection.items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-center justify-between gap-3 rounded-xl bg-dracula-bg/50 px-3 py-2"
+                className="flex flex-col gap-1.5 rounded-xl bg-dracula-bg/50 px-3 py-2"
               >
-                <div className="min-w-0">
-                  <p className="truncate text-sm font-semibold text-dracula-fg">{item.snippet.title}</p>
-                  <p className="text-xs text-dracula-comment">{item.snippet.language}</p>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-semibold text-dracula-fg">{item.snippet.title}</p>
+                    <p className="text-xs text-dracula-comment">{item.snippet.language}</p>
+                  </div>
+                  <button
+                    onClick={() => removeSnippet(item.snippet.id)}
+                    className="rounded-lg p-1.5 text-dracula-comment hover:bg-dracula-card hover:text-dracula-fg"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
                 </div>
-                <button
-                  onClick={() => removeSnippet(item.snippet.id)}
-                  className="rounded-lg p-1.5 text-dracula-comment hover:bg-dracula-card hover:text-dracula-fg"
-                >
-                  <X className="h-3.5 w-3.5" />
-                </button>
+                <input
+                  type="text"
+                  defaultValue={item.filePath || ""}
+                  onBlur={async (e) => {
+                    const val = e.target.value.trim() || null;
+                    if (val !== item.filePath) {
+                      await collectionApiClient.updateSnippetFilePath(collection.id, item.snippet.id, val);
+                      onRefresh();
+                    }
+                  }}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  placeholder="Caminho do arquivo (ex: src/utils.js)"
+                  className="w-full bg-dracula-bg/30 border border-dracula-card/50 rounded px-2.5 py-1 text-[11px] text-dracula-fg placeholder-dracula-comment/30 focus:outline-none focus:border-dracula-purple"
+                />
               </div>
             ))
           )}
         </div>
       </div>
+      <PlaybookRunModal
+        isOpen={runModalOpen}
+        onClose={() => setRunModalOpen(false)}
+        collection={collection}
+      />
     </article>
   );
 }
