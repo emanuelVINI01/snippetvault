@@ -428,6 +428,70 @@ class SnippetAiService {
       usage: await this.getUsageSummary(userId),
     };
   }
+
+  async semanticSearchReRank(
+    query: string,
+    candidates: { id: string; title: string; description: string | null; tags: string[] }[]
+  ): Promise<string[]> {
+    if (!query.trim() || candidates.length === 0) return [];
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey.startsWith("replace-with-")) throw new AiConfigurationError();
+
+    const ai = new GoogleGenAI({ apiKey });
+    const model = getGeminiModel();
+
+    const prompt = [
+      "You are a semantic search assistant.",
+      "The user is searching for a code snippet with this search query:",
+      `Query: "${query}"`,
+      "",
+      "Here is the list of candidate snippets:",
+      JSON.stringify(candidates.map(c => ({ id: c.id, title: c.title, description: c.description, tags: c.tags }))),
+      "",
+      "Analyze the semantic match of each candidate against the query.",
+      "Filter out candidates that are completely irrelevant.",
+      "Return a JSON object containing the list of matching snippet IDs in order of relevance, matching the schema:",
+      JSON.stringify({
+        type: "object",
+        required: ["matchingIds"],
+        properties: {
+          matchingIds: {
+            type: "array",
+            items: { type: "string" }
+          }
+        }
+      })
+    ].join("\n");
+
+    try {
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseJsonSchema: {
+            type: "object",
+            additionalProperties: false,
+            required: ["matchingIds"],
+            properties: {
+              matchingIds: {
+                type: "array",
+                items: { type: "string" }
+              }
+            }
+          },
+          temperature: 0.1,
+        }
+      });
+
+      const parsed = JSON.parse(response.text ?? "{}");
+      return parsed.matchingIds || [];
+    } catch (e) {
+      console.error("Semantic search failed:", e);
+      return [];
+    }
+  }
 }
 
 async function generateSnippetAnalysis(

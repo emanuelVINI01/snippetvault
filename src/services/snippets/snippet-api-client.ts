@@ -11,8 +11,11 @@ class SnippetApiClient {
     return this.fetchJson("/api/snippets");
   }
 
-  async searchPublic(query: string): Promise<Snippet[]> {
+  async searchPublic(query: string, semantic: boolean = false): Promise<Snippet[]> {
     const params = new URLSearchParams({ q: query });
+    if (semantic) {
+      params.append("semantic", "true");
+    }
     return this.fetchJson(`/api/snippets/search?${params.toString()}`);
   }
 

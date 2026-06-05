@@ -31,10 +31,12 @@ export default function DashboardClient() {
           <>
             <DashboardSearchControls
               isGlobal={dashboard.isGlobal}
+              semantic={dashboard.semantic}
               query={dashboard.query}
               searchRef={dashboard.searchRef}
               onQueryChange={dashboard.setQuery}
               onToggleGlobal={dashboard.toggleGlobalSearch}
+              onToggleSemantic={dashboard.toggleSemanticSearch}
             />
             <DashboardContent
               error={dashboard.error}

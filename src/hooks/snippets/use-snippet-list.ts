@@ -24,9 +24,9 @@ export function useSnippetList(initialLoading = false) {
     });
   }, [router, t.errors.loadSnippets]);
 
-  const fetchGlobalSnippets = useCallback(async (query: string) => {
+  const fetchGlobalSnippets = useCallback(async (query: string, semantic: boolean = false) => {
     await fetchSnippetList({
-      load: () => snippetApiClient.searchPublic(query),
+      load: () => snippetApiClient.searchPublic(query, semantic),
       setError,
       setLoading,
       setSnippets,

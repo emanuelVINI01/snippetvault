@@ -14,6 +14,7 @@ export function useDashboardSnippets() {
   const searchRef = useRef<HTMLDivElement>(null);
   const [query, setQuery] = useState("");
   const [isGlobal, setIsGlobal] = useState(false);
+  const [semantic, setSemantic] = useState(false);
   const [modal, setModal] = useState<DashboardModal>("none");
   const [selected, setSelected] = useState<Snippet | null>(null);
   const debouncedQuery = useDebouncedValue(query, 400);
@@ -24,12 +25,12 @@ export function useDashboardSnippets() {
 
   useEffect(() => {
     if (isGlobal) {
-      fetchGlobalSnippets(debouncedQuery);
+      fetchGlobalSnippets(debouncedQuery, semantic);
       return;
     }
 
     fetchSnippets();
-  }, [debouncedQuery, fetchGlobalSnippets, fetchSnippets, isGlobal]);
+  }, [debouncedQuery, fetchGlobalSnippets, fetchSnippets, isGlobal, semantic]);
 
   const localFiltered = filterSnippets(snippetsState.snippets, query);
 
@@ -57,6 +58,7 @@ export function useDashboardSnippets() {
     ...snippetsState,
     filtered,
     isGlobal,
+    semantic,
     modal,
     query,
     searchRef,
@@ -71,6 +73,7 @@ export function useDashboardSnippets() {
     refreshSnippets: fetchSnippets,
     setQuery,
     toggleGlobalSearch: () => setIsGlobal((value) => !value),
+    toggleSemanticSearch: () => setSemantic((value) => !value),
     togglePin,
     toggleFavorite,
   };

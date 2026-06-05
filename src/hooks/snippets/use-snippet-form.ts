@@ -37,6 +37,7 @@ export function useSnippetForm(snippet?: Snippet | null) {
     setLanguage: (language: string) => setForm((current) => ({ ...current, language })),
     setTagInput: (tagInput: string) => setForm((current) => ({ ...current, tagInput })),
     setTitle: (title: string) => setForm((current) => ({ ...current, title })),
+    fillValues: (values: Partial<SnippetFormState>) => setForm((current) => ({ ...current, ...values })),
   };
 }
 
