@@ -38,6 +38,7 @@ export default function EditSnippetModal({ isOpen, onClose, onUpdated, snippet }
 }
 
 import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import CodeDiffViewer from "../editor/CodeDiffViewer";
 import { Eye, Copy } from "lucide-react";
 
@@ -150,97 +151,20 @@ function EditSnippetModalContent({
       </div>
 
       {/* Tab Content */}
-      {activeTab === "editor" && (
-        <div className="flex flex-col gap-4">
-          <SnippetFormFields
-            descriptionPlaceholder={t.form.editDescriptionPlaceholder}
-            form={form}
-            languageListId="edit-lang-list"
-          />
-          {submit.error && <p className="text-sm text-dracula-red">{submit.error}</p>}
-          <SnippetModalActions
-            loading={submit.loading}
-            loadingLabel={t.form.saving}
-            submitLabel={t.form.save}
-            onCancel={onClose}
-            onSubmit={submit.submit}
-          />
-        </div>
-      )}
-
-      {activeTab === "versions" && (
-        <div className="grid gap-5 lg:grid-cols-[250px_1fr]">
-          {/* Versions Sidebar */}
-          <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-1">
-            <span className="text-xs font-semibold text-dracula-comment">Histórico</span>
-            {loadingVersions ? (
-              <span className="text-xs text-dracula-comment">Carregando versões...</span>
-            ) : versions.length === 0 ? (
-              <span className="text-xs text-dracula-comment">Nenhuma versão encontrada.</span>
-            ) : (
-              versions.map((ver) => (
-                <button
-                  key={ver.id}
-                  type="button"
-                  onClick={() => setSelectedVersion(ver)}
-                  className={`flex flex-col text-left w-full p-2.5 rounded-lg border text-xs transition-all ${
-                    selectedVersion?.id === ver.id
-                      ? "border-dracula-purple bg-dracula-purple/10 text-dracula-fg"
-                      : "border-dracula-card bg-dracula-card/10 text-dracula-comment hover:border-dracula-comment/30"
-                  }`}
-                >
-                  <div className="flex justify-between w-full font-bold">
-                    <span>Versão {ver.version}</span>
-                    <span className="font-normal opacity-60">
-                      {new Date(ver.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                  {ver.changeNote && (
-                    <span className="mt-1 opacity-80 truncate">{ver.changeNote}</span>
-                  )}
-                </button>
-              ))
-            )}
-          </div>
-
-          {/* Diff Viewer Area */}
-          <div className="flex flex-col gap-3">
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-semibold text-dracula-comment">
-                Diferença: Versão {selectedVersion?.version || ""} vs Atual
-              </span>
-              {selectedVersion && (
-                <button
-                  type="button"
-                  disabled={restoring}
-                  onClick={() => handleRestore(selectedVersion.id)}
-                  className="px-3 py-1 bg-dracula-purple hover:bg-dracula-purple/80 text-dracula-bg font-semibold text-xs rounded-md transition-colors disabled:opacity-50"
-                >
-                  {restoring ? "Restaurando..." : "Restaurar esta versão"}
-                </button>
-              )}
-            </div>
-            {selectedVersion ? (
-              <CodeDiffViewer oldCode={selectedVersion.code} newCode={snippet.code} />
-            ) : (
-              <div className="flex items-center justify-center border border-dashed border-dracula-card/50 rounded-lg p-10 text-xs text-dracula-comment">
-                Selecione uma versão para comparar
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {activeTab === "notes" && (
-        <div className="grid gap-5 lg:grid-cols-[1.35fr_0.65fr]">
-          {/* Notes Editor */}
-          <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-dracula-comment">Anotações Privadas</label>
-            <textarea
-              value={form.form.privateNotes}
-              onChange={(e) => form.setPrivateNotes(e.target.value)}
-              placeholder="Adicione anotações sobre esse snippet (ex: bugs conhecidos, flags extras). Apenas você verá isso."
-              className="w-full flex-1 min-h-[200px] bg-dracula-bg/50 border border-dracula-card rounded-lg p-3 text-sm text-dracula-fg placeholder-dracula-comment/40 focus:border-dracula-purple/60 focus:outline-none focus:ring-1 focus:ring-dracula-purple/60"
+      <AnimatePresence mode="wait">
+        {activeTab === "editor" && (
+          <motion.div
+            key="editor"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15 }}
+            className="flex flex-col gap-4 min-w-0 w-full"
+          >
+            <SnippetFormFields
+              descriptionPlaceholder={t.form.editDescriptionPlaceholder}
+              form={form}
+              languageListId="edit-lang-list"
             />
             {submit.error && <p className="text-sm text-dracula-red">{submit.error}</p>}
             <SnippetModalActions
@@ -250,43 +174,143 @@ function EditSnippetModalContent({
               onCancel={onClose}
               onSubmit={submit.submit}
             />
-          </div>
+          </motion.div>
+        )}
 
-          {/* Statistics Display */}
-          <div className="flex flex-col gap-4 bg-dracula-card/10 border border-dracula-card/30 rounded-xl p-4">
-            <span className="text-xs font-semibold text-dracula-comment uppercase tracking-wider">
-              Métricas de Uso
-            </span>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="bg-dracula-bg/30 border border-dracula-card/20 rounded-lg p-3 flex flex-col gap-1">
-                <div className="flex items-center gap-1.5 text-dracula-comment">
-                  <Eye className="h-3.5 w-3.5" />
-                  <span className="text-[10px] font-semibold">Visualizações</span>
-                </div>
-                <span className="text-lg font-bold text-dracula-fg">{snippet.viewCount || 0}</span>
-              </div>
-              <div className="bg-dracula-bg/30 border border-dracula-card/20 rounded-lg p-3 flex flex-col gap-1">
-                <div className="flex items-center gap-1.5 text-dracula-comment">
-                  <Copy className="h-3.5 w-3.5" />
-                  <span className="text-[10px] font-semibold">Cópias</span>
-                </div>
-                <span className="text-lg font-bold text-dracula-fg">{snippet.copyCount || 0}</span>
-              </div>
+        {activeTab === "versions" && (
+          <motion.div
+            key="versions"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15 }}
+            className="grid gap-5 lg:grid-cols-[250px_1fr] min-w-0 w-full"
+          >
+            {/* Versions Sidebar */}
+            <div className="flex flex-col gap-2 max-h-[400px] overflow-y-auto pr-1">
+              <span className="text-xs font-semibold text-dracula-comment">Histórico</span>
+              {loadingVersions ? (
+                <span className="text-xs text-dracula-comment">Carregando versões...</span>
+              ) : versions.length === 0 ? (
+                <span className="text-xs text-dracula-comment">Nenhuma versão encontrada.</span>
+              ) : (
+                versions.map((ver) => (
+                  <button
+                    key={ver.id}
+                    type="button"
+                    onClick={() => setSelectedVersion(ver)}
+                    className={`flex flex-col text-left w-full p-2.5 rounded-lg border text-xs transition-all ${
+                      selectedVersion?.id === ver.id
+                        ? "border-dracula-purple bg-dracula-purple/10 text-dracula-fg"
+                        : "border-dracula-card bg-dracula-card/10 text-dracula-comment hover:border-dracula-comment/30"
+                    }`}
+                  >
+                    <div className="flex justify-between w-full font-bold">
+                      <span>Versão {ver.version}</span>
+                      <span className="font-normal opacity-60">
+                        {new Date(ver.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    {ver.changeNote && (
+                      <span className="mt-1 opacity-80 truncate">{ver.changeNote}</span>
+                    )}
+                  </button>
+                ))
+              )}
             </div>
 
-            <div className="border-t border-dracula-card/30 pt-4 flex flex-col gap-2 text-xs">
-              <div className="flex justify-between">
-                <span className="text-dracula-comment">Criado em:</span>
-                <span className="text-dracula-fg">{new Date(snippet.createdAt).toLocaleDateString()}</span>
+            {/* Diff Viewer Area */}
+            <div className="flex flex-col gap-3 min-w-0">
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-semibold text-dracula-comment">
+                  Diferença: Versão {selectedVersion?.version || ""} vs Atual
+                </span>
+                {selectedVersion && (
+                  <button
+                    type="button"
+                    disabled={restoring}
+                    onClick={() => handleRestore(selectedVersion.id)}
+                    className="px-3 py-1 bg-dracula-purple hover:bg-dracula-purple/80 text-dracula-bg font-semibold text-xs rounded-md transition-colors disabled:opacity-50"
+                  >
+                    {restoring ? "Restaurando..." : "Restaurar esta versão"}
+                  </button>
+                )}
               </div>
-              <div className="flex justify-between">
-                <span className="text-dracula-comment">Última alteração:</span>
-                <span className="text-dracula-fg">{new Date(snippet.updatedAt).toLocaleDateString()}</span>
+              {selectedVersion ? (
+                <CodeDiffViewer oldCode={selectedVersion.code} newCode={snippet.code} />
+              ) : (
+                <div className="flex items-center justify-center border border-dashed border-dracula-card/50 rounded-lg p-10 text-xs text-dracula-comment">
+                  Selecione uma versão para comparar
+                </div>
+              )}
+            </div>
+          </motion.div>
+        )}
+
+        {activeTab === "notes" && (
+          <motion.div
+            key="notes"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            transition={{ duration: 0.15 }}
+            className="grid gap-5 lg:grid-cols-[1.35fr_0.65fr] min-w-0 w-full"
+          >
+            {/* Notes Editor */}
+            <div className="flex flex-col gap-2">
+              <label className="text-xs font-semibold text-dracula-comment">Anotações Privadas</label>
+              <textarea
+                value={form.form.privateNotes}
+                onChange={(e) => form.setPrivateNotes(e.target.value)}
+                placeholder="Adicione anotações sobre esse snippet (ex: bugs conhecidos, flags extras). Apenas você verá isso."
+                className="w-full flex-1 min-h-[200px] bg-dracula-bg/50 border border-dracula-card rounded-lg p-3 text-sm text-dracula-fg placeholder-dracula-comment/40 focus:border-dracula-purple/60 focus:outline-none focus:ring-1 focus:ring-dracula-purple/60"
+              />
+              {submit.error && <p className="text-sm text-dracula-red">{submit.error}</p>}
+              <SnippetModalActions
+                loading={submit.loading}
+                loadingLabel={t.form.saving}
+                submitLabel={t.form.save}
+                onCancel={onClose}
+                onSubmit={submit.submit}
+              />
+            </div>
+
+            {/* Statistics Display */}
+            <div className="flex flex-col gap-4 bg-dracula-card/10 border border-dracula-card/30 rounded-xl p-4">
+              <span className="text-xs font-semibold text-dracula-comment uppercase tracking-wider">
+                Métricas de Uso
+              </span>
+              <div className="grid grid-cols-2 gap-3">
+                <div className="bg-dracula-bg/30 border border-dracula-card/20 rounded-lg p-3 flex flex-col gap-1">
+                  <div className="flex items-center gap-1.5 text-dracula-comment">
+                    <Eye className="h-3.5 w-3.5" />
+                    <span className="text-[10px] font-semibold">Visualizações</span>
+                  </div>
+                  <span className="text-lg font-bold text-dracula-fg">{snippet.viewCount || 0}</span>
+                </div>
+                <div className="bg-dracula-bg/30 border border-dracula-card/20 rounded-lg p-3 flex flex-col gap-1">
+                  <div className="flex items-center gap-1.5 text-dracula-comment">
+                    <Copy className="h-3.5 w-3.5" />
+                    <span className="text-[10px] font-semibold">Cópias</span>
+                  </div>
+                  <span className="text-lg font-bold text-dracula-fg">{snippet.copyCount || 0}</span>
+                </div>
+              </div>
+
+              <div className="border-t border-dracula-card/30 pt-4 flex flex-col gap-2 text-xs">
+                <div className="flex justify-between">
+                  <span className="text-dracula-comment">Criado em:</span>
+                  <span className="text-dracula-fg">{new Date(snippet.createdAt).toLocaleDateString()}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-dracula-comment">Última alteração:</span>
+                  <span className="text-dracula-fg">{new Date(snippet.updatedAt).toLocaleDateString()}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

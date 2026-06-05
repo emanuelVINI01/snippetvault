@@ -214,7 +214,14 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
             
             <AnimatePresence mode="wait">
               {response ? (
-                <div key="result-wrapper">
+                <motion.div
+                  key={activeSection}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.15 }}
+                  className="min-w-0 w-full"
+                >
                   {activeSection === "analysis" && (
                     <AiResult response={response} />
                   )}
@@ -468,9 +475,17 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
                       </div>
                     </div>
                   )}
-                </div>
+                </motion.div>
               ) : (
-                <AiEmptyState key="empty" loading={loading} />
+                <motion.div
+                  key="empty"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <AiEmptyState loading={loading} />
+                </motion.div>
               )}
             </AnimatePresence>
           </div>
