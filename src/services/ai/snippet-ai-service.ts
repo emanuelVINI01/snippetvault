@@ -220,6 +220,214 @@ class SnippetAiService {
   }) {
     return prisma.aiUsageEvent.create({ data: input });
   }
+
+  async generateTests(
+    userId: string,
+    snippet: SnippetAiSource,
+    framework: string,
+    locale: "pt" | "en",
+    forceRefresh?: boolean
+  ) {
+    const normalizedCode = normalizeCodeForHash(snippet.code);
+    const codeHash = getSnippetCodeHash(normalizedCode);
+    const model = getGeminiModel();
+
+    if (forceRefresh) {
+      try {
+        await prisma.aiGeneratedDoc.deleteMany({
+          where: { targetType: "tests", targetId: snippet.id, locale, codeHash }
+        });
+      } catch {}
+    }
+
+    let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
+      where: { targetType: "tests", targetId: snippet.id, locale, codeHash }
+    });
+
+    if (cached) {
+      await this.recordUsageEvent({
+        cacheHit: true,
+        codeHash,
+        model: cached.model,
+        snippetId: snippet.id,
+        userId,
+      });
+      return {
+        result: cached.result as { testCode: string; setupInstructions: string },
+        cacheHit: true,
+        usage: await this.getUsageSummary(userId),
+      };
+    }
+
+    const usage = await this.getUsageSummary(userId);
+    if (usage.remaining <= 0) throw new AiUsageLimitError();
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey.startsWith("replace-with-")) throw new AiConfigurationError();
+
+    const ai = new GoogleGenAI({ apiKey });
+    const outputLanguage = locale === "pt" ? "Portuguese from Brazil" : "English";
+    const prompt = [
+      "You are an expert testing assistant.",
+      `Write unit tests using the ${framework} framework for the code snippet below.`,
+      `Provide step-by-step setup instructions in ${outputLanguage}.`,
+      "Return a single JSON object matching the provided schema.",
+      `Snippet Title: ${snippet.title}`,
+      `Language: ${snippet.language}`,
+      "Code:",
+      "```",
+      normalizedCode,
+      "```"
+    ].join("\n");
+
+    const response = await ai.models.generateContent({
+      model,
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: {
+          type: "object",
+          additionalProperties: false,
+          required: ["testCode", "setupInstructions"],
+          properties: {
+            testCode: { type: "string" },
+            setupInstructions: { type: "string" }
+          }
+        },
+        temperature: 0.2,
+      }
+    });
+
+    const parsed = JSON.parse(response.text ?? "{}");
+
+    await prisma.aiGeneratedDoc.create({
+      data: {
+        targetType: "tests",
+        targetId: snippet.id,
+        codeHash,
+        model,
+        locale,
+        result: parsed,
+      }
+    });
+
+    await this.recordUsageEvent({
+      cacheHit: false,
+      codeHash,
+      model,
+      snippetId: snippet.id,
+      userId,
+    });
+
+    return {
+      result: parsed as { testCode: string; setupInstructions: string },
+      cacheHit: false,
+      usage: await this.getUsageSummary(userId),
+    };
+  }
+
+  async generateDocumentation(
+    userId: string,
+    snippet: SnippetAiSource,
+    locale: "pt" | "en",
+    forceRefresh?: boolean
+  ) {
+    const normalizedCode = normalizeCodeForHash(snippet.code);
+    const codeHash = getSnippetCodeHash(normalizedCode);
+    const model = getGeminiModel();
+
+    if (forceRefresh) {
+      try {
+        await prisma.aiGeneratedDoc.deleteMany({
+          where: { targetType: "documentation", targetId: snippet.id, locale, codeHash }
+        });
+      } catch {}
+    }
+
+    let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
+      where: { targetType: "documentation", targetId: snippet.id, locale, codeHash }
+    });
+
+    if (cached) {
+      await this.recordUsageEvent({
+        cacheHit: true,
+        codeHash,
+        model: cached.model,
+        snippetId: snippet.id,
+        userId,
+      });
+      return {
+        result: cached.result as { readme: string; docBlocks: string },
+        cacheHit: true,
+        usage: await this.getUsageSummary(userId),
+      };
+    }
+
+    const usage = await this.getUsageSummary(userId);
+    if (usage.remaining <= 0) throw new AiUsageLimitError();
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey || apiKey.startsWith("replace-with-")) throw new AiConfigurationError();
+
+    const ai = new GoogleGenAI({ apiKey });
+    const outputLanguage = locale === "pt" ? "Portuguese from Brazil" : "English";
+    const prompt = [
+      "You are an expert technical writer.",
+      `Write a comprehensive README.md (markdown) and standard documentation blocks (comments or details) in ${outputLanguage} for the code snippet below.`,
+      "Return a single JSON object matching the provided schema.",
+      `Snippet Title: ${snippet.title}`,
+      `Language: ${snippet.language}`,
+      "Code:",
+      "```",
+      normalizedCode,
+      "```"
+    ].join("\n");
+
+    const response = await ai.models.generateContent({
+      model,
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseJsonSchema: {
+          type: "object",
+          additionalProperties: false,
+          required: ["readme", "docBlocks"],
+          properties: {
+            readme: { type: "string" },
+            docBlocks: { type: "string" }
+          }
+        },
+        temperature: 0.3,
+      }
+    });
+
+    const parsed = JSON.parse(response.text ?? "{}");
+
+    await prisma.aiGeneratedDoc.create({
+      data: {
+        targetType: "documentation",
+        targetId: snippet.id,
+        codeHash,
+        model,
+        locale,
+        result: parsed,
+      }
+    });
+
+    await this.recordUsageEvent({
+      cacheHit: false,
+      codeHash,
+      model,
+      snippetId: snippet.id,
+      userId,
+    });
+
+    return {
+      result: parsed as { readme: string; docBlocks: string },
+      cacheHit: false,
+      usage: await this.getUsageSummary(userId),
+    };
+  }
 }
 
 async function generateSnippetAnalysis(
@@ -254,8 +462,8 @@ function buildPrompt(snippet: SnippetAiSource, code: string, locale: "pt" | "en"
     "You are SnippetVault's senior code assistant.",
     `Reply only in ${outputLanguage}.`,
     "Return one compact JSON object matching the provided schema.",
-    "Cover all requested jobs in this single response: explain, generate description, suggest language/tags, find bugs, refactor, and provide usage example.",
-    "Keep refactored code practical and preserve the original intent. If no bug is obvious, return low-severity improvement findings.",
+    "Cover all requested jobs in this single response: explain (quick, technical, line-by-line of key lines), generate description, suggest language/tags, find bugs, refactor, provide usage example, detect dependencies/requirements, generate quality score (0-100), and write a security report (riskLevel and findings).",
+    "Keep refactored code practical and preserve original intent. If no bug is obvious, return low-severity improvement findings.",
     `Title: ${snippet.title}`,
     `Current language: ${snippet.language}`,
     `Current description: ${snippet.description ?? "none"}`,
@@ -308,7 +516,19 @@ interface SnippetAiSource {
 const SNIPPET_ANALYSIS_JSON_SCHEMA = {
   type: "object",
   additionalProperties: false,
-  required: ["summary", "description", "language", "tags", "bugs", "refactor", "example"],
+  required: [
+    "summary",
+    "description",
+    "language",
+    "tags",
+    "bugs",
+    "refactor",
+    "example",
+    "qualityScore",
+    "securityReport",
+    "requirements",
+    "explanations"
+  ],
   properties: {
     summary: { type: "string" },
     description: { type: "string" },
@@ -355,5 +575,57 @@ const SNIPPET_ANALYSIS_JSON_SCHEMA = {
         notes: { type: "string" },
       },
     },
+    qualityScore: {
+      type: "integer",
+      minimum: 0,
+      maximum: 100
+    },
+    securityReport: {
+      type: "object",
+      additionalProperties: false,
+      required: ["riskLevel", "findings"],
+      properties: {
+        riskLevel: { type: "string", enum: ["low", "medium", "high"] },
+        findings: {
+          type: "array",
+          maxItems: 5,
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["title", "description"],
+            properties: {
+              title: { type: "string" },
+              description: { type: "string" }
+            }
+          }
+        }
+      }
+    },
+    requirements: {
+      type: "array",
+      maxItems: 10,
+      items: { type: "string" }
+    },
+    explanations: {
+      type: "object",
+      additionalProperties: false,
+      required: ["quick", "technical", "lineByLine"],
+      properties: {
+        quick: { type: "string" },
+        technical: { type: "string" },
+        lineByLine: {
+          type: "array",
+          items: {
+            type: "object",
+            additionalProperties: false,
+            required: ["line", "explanation"],
+            properties: {
+              line: { type: "string" },
+              explanation: { type: "string" }
+            }
+          }
+        }
+      }
+    }
   },
 };

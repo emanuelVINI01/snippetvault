@@ -12,6 +12,27 @@ const findingSchema = z.object({
   detail: z.string(),
 });
 
+const securityReportSchema = z.object({
+  riskLevel: z.enum(["low", "medium", "high"]),
+  findings: z.array(
+    z.object({
+      title: z.string(),
+      description: z.string(),
+    })
+  ),
+});
+
+const lineExplanationSchema = z.object({
+  line: z.string(),
+  explanation: z.string(),
+});
+
+const explanationsSchema = z.object({
+  quick: z.string(),
+  technical: z.string(),
+  lineByLine: z.array(lineExplanationSchema),
+});
+
 export const aiSnippetAnalysisSchema = z.object({
   summary: z.string(),
   description: z.string(),
@@ -27,6 +48,10 @@ export const aiSnippetAnalysisSchema = z.object({
     code: z.string(),
     notes: z.string(),
   }),
+  qualityScore: z.number().min(0).max(100).optional().default(75),
+  securityReport: securityReportSchema.optional().default({ riskLevel: "low", findings: [] }),
+  requirements: z.array(z.string()).optional().default([]),
+  explanations: explanationsSchema.optional().default({ quick: "", technical: "", lineByLine: [] }),
 });
 
 export type AiSnippetAnalysis = z.infer<typeof aiSnippetAnalysisSchema>;
