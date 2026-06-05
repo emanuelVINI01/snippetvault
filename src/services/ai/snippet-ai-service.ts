@@ -122,7 +122,9 @@ async function generateSnippetAnalysis(
   model: string,
 ): Promise<AiSnippetAnalysis> {
   const apiKey = process.env.GEMINI_API_KEY;
-  if (!apiKey) throw new AiConfigurationError();
+  if (!apiKey || apiKey === "replace-with-gemini-api-key" || apiKey.startsWith("replace-with-")) {
+    throw new AiConfigurationError();
+  }
 
   const ai = new GoogleGenAI({ apiKey });
   const response = await ai.models.generateContent({

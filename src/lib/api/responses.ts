@@ -12,5 +12,6 @@ export function validationErrorResponse(error: ZodError) {
 
 export function handleApiError(error: unknown) {
   if (error instanceof ZodError) return validationErrorResponse(error);
+  console.error("Unhandled API error:", error);
   return internalErrorResponse();
 }
