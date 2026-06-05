@@ -4,20 +4,24 @@ export interface SnippetFormState {
   code: string;
   description: string;
   isPublic: boolean;
+  visibility: "private" | "unlisted" | "public";
   language: string;
   tagInput: string;
   tags: string[];
   title: string;
+  privateNotes: string;
 }
 
 export const EMPTY_SNIPPET_FORM: SnippetFormState = {
   code: "",
   description: "",
   isPublic: false,
+  visibility: "private",
   language: "TypeScript",
   tagInput: "",
   tags: [],
   title: "",
+  privateNotes: "",
 };
 
 export function getInitialSnippetForm(snippet?: Snippet | null): SnippetFormState {
@@ -27,10 +31,12 @@ export function getInitialSnippetForm(snippet?: Snippet | null): SnippetFormStat
     code: snippet.code,
     description: snippet.description ?? "",
     isPublic: snippet.public,
+    visibility: snippet.visibility || (snippet.public ? "public" : "private"),
     language: snippet.language,
     tagInput: "",
     tags: snippet.tags,
     title: snippet.title,
+    privateNotes: snippet.privateNotes ?? "",
   };
 }
 
@@ -39,9 +45,11 @@ export function getSnippetFormPayload(form: SnippetFormState): CreateSnippetPayl
     code: form.code,
     description: form.description,
     language: form.language,
-    public: form.isPublic,
+    public: form.visibility === "public",
+    visibility: form.visibility,
     tags: form.tags,
     title: form.title,
+    privateNotes: form.privateNotes,
   };
 }
 

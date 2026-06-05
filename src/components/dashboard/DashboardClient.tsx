@@ -48,6 +48,8 @@ export default function DashboardClient() {
               onDelete={dashboard.openDelete}
               onEdit={dashboard.openEdit}
               onRetry={dashboard.refreshSnippets}
+              onTogglePin={dashboard.togglePin}
+              onToggleFavorite={dashboard.toggleFavorite}
             />
           </>
         )}

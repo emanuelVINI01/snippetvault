@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { filterSnippets } from "@/src/utils/snippets/snippet-filters";
 import type { Snippet } from "@/src/types/snippet";
 import { useDebouncedValue } from "../shared/use-debounced-value";
 import { useFocusShortcut } from "../shared/use-focus-shortcut";
 import { useSnippetList } from "../snippets/use-snippet-list";
+import { snippetApiClient } from "@/src/services/snippets/snippet-api-client";
 
 export type DashboardModal = "none" | "create" | "edit" | "delete" | "ai";
 
@@ -34,6 +35,24 @@ export function useDashboardSnippets() {
 
   const filtered = isGlobal ? snippetsState.snippets : localFiltered;
 
+  const togglePin = useCallback(async (snippet: Snippet) => {
+    try {
+      await snippetApiClient.update(snippet.id, { pinned: !snippet.pinned });
+      await fetchSnippets();
+    } catch (e) {
+      console.error(e);
+    }
+  }, [fetchSnippets]);
+
+  const toggleFavorite = useCallback(async (snippet: Snippet) => {
+    try {
+      await snippetApiClient.update(snippet.id, { favorite: !snippet.favorite });
+      await fetchSnippets();
+    } catch (e) {
+      console.error(e);
+    }
+  }, [fetchSnippets]);
+
   return {
     ...snippetsState,
     filtered,
@@ -52,6 +71,8 @@ export function useDashboardSnippets() {
     refreshSnippets: fetchSnippets,
     setQuery,
     toggleGlobalSearch: () => setIsGlobal((value) => !value),
+    togglePin,
+    toggleFavorite,
   };
 }
 

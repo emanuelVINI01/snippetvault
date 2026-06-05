@@ -20,6 +20,8 @@ interface DashboardContentProps {
   onDelete: (snippet: Snippet) => void;
   onEdit: (snippet: Snippet) => void;
   onRetry: () => void;
+  onTogglePin?: (snippet: Snippet) => void;
+  onToggleFavorite?: (snippet: Snippet) => void;
 }
 
 export default function DashboardContent(props: DashboardContentProps) {
@@ -40,6 +42,8 @@ function getDashboardContent(props: DashboardContentProps) {
       onAi={props.onAi}
       onDelete={props.onDelete}
       onEdit={props.onEdit}
+      onTogglePin={props.onTogglePin}
+      onToggleFavorite={props.onToggleFavorite}
     />
   );
 }

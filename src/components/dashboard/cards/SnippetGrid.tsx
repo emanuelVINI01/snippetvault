@@ -9,9 +9,18 @@ interface SnippetGridProps {
   onAi: (snippet: Snippet) => void;
   onDelete: (snippet: Snippet) => void;
   onEdit: (snippet: Snippet) => void;
+  onTogglePin?: (snippet: Snippet) => void;
+  onToggleFavorite?: (snippet: Snippet) => void;
 }
 
-export default function SnippetGrid({ onAi, onDelete, onEdit, snippets }: SnippetGridProps) {
+export default function SnippetGrid({
+  onAi,
+  onDelete,
+  onEdit,
+  snippets,
+  onTogglePin,
+  onToggleFavorite,
+}: SnippetGridProps) {
   return (
     <motion.div
       key="grid"
@@ -21,7 +30,15 @@ export default function SnippetGrid({ onAi, onDelete, onEdit, snippets }: Snippe
       className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3"
     >
       {snippets.map((snippet) => (
-        <SnippetCard key={snippet.id} snippet={snippet} onAi={onAi} onEdit={onEdit} onDelete={onDelete} />
+        <SnippetCard
+          key={snippet.id}
+          snippet={snippet}
+          onAi={onAi}
+          onEdit={onEdit}
+          onDelete={onDelete}
+          onTogglePin={onTogglePin}
+          onToggleFavorite={onToggleFavorite}
+        />
       ))}
     </motion.div>
   );

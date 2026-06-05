@@ -13,9 +13,18 @@ interface SnippetCardProps {
   onAi: (snippet: Snippet) => void;
   onEdit: (snippet: Snippet) => void;
   onDelete: (snippet: Snippet) => void;
+  onTogglePin?: (snippet: Snippet) => void;
+  onToggleFavorite?: (snippet: Snippet) => void;
 }
 
-export default function SnippetCard({ snippet, onAi, onEdit, onDelete }: SnippetCardProps) {
+export default function SnippetCard({
+  snippet,
+  onAi,
+  onEdit,
+  onDelete,
+  onTogglePin,
+  onToggleFavorite,
+}: SnippetCardProps) {
   return (
     <motion.article
       layout
@@ -26,7 +35,11 @@ export default function SnippetCard({ snippet, onAi, onEdit, onDelete }: Snippet
       transition={{ duration: 0.22, ease: "easeOut" }}
       className="group flex min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-dracula-card bg-dracula-card/25 transition-shadow duration-200 hover:border-dracula-purple/40 hover:shadow-xl hover:shadow-dracula-purple/10"
     >
-      <SnippetCardHeader snippet={snippet} />
+      <SnippetCardHeader
+        snippet={snippet}
+        onTogglePin={onTogglePin ? () => onTogglePin(snippet) : undefined}
+        onToggleFavorite={onToggleFavorite ? () => onToggleFavorite(snippet) : undefined}
+      />
       <SnippetCardCodePreview code={snippet.code} language={snippet.language} />
       <SnippetCardFooter snippet={snippet} onAi={onAi} onEdit={onEdit} onDelete={onDelete} />
     </motion.article>

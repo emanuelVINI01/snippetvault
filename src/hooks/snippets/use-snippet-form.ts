@@ -32,6 +32,8 @@ export function useSnippetForm(snippet?: Snippet | null) {
     setCode: (code: string) => setForm((current) => ({ ...current, code })),
     setDescription: (description: string) => setForm((current) => ({ ...current, description })),
     setIsPublic: (isPublic: boolean) => setForm((current) => ({ ...current, isPublic })),
+    setVisibility: (visibility: "private" | "unlisted" | "public") => setForm((current) => ({ ...current, visibility })),
+    setPrivateNotes: (privateNotes: string) => setForm((current) => ({ ...current, privateNotes })),
     setLanguage: (language: string) => setForm((current) => ({ ...current, language })),
     setTagInput: (tagInput: string) => setForm((current) => ({ ...current, tagInput })),
     setTitle: (title: string) => setForm((current) => ({ ...current, title })),
