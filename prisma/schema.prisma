@@ -99,6 +99,11 @@ model Snippet {
   forkedFromId   String?
   forkedFrom     Snippet?          @relation("SnippetForks", fields: [forkedFromId], references: [id], onDelete: SetNull)
   forks          Snippet[]         @relation("SnippetForks")
+
+  @@index([userId, createdAt])
+  @@index([visibility])
+  @@index([pinned, createdAt])
+  @@index([favorite])
 }
 
 model SnippetCollection {
@@ -123,6 +128,7 @@ model SnippetCollection {
   runs           PlaybookRun[]
 
   @@index([userId, createdAt])
+  @@index([visibility])
 }
 
 model SnippetCollectionItem {
