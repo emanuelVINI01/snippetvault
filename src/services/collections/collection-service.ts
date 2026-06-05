@@ -92,6 +92,122 @@ class CollectionRepository {
       }),
     ]);
   }
+
+  async createRun(collectionId: string, userId: string, title?: string) {
+    const collection = await prisma.snippetCollection.findUniqueOrThrow({
+      where: { id: collectionId, userId },
+      include: {
+        items: {
+          orderBy: { position: "asc" },
+        },
+      },
+    });
+
+    return prisma.$transaction(async (tx) => {
+      const run = await tx.playbookRun.create({
+        data: {
+          collectionId,
+          userId,
+          title: title || `${collection.title} - ${new Date().toLocaleDateString()}`,
+          status: "active",
+        },
+      });
+
+      if (collection.items.length > 0) {
+        await tx.playbookRunItem.createMany({
+          data: collection.items.map((item, index) => ({
+            runId: run.id,
+            collectionItemId: item.id,
+            snippetId: item.snippetId,
+            position: index,
+            status: "pending",
+          })),
+        });
+      }
+
+      return tx.playbookRun.findUnique({
+        where: { id: run.id },
+        include: {
+          items: {
+            orderBy: { position: "asc" },
+          },
+        },
+      });
+    });
+  }
+
+  async getRuns(collectionId: string, userId: string) {
+    return prisma.playbookRun.findMany({
+      where: { collectionId, userId },
+      orderBy: { createdAt: "desc" },
+      include: {
+        items: {
+          orderBy: { position: "asc" },
+        },
+      },
+    });
+  }
+
+  async getRunById(runId: string, collectionId: string, userId: string) {
+    return prisma.playbookRun.findFirst({
+      where: { id: runId, collectionId, userId },
+      include: {
+        items: {
+          orderBy: { position: "asc" },
+        },
+      },
+    });
+  }
+
+  async updateRun(
+    runId: string,
+    collectionId: string,
+    userId: string,
+    data: {
+      status?: "active" | "completed" | "abandoned";
+      items?: {
+        id: string;
+        status?: "pending" | "done" | "skipped";
+        notes?: string | null;
+      }[];
+    }
+  ) {
+    const run = await prisma.playbookRun.findFirst({
+      where: { id: runId, collectionId, userId },
+    });
+    if (!run) throw new Error("Playbook run not found or unauthorized");
+
+    return prisma.$transaction(async (tx) => {
+      if (data.status) {
+        await tx.playbookRun.update({
+          where: { id: runId },
+          data: { status: data.status },
+        });
+      }
+
+      if (data.items && data.items.length > 0) {
+        for (const item of data.items) {
+          await tx.playbookRunItem.update({
+            where: { id: item.id, runId },
+            data: {
+              status: item.status,
+              notes: item.notes,
+              completedAt: item.status === "done" ? new Date() : undefined,
+            },
+          });
+        }
+      }
+
+      return tx.playbookRun.findUnique({
+        where: { id: runId },
+        include: {
+          items: {
+            orderBy: { position: "asc" },
+          },
+        },
+      });
+    });
+  }
 }
 
 export const CollectionService = new CollectionRepository();
