@@ -304,6 +304,57 @@ class SnippetRepository {
       },
     });
   }
+
+  getVariables(snippetId: string, userId: string) {
+    return prisma.snippetVariable.findMany({
+      where: {
+        snippetId,
+        snippet: { userId },
+      },
+      orderBy: { name: "asc" },
+    });
+  }
+
+  async updateVariables(
+    snippetId: string,
+    userId: string,
+    variables: {
+      name: string;
+      label?: string | null;
+      description?: string | null;
+      defaultValue?: string | null;
+      required?: boolean;
+    }[]
+  ) {
+    const snippet = await prisma.snippet.findFirst({
+      where: { id: snippetId, userId },
+    });
+    if (!snippet) throw new Error("Snippet not found or unauthorized");
+
+    return prisma.$transaction(async (tx) => {
+      await tx.snippetVariable.deleteMany({
+        where: { snippetId },
+      });
+
+      if (variables.length === 0) return [];
+
+      await tx.snippetVariable.createMany({
+        data: variables.map((v) => ({
+          snippetId,
+          name: v.name,
+          label: v.label ?? null,
+          description: v.description ?? null,
+          defaultValue: v.defaultValue ?? null,
+          required: v.required !== undefined ? v.required : true,
+        })),
+      });
+
+      return tx.snippetVariable.findMany({
+        where: { snippetId },
+        orderBy: { name: "asc" },
+      });
+    });
+  }
 }
 
 function getPublicSearchWhere(query: string) {
