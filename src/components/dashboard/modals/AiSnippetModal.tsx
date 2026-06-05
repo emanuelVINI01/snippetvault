@@ -39,6 +39,20 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  const formatSetupInstructions = (text: string) => {
+    if (!text) return null;
+    const cleanText = text.replace(/\\n/g, "\n");
+    return cleanText.split("\n").map((line, index) => (
+      <p key={index} className="min-h-[1em] mb-1 text-xs text-dracula-fg leading-relaxed">
+        {line}
+      </p>
+    ));
+  };
+
+  const cleanCodeString = (code: string) => {
+    return code ? code.replace(/\\n/g, "\n") : "";
+  };
+
   // Tabs / Expanded state
   const [activeSection, setActiveSection] = useState<"analysis" | "explain" | "security" | "generators">("analysis");
   const [explainMode, setExplainMode] = useState<"quick" | "technical" | "lineByLine">("quick");
@@ -414,17 +428,36 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
                           <div className="flex flex-col gap-2 mt-2">
                             <div className="flex justify-between items-center bg-dracula-bg p-2 rounded-lg text-[10px] text-dracula-comment font-mono border border-dracula-card/45">
                               <span>Arquivo de Teste</span>
-                              <CopyButton content={testResult.testCode} iconSize={12} />
+                              <CopyButton content={cleanCodeString(testResult.testCode)} iconSize={12} />
                             </div>
-                            <pre className="p-3 overflow-x-auto text-[10px] font-mono bg-[#1e1f29] rounded-lg max-h-[160px] border border-dracula-card/30 text-dracula-fg whitespace-pre select-text">
-                              {testResult.testCode}
-                            </pre>
+                            <div className="max-h-[160px] overflow-auto rounded-xl border border-dracula-card/50 bg-[#1e1f29]">
+                              <SyntaxHighlighter
+                                language={normalizeSnippetLanguage(snippet.language)}
+                                style={dracula}
+                                customStyle={{
+                                  margin: 0,
+                                  padding: "0.75rem",
+                                  fontSize: "0.75rem",
+                                  background: "transparent",
+                                  lineHeight: "1.5",
+                                  whiteSpace: "pre-wrap",
+                                }}
+                                codeTagProps={{
+                                  style: {
+                                    fontFamily: "inherit",
+                                    whiteSpace: "pre-wrap",
+                                  },
+                                }}
+                              >
+                                {cleanCodeString(testResult.testCode)}
+                              </SyntaxHighlighter>
+                            </div>
                             <span className="text-[10px] font-bold text-dracula-comment uppercase mt-1">
                               Instruções de Setup
                             </span>
-                            <p className="text-xs text-dracula-fg bg-dracula-bg/40 p-2.5 rounded-lg border border-dracula-card/20 whitespace-pre-line leading-relaxed">
-                              {testResult.setupInstructions}
-                            </p>
+                            <div className="bg-dracula-bg/40 p-2.5 rounded-lg border border-dracula-card/20 leading-relaxed max-h-[120px] overflow-y-auto">
+                              {formatSetupInstructions(testResult.setupInstructions)}
+                            </div>
                           </div>
                         ) : (
                           <div className="flex items-center justify-center p-12 text-center text-xs text-dracula-comment border border-dashed border-dracula-card/40 rounded-xl">
@@ -455,17 +488,55 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
                           <div className="flex flex-col gap-2 mt-1">
                             <div className="flex justify-between items-center bg-dracula-bg p-2 rounded-lg text-[10px] text-dracula-comment font-mono border border-dracula-card/45">
                               <span>README.md</span>
-                              <CopyButton content={docResult.readme} iconSize={12} />
+                              <CopyButton content={cleanCodeString(docResult.readme)} iconSize={12} />
                             </div>
-                            <pre className="p-3 overflow-x-auto text-[10px] font-mono bg-[#1e1f29] rounded-lg max-h-[160px] border border-dracula-card/30 text-dracula-fg whitespace-pre select-text">
-                              {docResult.readme}
-                            </pre>
+                            <div className="max-h-[160px] overflow-auto rounded-xl border border-dracula-card/50 bg-[#1e1f29]">
+                              <SyntaxHighlighter
+                                language="markdown"
+                                style={dracula}
+                                customStyle={{
+                                  margin: 0,
+                                  padding: "0.75rem",
+                                  fontSize: "0.75rem",
+                                  background: "transparent",
+                                  lineHeight: "1.5",
+                                  whiteSpace: "pre-wrap",
+                                }}
+                                codeTagProps={{
+                                  style: {
+                                    fontFamily: "inherit",
+                                    whiteSpace: "pre-wrap",
+                                  },
+                                }}
+                              >
+                                {cleanCodeString(docResult.readme)}
+                              </SyntaxHighlighter>
+                            </div>
                             <span className="text-[10px] font-bold text-dracula-comment uppercase mt-1">
                               Doc Blocks / Comentários Recomendados
                             </span>
-                            <pre className="p-3 overflow-x-auto text-[10px] font-mono bg-[#1e1f29] rounded-lg max-h-[120px] border border-dracula-card/30 text-dracula-comment whitespace-pre select-text">
-                              {docResult.docBlocks}
-                            </pre>
+                            <div className="max-h-[120px] overflow-auto rounded-xl border border-dracula-card/50 bg-[#1e1f29]">
+                              <SyntaxHighlighter
+                                language={normalizeSnippetLanguage(snippet.language)}
+                                style={dracula}
+                                customStyle={{
+                                  margin: 0,
+                                  padding: "0.75rem",
+                                  fontSize: "0.75rem",
+                                  background: "transparent",
+                                  lineHeight: "1.5",
+                                  whiteSpace: "pre-wrap",
+                                }}
+                                codeTagProps={{
+                                  style: {
+                                    fontFamily: "inherit",
+                                    whiteSpace: "pre-wrap",
+                                  },
+                                }}
+                              >
+                                {cleanCodeString(docResult.docBlocks)}
+                              </SyntaxHighlighter>
+                            </div>
                           </div>
                         ) : (
                           <div className="flex items-center justify-center p-12 text-center text-xs text-dracula-comment border border-dashed border-dracula-card/40 rounded-xl">
