@@ -31,6 +31,11 @@ A documentação está dividida em 4 pilares fundamentais:
 * Funcionamento detalhado de todos os Modais responsivos.
 * Lista exaustiva de todas as rotas de API (`/api/...`) com métodos, parâmetros e respostas.
 
+### 5. 🚀 [Recursos Avançados e Evolução](file:///home/emanuel/%C3%81rea%20de%20trabalho/devs_ntx/snippetvault/docs/recursos_avancados.md)
+* Detalhamento de todos os recursos de produtividade, IA, versionamento e playbooks de checklist.
+* Travas de segurança contra ataques de SSRF (SSRF Safe Resolution) e Zip Slip (caminhos sanitizados).
+* Algoritmo nativo de Code Diff visual e Busca Semântica via Gemini Re-ranking.
+
 ---
 
 > [!TIP]
