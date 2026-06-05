@@ -269,6 +269,41 @@ class SnippetRepository {
       include: { user: { select: AUTHOR_SELECT } },
     });
   }
+
+  async fork(id: string, userId: string) {
+    const target = await prisma.snippet.findFirst({
+      where: {
+        id,
+        OR: [
+          { public: true },
+          { visibility: "unlisted" },
+          { visibility: "public" },
+          { userId },
+        ],
+      },
+    });
+
+    if (!target) throw new Error("Snippet not found or not shareable");
+
+    const forked = await this.create(userId, {
+      title: `${target.title} (Fork)`,
+      code: target.code,
+      language: target.language,
+      description: target.description ?? undefined,
+      tags: target.tags,
+      visibility: "private",
+      public: false,
+      favorite: false,
+      pinned: false,
+    });
+
+    return prisma.snippet.update({
+      where: { id: forked.id },
+      data: {
+        forkedFromId: target.id,
+      },
+    });
+  }
 }
 
 function getPublicSearchWhere(query: string) {
