@@ -27,55 +27,147 @@ class SnippetAiService {
     const normalizedCode = normalizeCodeForHash(snippet.code);
     const codeHash = getSnippetCodeHash(normalizedCode);
     const model = getGeminiModel();
-    const cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
+    let cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
 
     if (cached) {
-      await this.recordUsageEvent({
-        cacheHit: true,
-        codeHash,
-        model: cached.model,
-        snippetId: snippet.id,
-        userId,
+      if ((cached.result as any)?.status === "pending") {
+        // Another concurrent request is analyzing this snippet. Poll until finished.
+        let attempts = 0;
+        while (attempts < 30) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
+          if (!cached) {
+            // The other request failed and deleted the pending record.
+            break;
+          }
+          if ((cached.result as any)?.status !== "pending") {
+            break;
+          }
+          attempts++;
+        }
+      }
+
+      if (cached && (cached.result as any)?.status !== "pending") {
+        await this.recordUsageEvent({
+          cacheHit: true,
+          codeHash,
+          model: cached.model,
+          snippetId: snippet.id,
+          userId,
+        });
+
+        return {
+          analysis: aiSnippetAnalysisSchema.parse(cached.result),
+          cacheHit: true,
+          codeHash,
+          model: cached.model,
+          usage: await this.getUsageSummary(userId),
+        };
+      }
+
+      if (cached && (cached.result as any)?.status === "pending") {
+        try {
+          await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
+        } catch {}
+        throw new Error("AI analysis timed out. Please try again.");
+      }
+    }
+
+    let pendingRecordCreated = false;
+    try {
+      await prisma.aiSnippetAnalysis.create({
+        data: {
+          codeHash,
+          model,
+          normalizedLength: normalizedCode.length,
+          result: { status: "pending" },
+        },
       });
+      pendingRecordCreated = true;
+    } catch (error: any) {
+      // If codeHash already exists due to unique constraint, another request created it concurrently
+      if (error.code === "P2002") {
+        let attempts = 0;
+        while (attempts < 30) {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
+          if (!cached) {
+            break;
+          }
+          if ((cached.result as any)?.status !== "pending") {
+            break;
+          }
+          attempts++;
+        }
 
-      return {
-        analysis: aiSnippetAnalysisSchema.parse(cached.result),
-        cacheHit: true,
-        codeHash,
-        model: cached.model,
-        usage: await this.getUsageSummary(userId),
-      };
+        if (cached && (cached.result as any)?.status !== "pending") {
+          await this.recordUsageEvent({
+            cacheHit: true,
+            codeHash,
+            model: cached.model,
+            snippetId: snippet.id,
+            userId,
+          });
+
+          return {
+            analysis: aiSnippetAnalysisSchema.parse(cached.result),
+            cacheHit: true,
+            codeHash,
+            model: cached.model,
+            usage: await this.getUsageSummary(userId),
+          };
+        }
+
+        if (cached && (cached.result as any)?.status === "pending") {
+          try {
+            await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
+          } catch {}
+          throw new Error("AI analysis timed out. Please try again.");
+        }
+      }
+
+      // If it's some other database error, rethrow it
+      throw error;
     }
 
-    const usage = await this.getUsageSummary(userId);
-    if (usage.remaining <= 0) {
-      throw new AiUsageLimitError();
+    if (pendingRecordCreated) {
+      try {
+        const usage = await this.getUsageSummary(userId);
+        if (usage.remaining <= 0) {
+          throw new AiUsageLimitError();
+        }
+
+        const analysis = await generateSnippetAnalysis(snippet, normalizedCode, locale, model);
+        await prisma.aiSnippetAnalysis.update({
+          where: { codeHash },
+          data: { result: analysis },
+        });
+
+        await this.recordUsageEvent({
+          cacheHit: false,
+          codeHash,
+          model,
+          snippetId: snippet.id,
+          userId,
+        });
+
+        return {
+          analysis,
+          cacheHit: false,
+          codeHash,
+          model,
+          usage: await this.getUsageSummary(userId),
+        };
+      } catch (error) {
+        // Crucial: remove the pending lock record on failure so we don't block subsequent attempts
+        try {
+          await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
+        } catch {}
+        throw error;
+      }
     }
 
-    const analysis = await generateSnippetAnalysis(snippet, normalizedCode, locale, model);
-    await prisma.aiSnippetAnalysis.create({
-      data: {
-        codeHash,
-        model,
-        normalizedLength: normalizedCode.length,
-        result: analysis,
-      },
-    });
-    await this.recordUsageEvent({
-      cacheHit: false,
-      codeHash,
-      model,
-      snippetId: snippet.id,
-      userId,
-    });
-
-    return {
-      analysis,
-      cacheHit: false,
-      codeHash,
-      model,
-      usage: await this.getUsageSummary(userId),
-    };
+    throw new Error("Failed to process AI analysis.");
   }
 
   async getUsageSummary(userId: string): Promise<AiUsageSummary> {
