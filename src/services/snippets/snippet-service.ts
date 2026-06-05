@@ -231,6 +231,44 @@ class SnippetRepository {
       changeNote: `Restaurado para versão ${version.version}`,
     });
   }
+
+  async generateShareToken(id: string, userId: string, expiresAt?: Date | null) {
+    const shareToken = crypto.randomUUID();
+    return prisma.snippet.update({
+      where: { id, userId },
+      data: {
+        shareToken,
+        shareExpiresAt: expiresAt || null,
+      },
+    });
+  }
+
+  async revokeShareToken(id: string, userId: string) {
+    return prisma.snippet.update({
+      where: { id, userId },
+      data: {
+        shareToken: null,
+        shareExpiresAt: null,
+      },
+    });
+  }
+
+  async updateVisibility(id: string, userId: string, visibility: "private" | "unlisted" | "public") {
+    return this.update(id, userId, { visibility });
+  }
+
+  getSnippetByShareToken(shareToken: string) {
+    return prisma.snippet.findFirst({
+      where: {
+        shareToken,
+        OR: [
+          { shareExpiresAt: null },
+          { shareExpiresAt: { gt: new Date() } },
+        ],
+      },
+      include: { user: { select: AUTHOR_SELECT } },
+    });
+  }
 }
 
 function getPublicSearchWhere(query: string) {
