@@ -82,6 +82,7 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
               snippet={snippet}
               usage={response?.usage}
               onRun={runAssistant}
+              showRunButton={!response}
             />
             {error && (
               <p className="rounded-xl border border-dracula-red/30 bg-dracula-red/10 px-3 py-2 text-sm text-dracula-red">
@@ -109,6 +110,7 @@ function AiIntro({
   snippet,
   usage,
   onRun,
+  showRunButton,
 }: {
   cacheHit?: boolean;
   loading: boolean;
@@ -116,6 +118,7 @@ function AiIntro({
   snippet: Snippet;
   usage?: AiSnippetAssistantResponse["usage"];
   onRun: () => void;
+  showRunButton: boolean;
 }) {
   const { t } = useLanguage();
 
@@ -144,14 +147,16 @@ function AiIntro({
             {usage.used}/{usage.limit} {t.ai.usedToday} · {usage.cacheHits} {t.ai.savedCalls}
           </div>
         )}
-        <button
-          onClick={onRun}
-          disabled={loading}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-dracula-pink px-4 py-3 text-sm font-bold text-dracula-bg shadow-lg shadow-dracula-pink/20 transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
-        >
-          <Wand2 className="h-4 w-4" />
-          {loading ? t.ai.running : t.ai.run}
-        </button>
+        {showRunButton && (
+          <button
+            onClick={onRun}
+            disabled={loading}
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-dracula-pink px-4 py-3 text-sm font-bold text-dracula-bg shadow-lg shadow-dracula-pink/20 transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
+          >
+            <Wand2 className="h-4 w-4" />
+            {loading ? t.ai.running : t.ai.run}
+          </button>
+        )}
       </div>
     </div>
   );
@@ -196,11 +201,11 @@ function AiResult({ response }: { response: AiSnippetAssistantResponse }) {
     >
       <div className="flex min-w-0 flex-col gap-4">
         <AiCard icon={Lightbulb} title={t.ai.summary}>
-          <p>{analysis.summary}</p>
+          <p className="whitespace-pre-line">{analysis.summary}</p>
         </AiCard>
         <AiCard icon={FileText} title={t.ai.generatedDescription}>
           <div className="flex items-start justify-between gap-3">
-            <p>{analysis.description}</p>
+            <p className="whitespace-pre-line">{analysis.description}</p>
             <CopyButton content={analysis.description} iconSize={14} />
           </div>
         </AiCard>

@@ -39,11 +39,11 @@ export default function PublicSnippetClient({ snippet, analysis }: PublicSnippet
             <div className="grid gap-4 xl:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)]">
               <div className="flex min-w-0 flex-col gap-4">
                 <AiCard icon={Lightbulb} title={t.ai.summary}>
-                  <p>{analysis.summary}</p>
+                  <p className="whitespace-pre-line">{analysis.summary}</p>
                 </AiCard>
                 <AiCard icon={FileText} title={t.ai.generatedDescription}>
                   <div className="flex items-start justify-between gap-3">
-                    <p>{analysis.description}</p>
+                    <p className="whitespace-pre-line">{analysis.description}</p>
                     <CopyButton content={analysis.description} iconSize={14} />
                   </div>
                 </AiCard>
