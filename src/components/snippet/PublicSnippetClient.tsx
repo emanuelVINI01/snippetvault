@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import type { PublicSnippetView } from "@/src/types/public-snippet";
 import PublicSnippetCodePanel from "./PublicSnippetCodePanel";
 import PublicSnippetHeader from "./PublicSnippetHeader";
@@ -19,6 +20,22 @@ interface PublicSnippetClientProps {
 
 export default function PublicSnippetClient({ snippet, analysis }: PublicSnippetClientProps) {
   const { language, t } = useLanguage();
+  const [related, setRelated] = useState<any[]>([]);
+  const [relatedLoading, setRelatedLoading] = useState(false);
+
+  useEffect(() => {
+    if (snippet?.id) {
+      setRelatedLoading(true);
+      fetch(`/api/snippets/${snippet.id}/related`)
+        .then((res) => {
+          if (res.ok) return res.json();
+          return [];
+        })
+        .then((data) => setRelated(data))
+        .catch((err) => console.error("Error fetching related snippets:", err))
+        .finally(() => setRelatedLoading(false));
+    }
+  }, [snippet?.id]);
 
   return (
     <div className="min-h-screen text-dracula-fg">
@@ -119,6 +136,51 @@ export default function PublicSnippetClient({ snippet, analysis }: PublicSnippet
             </div>
           )}
         </div>
+
+        {/* Related Snippets Section */}
+        {related.length > 0 && (
+          <div className="mx-auto w-full max-w-[min(100%,96rem)] mt-12 border-t border-dracula-card/30 pt-8">
+            <h2 className="mb-6 flex items-center gap-2 text-lg font-bold text-dracula-fg">
+              <Code2 className="h-5 w-5 text-dracula-cyan" />
+              {language === "pt" ? "Snippets Relacionados" : "Related Snippets"}
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              {related.map((item) => (
+                <Link
+                  key={item.id}
+                  href={`/snippet/${item.id}`}
+                  className="group flex flex-col justify-between p-4 rounded-2xl border border-dracula-card/75 bg-dracula-card/15 hover:border-dracula-cyan/40 hover:bg-dracula-card/25 transition-all duration-200"
+                >
+                  <div>
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-[10px] font-bold uppercase tracking-wider text-dracula-cyan bg-dracula-cyan/10 px-2 py-0.5 rounded-md">
+                        {item.language}
+                      </span>
+                      <span className="text-[10px] text-dracula-comment">
+                        {new Date(item.createdAt).toLocaleDateString()}
+                      </span>
+                    </div>
+                    <h3 className="text-sm font-bold text-dracula-fg group-hover:text-dracula-cyan transition-colors line-clamp-1">
+                      {item.title}
+                    </h3>
+                    {item.description && (
+                      <p className="mt-1 text-xs text-dracula-comment line-clamp-2 leading-relaxed">
+                        {item.description}
+                      </p>
+                    )}
+                  </div>
+                  <div className="mt-4 flex flex-wrap gap-1">
+                    {item.tags.slice(0, 3).map((tag: string) => (
+                      <span key={tag} className="text-[10px] text-dracula-comment mr-2">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
     </div>
   );
