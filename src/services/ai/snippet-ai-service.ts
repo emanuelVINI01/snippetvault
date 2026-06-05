@@ -22,97 +22,52 @@ export class AiConfigurationError extends Error {
   }
 }
 
+export class AiConcurrencyError extends Error {
+  constructor() {
+    super("Another AI operation is already in progress");
+  }
+}
+
+const activeUserLocks = new Set<string>();
+
 class SnippetAiService {
   async analyzeSnippet(userId: string, snippet: SnippetAiSource, locale: "pt" | "en", checkOnly?: boolean, forceRefresh?: boolean) {
-    const normalizedCode = normalizeCodeForHash(snippet.code);
-    const codeHash = getSnippetCodeHash(normalizedCode);
-    const model = getGeminiModel();
-
-    if (forceRefresh) {
-      try {
-        await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
-      } catch {}
+    if (!checkOnly) {
+      if (activeUserLocks.has(userId)) {
+        throw new AiConcurrencyError();
+      }
+      activeUserLocks.add(userId);
     }
 
-    let cached = forceRefresh ? null : await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
+    try {
+      const normalizedCode = normalizeCodeForHash(snippet.code);
+      const codeHash = getSnippetCodeHash(normalizedCode);
+      const model = getGeminiModel();
 
-    if (cached) {
-      if ((cached.result as any)?.status === "pending") {
-        // Another concurrent request is analyzing this snippet. Poll until finished.
-        let attempts = 0;
-        while (attempts < 60) {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
-          if (!cached) {
-            // The other request failed and deleted the pending record.
-            break;
-          }
-          if ((cached.result as any)?.status !== "pending") {
-            break;
-          }
-          attempts++;
-        }
-      }
-
-      if (cached && (cached.result as any)?.status !== "pending") {
-        await this.recordUsageEvent({
-          cacheHit: true,
-          codeHash,
-          model: cached.model,
-          snippetId: snippet.id,
-          userId,
-        });
-
-        return {
-          analysis: aiSnippetAnalysisSchema.parse(cached.result),
-          cacheHit: true,
-          codeHash,
-          model: cached.model,
-          usage: await this.getUsageSummary(userId),
-        };
-      }
-
-      if (cached && (cached.result as any)?.status === "pending") {
+      if (forceRefresh) {
         try {
           await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
         } catch {}
-        throw new Error("AI analysis timed out. Please try again.");
       }
-    }
 
-    if (checkOnly) {
-      return {
-        analysis: null,
-        cacheHit: false,
-        usage: await this.getUsageSummary(userId),
-      };
-    }
+      let cached = forceRefresh ? null : await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
 
-    let pendingRecordCreated = false;
-    try {
-      await prisma.aiSnippetAnalysis.create({
-        data: {
-          codeHash,
-          model,
-          normalizedLength: normalizedCode.length,
-          result: { status: "pending" },
-        },
-      });
-      pendingRecordCreated = true;
-    } catch (error: any) {
-      // If codeHash already exists due to unique constraint, another request created it concurrently
-      if (error.code === "P2002") {
-        let attempts = 0;
-        while (attempts < 60) {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
-          if (!cached) {
-            break;
+      if (cached) {
+        if ((cached.result as any)?.status === "pending") {
+          // Another concurrent request is analyzing this snippet. Poll until finished.
+          let attempts = 0;
+          while (attempts < 60) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
+            if (!cached) {
+              // The other request failed and deleted the pending record.
+              break;
+            }
+            if ((cached.result as any)?.status !== "pending") {
+              break;
+            }
+            attempts++;
           }
-          if ((cached.result as any)?.status !== "pending") {
-            break;
-          }
-          attempts++;
         }
 
         if (cached && (cached.result as any)?.status !== "pending") {
@@ -141,48 +96,114 @@ class SnippetAiService {
         }
       }
 
-      // If it's some other database error, rethrow it
-      throw error;
-    }
-
-    if (pendingRecordCreated) {
-      try {
-        const usage = await this.getUsageSummary(userId);
-        if (usage.remaining <= 0) {
-          throw new AiUsageLimitError();
-        }
-
-        const analysis = await generateSnippetAnalysis(snippet, normalizedCode, locale, model);
-        await prisma.aiSnippetAnalysis.update({
-          where: { codeHash },
-          data: { result: analysis },
-        });
-
-        await this.recordUsageEvent({
-          cacheHit: false,
-          codeHash,
-          model,
-          snippetId: snippet.id,
-          userId,
-        });
-
+      if (checkOnly) {
         return {
-          analysis,
+          analysis: null,
           cacheHit: false,
-          codeHash,
-          model,
           usage: await this.getUsageSummary(userId),
         };
-      } catch (error) {
-        // Crucial: remove the pending lock record on failure so we don't block subsequent attempts
-        try {
-          await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
-        } catch {}
+      }
+
+      let pendingRecordCreated = false;
+      try {
+        await prisma.aiSnippetAnalysis.create({
+          data: {
+            codeHash,
+            model,
+            normalizedLength: normalizedCode.length,
+            result: { status: "pending" },
+          },
+        });
+        pendingRecordCreated = true;
+      } catch (error: any) {
+        // If codeHash already exists due to unique constraint, another request created it concurrently
+        if (error.code === "P2002") {
+          let attempts = 0;
+          while (attempts < 60) {
+            await new Promise((resolve) => setTimeout(resolve, 500));
+            cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
+            if (!cached) {
+              break;
+            }
+            if ((cached.result as any)?.status !== "pending") {
+              break;
+            }
+            attempts++;
+          }
+
+          if (cached && (cached.result as any)?.status !== "pending") {
+            await this.recordUsageEvent({
+              cacheHit: true,
+              codeHash,
+              model: cached.model,
+              snippetId: snippet.id,
+              userId,
+            });
+
+            return {
+              analysis: aiSnippetAnalysisSchema.parse(cached.result),
+              cacheHit: true,
+              codeHash,
+              model: cached.model,
+              usage: await this.getUsageSummary(userId),
+            };
+          }
+
+          if (cached && (cached.result as any)?.status === "pending") {
+            try {
+              await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
+            } catch {}
+            throw new Error("AI analysis timed out. Please try again.");
+          }
+        }
+
+        // If it's some other database error, rethrow it
         throw error;
       }
-    }
 
-    throw new Error("Failed to process AI analysis.");
+      if (pendingRecordCreated) {
+        try {
+          const usage = await this.getUsageSummary(userId);
+          if (usage.remaining <= 0) {
+            throw new AiUsageLimitError();
+          }
+
+          const analysis = await generateSnippetAnalysis(snippet, normalizedCode, locale, model);
+          await prisma.aiSnippetAnalysis.update({
+            where: { codeHash },
+            data: { result: analysis },
+          });
+
+          await this.recordUsageEvent({
+            cacheHit: false,
+            codeHash,
+            model,
+            snippetId: snippet.id,
+            userId,
+          });
+
+          return {
+            analysis,
+            cacheHit: false,
+            codeHash,
+            model,
+            usage: await this.getUsageSummary(userId),
+          };
+        } catch (error) {
+          // Crucial: remove the pending lock record on failure so we don't block subsequent attempts
+          try {
+            await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
+          } catch {}
+          throw error;
+        }
+      }
+
+      throw new Error("Failed to process AI analysis.");
+    } finally {
+      if (!checkOnly) {
+        activeUserLocks.delete(userId);
+      }
+    }
   }
 
   async getUsageSummary(userId: string): Promise<AiUsageSummary> {
@@ -228,102 +249,111 @@ class SnippetAiService {
     locale: "pt" | "en",
     forceRefresh?: boolean
   ) {
-    const normalizedCode = normalizeCodeForHash(snippet.code);
-    const codeHash = getSnippetCodeHash(normalizedCode);
-    const model = getGeminiModel();
-
-    if (forceRefresh) {
-      try {
-        await prisma.aiGeneratedDoc.deleteMany({
-          where: { targetType: "tests", targetId: snippet.id, locale, codeHash }
-        });
-      } catch {}
+    if (activeUserLocks.has(userId)) {
+      throw new AiConcurrencyError();
     }
+    activeUserLocks.add(userId);
 
-    let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
-      where: { targetType: "tests", targetId: snippet.id, locale, codeHash }
-    });
+    try {
+      const normalizedCode = normalizeCodeForHash(snippet.code);
+      const codeHash = getSnippetCodeHash(normalizedCode);
+      const model = getGeminiModel();
 
-    if (cached) {
+      if (forceRefresh) {
+        try {
+          await prisma.aiGeneratedDoc.deleteMany({
+            where: { targetType: "tests", targetId: snippet.id, locale, codeHash }
+          });
+        } catch {}
+      }
+
+      let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
+        where: { targetType: "tests", targetId: snippet.id, locale, codeHash }
+      });
+
+      if (cached) {
+        await this.recordUsageEvent({
+          cacheHit: true,
+          codeHash,
+          model: cached.model,
+          snippetId: snippet.id,
+          userId,
+        });
+        return {
+          result: cached.result as { testCode: string; setupInstructions: string },
+          cacheHit: true,
+          usage: await this.getUsageSummary(userId),
+        };
+      }
+
+      const usage = await this.getUsageSummary(userId);
+      if (usage.remaining <= 0) throw new AiUsageLimitError();
+
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey || apiKey.startsWith("replace-with-")) throw new AiConfigurationError();
+
+      const ai = new GoogleGenAI({ apiKey });
+      const outputLanguage = locale === "pt" ? "Portuguese from Brazil" : "English";
+      const prompt = [
+        "You are an expert testing assistant.",
+        `Write unit tests using the ${framework} framework for the code snippet below.`,
+        `Provide step-by-step setup instructions in ${outputLanguage}.`,
+        "Return a single JSON object matching the provided schema.",
+        `Snippet Title: ${snippet.title}`,
+        `Language: ${snippet.language}`,
+        "Code:",
+        "```",
+        normalizedCode,
+        "```"
+      ].join("\n");
+
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseJsonSchema: {
+            type: "object",
+            additionalProperties: false,
+            required: ["testCode", "setupInstructions"],
+            properties: {
+              testCode: { type: "string" },
+              setupInstructions: { type: "string" }
+            }
+          },
+          temperature: 0.2,
+        }
+      });
+
+      const parsed = JSON.parse(response.text ?? "{}");
+
+      await prisma.aiGeneratedDoc.create({
+        data: {
+          targetType: "tests",
+          targetId: snippet.id,
+          codeHash,
+          model,
+          locale,
+          result: parsed,
+        }
+      });
+
       await this.recordUsageEvent({
-        cacheHit: true,
+        cacheHit: false,
         codeHash,
-        model: cached.model,
+        model,
         snippetId: snippet.id,
         userId,
       });
+
       return {
-        result: cached.result as { testCode: string; setupInstructions: string },
-        cacheHit: true,
+        result: parsed as { testCode: string; setupInstructions: string },
+        cacheHit: false,
         usage: await this.getUsageSummary(userId),
       };
+    } finally {
+      activeUserLocks.delete(userId);
     }
-
-    const usage = await this.getUsageSummary(userId);
-    if (usage.remaining <= 0) throw new AiUsageLimitError();
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || apiKey.startsWith("replace-with-")) throw new AiConfigurationError();
-
-    const ai = new GoogleGenAI({ apiKey });
-    const outputLanguage = locale === "pt" ? "Portuguese from Brazil" : "English";
-    const prompt = [
-      "You are an expert testing assistant.",
-      `Write unit tests using the ${framework} framework for the code snippet below.`,
-      `Provide step-by-step setup instructions in ${outputLanguage}.`,
-      "Return a single JSON object matching the provided schema.",
-      `Snippet Title: ${snippet.title}`,
-      `Language: ${snippet.language}`,
-      "Code:",
-      "```",
-      normalizedCode,
-      "```"
-    ].join("\n");
-
-    const response = await ai.models.generateContent({
-      model,
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseJsonSchema: {
-          type: "object",
-          additionalProperties: false,
-          required: ["testCode", "setupInstructions"],
-          properties: {
-            testCode: { type: "string" },
-            setupInstructions: { type: "string" }
-          }
-        },
-        temperature: 0.2,
-      }
-    });
-
-    const parsed = JSON.parse(response.text ?? "{}");
-
-    await prisma.aiGeneratedDoc.create({
-      data: {
-        targetType: "tests",
-        targetId: snippet.id,
-        codeHash,
-        model,
-        locale,
-        result: parsed,
-      }
-    });
-
-    await this.recordUsageEvent({
-      cacheHit: false,
-      codeHash,
-      model,
-      snippetId: snippet.id,
-      userId,
-    });
-
-    return {
-      result: parsed as { testCode: string; setupInstructions: string },
-      cacheHit: false,
-      usage: await this.getUsageSummary(userId),
-    };
   }
 
   async generateDocumentation(
@@ -332,101 +362,110 @@ class SnippetAiService {
     locale: "pt" | "en",
     forceRefresh?: boolean
   ) {
-    const normalizedCode = normalizeCodeForHash(snippet.code);
-    const codeHash = getSnippetCodeHash(normalizedCode);
-    const model = getGeminiModel();
-
-    if (forceRefresh) {
-      try {
-        await prisma.aiGeneratedDoc.deleteMany({
-          where: { targetType: "documentation", targetId: snippet.id, locale, codeHash }
-        });
-      } catch {}
+    if (activeUserLocks.has(userId)) {
+      throw new AiConcurrencyError();
     }
+    activeUserLocks.add(userId);
 
-    let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
-      where: { targetType: "documentation", targetId: snippet.id, locale, codeHash }
-    });
+    try {
+      const normalizedCode = normalizeCodeForHash(snippet.code);
+      const codeHash = getSnippetCodeHash(normalizedCode);
+      const model = getGeminiModel();
 
-    if (cached) {
+      if (forceRefresh) {
+        try {
+          await prisma.aiGeneratedDoc.deleteMany({
+            where: { targetType: "documentation", targetId: snippet.id, locale, codeHash }
+          });
+        } catch {}
+      }
+
+      let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
+        where: { targetType: "documentation", targetId: snippet.id, locale, codeHash }
+      });
+
+      if (cached) {
+        await this.recordUsageEvent({
+          cacheHit: true,
+          codeHash,
+          model: cached.model,
+          snippetId: snippet.id,
+          userId,
+        });
+        return {
+          result: cached.result as { readme: string; docBlocks: string },
+          cacheHit: true,
+          usage: await this.getUsageSummary(userId),
+        };
+      }
+
+      const usage = await this.getUsageSummary(userId);
+      if (usage.remaining <= 0) throw new AiUsageLimitError();
+
+      const apiKey = process.env.GEMINI_API_KEY;
+      if (!apiKey || apiKey.startsWith("replace-with-")) throw new AiConfigurationError();
+
+      const ai = new GoogleGenAI({ apiKey });
+      const outputLanguage = locale === "pt" ? "Portuguese from Brazil" : "English";
+      const prompt = [
+        "You are an expert technical writer.",
+        `Write a comprehensive README.md (markdown) and standard documentation blocks (comments or details) in ${outputLanguage} for the code snippet below.`,
+        "Return a single JSON object matching the provided schema.",
+        `Snippet Title: ${snippet.title}`,
+        `Language: ${snippet.language}`,
+        "Code:",
+        "```",
+        normalizedCode,
+        "```"
+      ].join("\n");
+
+      const response = await ai.models.generateContent({
+        model,
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseJsonSchema: {
+            type: "object",
+            additionalProperties: false,
+            required: ["readme", "docBlocks"],
+            properties: {
+              readme: { type: "string" },
+              docBlocks: { type: "string" }
+            }
+          },
+          temperature: 0.3,
+        }
+      });
+
+      const parsed = JSON.parse(response.text ?? "{}");
+
+      await prisma.aiGeneratedDoc.create({
+        data: {
+          targetType: "documentation",
+          targetId: snippet.id,
+          codeHash,
+          model,
+          locale,
+          result: parsed,
+        }
+      });
+
       await this.recordUsageEvent({
-        cacheHit: true,
+        cacheHit: false,
         codeHash,
-        model: cached.model,
+        model,
         snippetId: snippet.id,
         userId,
       });
+
       return {
-        result: cached.result as { readme: string; docBlocks: string },
-        cacheHit: true,
+        result: parsed as { readme: string; docBlocks: string },
+        cacheHit: false,
         usage: await this.getUsageSummary(userId),
       };
+    } finally {
+      activeUserLocks.delete(userId);
     }
-
-    const usage = await this.getUsageSummary(userId);
-    if (usage.remaining <= 0) throw new AiUsageLimitError();
-
-    const apiKey = process.env.GEMINI_API_KEY;
-    if (!apiKey || apiKey.startsWith("replace-with-")) throw new AiConfigurationError();
-
-    const ai = new GoogleGenAI({ apiKey });
-    const outputLanguage = locale === "pt" ? "Portuguese from Brazil" : "English";
-    const prompt = [
-      "You are an expert technical writer.",
-      `Write a comprehensive README.md (markdown) and standard documentation blocks (comments or details) in ${outputLanguage} for the code snippet below.`,
-      "Return a single JSON object matching the provided schema.",
-      `Snippet Title: ${snippet.title}`,
-      `Language: ${snippet.language}`,
-      "Code:",
-      "```",
-      normalizedCode,
-      "```"
-    ].join("\n");
-
-    const response = await ai.models.generateContent({
-      model,
-      contents: prompt,
-      config: {
-        responseMimeType: "application/json",
-        responseJsonSchema: {
-          type: "object",
-          additionalProperties: false,
-          required: ["readme", "docBlocks"],
-          properties: {
-            readme: { type: "string" },
-            docBlocks: { type: "string" }
-          }
-        },
-        temperature: 0.3,
-      }
-    });
-
-    const parsed = JSON.parse(response.text ?? "{}");
-
-    await prisma.aiGeneratedDoc.create({
-      data: {
-        targetType: "documentation",
-        targetId: snippet.id,
-        codeHash,
-        model,
-        locale,
-        result: parsed,
-      }
-    });
-
-    await this.recordUsageEvent({
-      cacheHit: false,
-      codeHash,
-      model,
-      snippetId: snippet.id,
-      userId,
-    });
-
-    return {
-      result: parsed as { readme: string; docBlocks: string },
-      cacheHit: false,
-      usage: await this.getUsageSummary(userId),
-    };
   }
 
   async semanticSearchReRank(

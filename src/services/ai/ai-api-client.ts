@@ -1,8 +1,8 @@
 import type { AiSnippetAssistantResponse, AiUsageSummary } from "@/src/types/ai";
 
 export class AiApiError extends Error {
-  constructor(public readonly status: number) {
-    super(String(status));
+  constructor(public readonly status: number, message?: string) {
+    super(message || String(status));
   }
 }
 
@@ -27,7 +27,14 @@ class AiApiClient {
       },
     });
 
-    if (!response.ok) throw new AiApiError(response.status);
+    if (!response.ok) {
+      let message = "";
+      try {
+        const body = await response.json();
+        message = body.error || "";
+      } catch {}
+      throw new AiApiError(response.status, message);
+    }
     return response.json();
   }
 }

@@ -11,6 +11,7 @@ import { aiSnippetRequestSchema } from "@/src/lib/validations/ai";
 import {
   AiConfigurationError,
   AiUsageLimitError,
+  AiConcurrencyError,
   snippetAiService,
 } from "@/src/services/ai/snippet-ai-service";
 import { SnippetService } from "@/src/services/snippets/snippet-service";
@@ -39,6 +40,9 @@ export async function POST(req: Request, { params }: AiSnippetRouteContext) {
     if (error instanceof ZodError) return validationErrorResponse(error);
     if (error instanceof AiUsageLimitError) {
       return NextResponse.json({ error: "AI usage limit reached" }, { status: 429 });
+    }
+    if (error instanceof AiConcurrencyError) {
+      return NextResponse.json({ error: "Another AI request is already in progress" }, { status: 429 });
     }
     if (error instanceof AiConfigurationError) {
       return NextResponse.json({ error: "Gemini API key is not configured" }, { status: 503 });

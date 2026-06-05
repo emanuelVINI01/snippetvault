@@ -108,17 +108,25 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
   const handleGenerateTests = async () => {
     if (!snippet) return;
     setGeneratingTests(true);
+    setError(null);
     try {
       const res = await fetch(`/api/ai/snippets/${snippet.id}/tests`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ framework: selectedFramework, locale: language }),
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
-        const data = await res.json();
         setTestResult(data.result);
+        if (data.usage) {
+          setResponse((prev) => prev ? { ...prev, usage: data.usage } : null);
+        }
+      } else {
+        const apiError = new AiApiError(res.status, data.error || "");
+        setError(getAiErrorMessage(apiError, t.ai));
       }
     } catch (e) {
+      setError(t.ai.failed);
       console.error(e);
     } finally {
       setGeneratingTests(false);
@@ -128,17 +136,25 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
   const handleGenerateDocs = async () => {
     if (!snippet) return;
     setGeneratingDocs(true);
+    setError(null);
     try {
       const res = await fetch(`/api/ai/snippets/${snippet.id}/documentation`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ locale: language }),
       });
+      const data = await res.json().catch(() => ({}));
       if (res.ok) {
-        const data = await res.json();
         setDocResult(data.result);
+        if (data.usage) {
+          setResponse((prev) => prev ? { ...prev, usage: data.usage } : null);
+        }
+      } else {
+        const apiError = new AiApiError(res.status, data.error || "");
+        setError(getAiErrorMessage(apiError, t.ai));
       }
     } catch (e) {
+      setError(t.ai.failed);
       console.error(e);
     } finally {
       setGeneratingDocs(false);
@@ -786,9 +802,17 @@ function AiCodeCard({
   );
 }
 
-function getAiErrorMessage(error: unknown, copy: { limitReached: string; notConfigured: string; failed: string }) {
+function getAiErrorMessage(
+  error: unknown,
+  copy: { limitReached: string; notConfigured: string; failed: string; concurrencyError?: string }
+) {
   if (error instanceof AiApiError) {
-    if (error.status === 429) return copy.limitReached;
+    if (error.status === 429) {
+      if (error.message?.includes("progress") || error.message?.includes("concurrency")) {
+        return copy.concurrencyError || "Another AI request is already in progress.";
+      }
+      return copy.limitReached;
+    }
     if (error.status === 503) return copy.notConfigured;
   }
 
