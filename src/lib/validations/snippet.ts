@@ -4,9 +4,15 @@ export const createSnippetSchema = z.object({
   title: z.string().min(1, "O título é obrigatório").max(64),
   code: z.string().min(1, "O código é obrigatório").max(25000),
   language: z.string().min(1, "A linguagem é obrigatória").max(32),
-  description: z.string().max(1024).optional(),
+  description: z.string().max(1024).optional().nullable(),
   public: z.boolean().optional().default(false),
   tags: z.array(z.string().max(128)).optional().default([]),
+  visibility: z.enum(["private", "unlisted", "public"]).optional().default("private"),
+  favorite: z.boolean().optional().default(false),
+  pinned: z.boolean().optional().default(false),
+  privateNotes: z.string().max(10000).optional().nullable(),
+  shareToken: z.string().optional().nullable(),
+  shareExpiresAt: z.coerce.date().optional().nullable(),
 });
 
 export const updateSnippetSchema = createSnippetSchema.partial().refine(
