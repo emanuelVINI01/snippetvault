@@ -29,8 +29,8 @@ export async function POST(req: Request, { params }: AiSnippetRouteContext) {
     if (!snippet) return notFoundResponse();
 
     const body = await req.json().catch(() => ({}));
-    const { locale } = aiSnippetRequestSchema.parse(body);
-    const response = await snippetAiService.analyzeSnippet(userId, snippet, locale);
+    const { locale, checkOnly } = aiSnippetRequestSchema.parse(body);
+    const response = await snippetAiService.analyzeSnippet(userId, snippet, locale, checkOnly);
 
     return NextResponse.json(response);
   } catch (error) {

@@ -25,12 +25,28 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isOpen) {
+    if (isOpen && snippet) {
+      const checkPreExisting = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const res = await aiApiClient.analyzeSnippet(snippet.id, language, true);
+          if (res.analysis) {
+            setResponse(res);
+          }
+        } catch (requestError) {
+          // Silent fallback on checking error, user can still run manually
+        } finally {
+          setLoading(false);
+        }
+      };
+      checkPreExisting();
+    } else {
       setResponse(null);
       setError(null);
       setLoading(false);
     }
-  }, [isOpen]);
+  }, [isOpen, snippet, language]);
 
   const runAssistant = async () => {
     if (!snippet) return;
@@ -167,6 +183,7 @@ function AiEmptyState({ loading }: { loading: boolean }) {
 function AiResult({ response }: { response: AiSnippetAssistantResponse }) {
   const { t } = useLanguage();
   const analysis = response.analysis;
+  if (!analysis) return null;
 
   return (
     <motion.div

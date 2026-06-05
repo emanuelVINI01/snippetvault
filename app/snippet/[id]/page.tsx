@@ -9,6 +9,9 @@ import {
 } from "@/src/lib/snippet-seo";
 import type { Metadata } from "next";
 import { cache } from "react";
+import { prisma } from "@/src/prisma";
+import { getSnippetCodeHash, normalizeCodeForHash } from "@/src/services/ai/snippet-ai-service";
+import { aiSnippetAnalysisSchema } from "@/src/lib/validations/ai";
 
 type SnippetPageProps = {
   params: Promise<{ id: string }>;
@@ -33,6 +36,15 @@ export default async function PublicSnippetPage({ params }: SnippetPageProps) {
     notFound();
   }
 
+  const codeHash = getSnippetCodeHash(normalizeCodeForHash(snippet.code));
+  const aiAnalysisRecord = await prisma.aiSnippetAnalysis.findUnique({
+    where: { codeHash },
+  });
+
+  const analysis = aiAnalysisRecord && (aiAnalysisRecord.result as any)?.status !== "pending"
+    ? aiSnippetAnalysisSchema.parse(aiAnalysisRecord.result)
+    : null;
+
   const jsonLd = getPublicSnippetJsonLd(snippet);
 
   return (
@@ -43,7 +55,7 @@ export default async function PublicSnippetPage({ params }: SnippetPageProps) {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <PublicSnippetClient snippet={mapPublicSnippetView(snippet)} />
+      <PublicSnippetClient snippet={mapPublicSnippetView(snippet)} analysis={analysis} />
     </>
   );
 }

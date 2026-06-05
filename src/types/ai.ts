@@ -11,9 +11,9 @@ export interface AiUsageSummary {
 }
 
 export interface AiSnippetAssistantResponse {
-  analysis: AiSnippetAnalysis;
+  analysis: AiSnippetAnalysis | null;
   cacheHit: boolean;
-  codeHash: string;
-  model: string;
+  codeHash?: string;
+  model?: string;
   usage: AiUsageSummary;
 }

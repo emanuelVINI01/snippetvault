@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const aiSnippetRequestSchema = z.object({
   locale: z.enum(["pt", "en"]).default("pt"),
+  checkOnly: z.boolean().optional(),
 });
 
 const findingSchema = z.object({

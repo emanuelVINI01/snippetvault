@@ -23,7 +23,7 @@ export class AiConfigurationError extends Error {
 }
 
 class SnippetAiService {
-  async analyzeSnippet(userId: string, snippet: SnippetAiSource, locale: "pt" | "en") {
+  async analyzeSnippet(userId: string, snippet: SnippetAiSource, locale: "pt" | "en", checkOnly?: boolean) {
     const normalizedCode = normalizeCodeForHash(snippet.code);
     const codeHash = getSnippetCodeHash(normalizedCode);
     const model = getGeminiModel();
@@ -71,6 +71,14 @@ class SnippetAiService {
         } catch {}
         throw new Error("AI analysis timed out. Please try again.");
       }
+    }
+
+    if (checkOnly) {
+      return {
+        analysis: null,
+        cacheHit: false,
+        usage: await this.getUsageSummary(userId),
+      };
     }
 
     let pendingRecordCreated = false;
