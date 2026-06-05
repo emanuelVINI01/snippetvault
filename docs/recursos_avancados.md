@@ -105,6 +105,15 @@ Disponível no formulário de criação de snippet, o usuário pode digitar uma 
 * O sistema envia a consulta abstrata do usuário (ex: *"código de conexão com banco de dados usando pool"*) junto com os candidatos públicos para a API do Gemini.
 * A IA analisa semanticamente quais snippets atendem ao objetivo do usuário e reordena os resultados por relevância (Re-ranking), entregando resultados altamente precisos.
 
+### Sugestão de Snippets Relacionados:
+* Implementado no endpoint `/api/snippets/[id]/related` e integrado no visualizador público de snippets (`PublicSnippetClient.tsx`).
+* Calcula uma pontuação de relevância para os snippets candidatos com base em:
+  * Correspondência de linguagem (+3 pontos).
+  * Playbooks compartilhados em comum (+2 pontos por playbook).
+  * Tags compartilhadas (+1 ponto por tag comum).
+  * Autoria correspondente (+1 ponto).
+* Exibe uma grade premium e responsiva com até 4 sugestões de código relacionadas para estimular a navegação e a descoberta de conhecimento.
+
 ---
 
 ## 7. Banco de Dados (Novos Modelos e Campos)
