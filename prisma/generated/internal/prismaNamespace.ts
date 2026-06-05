@@ -80,12 +80,12 @@ export type PrismaVersion = {
 }
 
 /**
- * Prisma Client JS version: 7.6.0
- * Query Engine version: 75cbdc1eb7150937890ad5465d861175c6624711
+ * Prisma Client JS version: 7.8.0
+ * Query Engine version: 3c6e192761c0362d496ed980de936e2f3cebcd3a
  */
 export const prismaVersion: PrismaVersion = {
-  client: "7.6.0",
-  engine: "75cbdc1eb7150937890ad5465d861175c6624711"
+  client: "7.8.0",
+  engine: "3c6e192761c0362d496ed980de936e2f3cebcd3a"
 }
 
 /**
@@ -392,7 +392,13 @@ export const ModelName = {
   SnippetCollection: 'SnippetCollection',
   SnippetCollectionItem: 'SnippetCollectionItem',
   AiSnippetAnalysis: 'AiSnippetAnalysis',
-  AiUsageEvent: 'AiUsageEvent'
+  AiUsageEvent: 'AiUsageEvent',
+  SnippetVersion: 'SnippetVersion',
+  SnippetVariable: 'SnippetVariable',
+  PlaybookRun: 'PlaybookRun',
+  PlaybookRunItem: 'PlaybookRunItem',
+  SnippetUsageEvent: 'SnippetUsageEvent',
+  AiGeneratedDoc: 'AiGeneratedDoc'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -408,7 +414,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "account" | "session" | "user" | "verificationToken" | "snippet" | "snippetCollection" | "snippetCollectionItem" | "aiSnippetAnalysis" | "aiUsageEvent"
+    modelProps: "account" | "session" | "user" | "verificationToken" | "snippet" | "snippetCollection" | "snippetCollectionItem" | "aiSnippetAnalysis" | "aiUsageEvent" | "snippetVersion" | "snippetVariable" | "playbookRun" | "playbookRunItem" | "snippetUsageEvent" | "aiGeneratedDoc"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1078,6 +1084,450 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    SnippetVersion: {
+      payload: Prisma.$SnippetVersionPayload<ExtArgs>
+      fields: Prisma.SnippetVersionFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SnippetVersionFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SnippetVersionFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>
+        }
+        findFirst: {
+          args: Prisma.SnippetVersionFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SnippetVersionFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>
+        }
+        findMany: {
+          args: Prisma.SnippetVersionFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>[]
+        }
+        create: {
+          args: Prisma.SnippetVersionCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>
+        }
+        createMany: {
+          args: Prisma.SnippetVersionCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SnippetVersionCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>[]
+        }
+        delete: {
+          args: Prisma.SnippetVersionDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>
+        }
+        update: {
+          args: Prisma.SnippetVersionUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>
+        }
+        deleteMany: {
+          args: Prisma.SnippetVersionDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SnippetVersionUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SnippetVersionUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>[]
+        }
+        upsert: {
+          args: Prisma.SnippetVersionUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVersionPayload>
+        }
+        aggregate: {
+          args: Prisma.SnippetVersionAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSnippetVersion>
+        }
+        groupBy: {
+          args: Prisma.SnippetVersionGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SnippetVersionGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SnippetVersionCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SnippetVersionCountAggregateOutputType> | number
+        }
+      }
+    }
+    SnippetVariable: {
+      payload: Prisma.$SnippetVariablePayload<ExtArgs>
+      fields: Prisma.SnippetVariableFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SnippetVariableFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SnippetVariableFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>
+        }
+        findFirst: {
+          args: Prisma.SnippetVariableFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SnippetVariableFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>
+        }
+        findMany: {
+          args: Prisma.SnippetVariableFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>[]
+        }
+        create: {
+          args: Prisma.SnippetVariableCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>
+        }
+        createMany: {
+          args: Prisma.SnippetVariableCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SnippetVariableCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>[]
+        }
+        delete: {
+          args: Prisma.SnippetVariableDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>
+        }
+        update: {
+          args: Prisma.SnippetVariableUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>
+        }
+        deleteMany: {
+          args: Prisma.SnippetVariableDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SnippetVariableUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SnippetVariableUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>[]
+        }
+        upsert: {
+          args: Prisma.SnippetVariableUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetVariablePayload>
+        }
+        aggregate: {
+          args: Prisma.SnippetVariableAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSnippetVariable>
+        }
+        groupBy: {
+          args: Prisma.SnippetVariableGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SnippetVariableGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SnippetVariableCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SnippetVariableCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlaybookRun: {
+      payload: Prisma.$PlaybookRunPayload<ExtArgs>
+      fields: Prisma.PlaybookRunFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlaybookRunFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlaybookRunFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>
+        }
+        findFirst: {
+          args: Prisma.PlaybookRunFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlaybookRunFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>
+        }
+        findMany: {
+          args: Prisma.PlaybookRunFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>[]
+        }
+        create: {
+          args: Prisma.PlaybookRunCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>
+        }
+        createMany: {
+          args: Prisma.PlaybookRunCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlaybookRunCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>[]
+        }
+        delete: {
+          args: Prisma.PlaybookRunDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>
+        }
+        update: {
+          args: Prisma.PlaybookRunUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlaybookRunDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlaybookRunUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlaybookRunUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlaybookRunUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunPayload>
+        }
+        aggregate: {
+          args: Prisma.PlaybookRunAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlaybookRun>
+        }
+        groupBy: {
+          args: Prisma.PlaybookRunGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlaybookRunGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlaybookRunCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlaybookRunCountAggregateOutputType> | number
+        }
+      }
+    }
+    PlaybookRunItem: {
+      payload: Prisma.$PlaybookRunItemPayload<ExtArgs>
+      fields: Prisma.PlaybookRunItemFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.PlaybookRunItemFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.PlaybookRunItemFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>
+        }
+        findFirst: {
+          args: Prisma.PlaybookRunItemFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.PlaybookRunItemFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>
+        }
+        findMany: {
+          args: Prisma.PlaybookRunItemFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>[]
+        }
+        create: {
+          args: Prisma.PlaybookRunItemCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>
+        }
+        createMany: {
+          args: Prisma.PlaybookRunItemCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.PlaybookRunItemCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>[]
+        }
+        delete: {
+          args: Prisma.PlaybookRunItemDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>
+        }
+        update: {
+          args: Prisma.PlaybookRunItemUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>
+        }
+        deleteMany: {
+          args: Prisma.PlaybookRunItemDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.PlaybookRunItemUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.PlaybookRunItemUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>[]
+        }
+        upsert: {
+          args: Prisma.PlaybookRunItemUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$PlaybookRunItemPayload>
+        }
+        aggregate: {
+          args: Prisma.PlaybookRunItemAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregatePlaybookRunItem>
+        }
+        groupBy: {
+          args: Prisma.PlaybookRunItemGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlaybookRunItemGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.PlaybookRunItemCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.PlaybookRunItemCountAggregateOutputType> | number
+        }
+      }
+    }
+    SnippetUsageEvent: {
+      payload: Prisma.$SnippetUsageEventPayload<ExtArgs>
+      fields: Prisma.SnippetUsageEventFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.SnippetUsageEventFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.SnippetUsageEventFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>
+        }
+        findFirst: {
+          args: Prisma.SnippetUsageEventFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.SnippetUsageEventFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>
+        }
+        findMany: {
+          args: Prisma.SnippetUsageEventFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>[]
+        }
+        create: {
+          args: Prisma.SnippetUsageEventCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>
+        }
+        createMany: {
+          args: Prisma.SnippetUsageEventCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.SnippetUsageEventCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>[]
+        }
+        delete: {
+          args: Prisma.SnippetUsageEventDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>
+        }
+        update: {
+          args: Prisma.SnippetUsageEventUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>
+        }
+        deleteMany: {
+          args: Prisma.SnippetUsageEventDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.SnippetUsageEventUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.SnippetUsageEventUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>[]
+        }
+        upsert: {
+          args: Prisma.SnippetUsageEventUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$SnippetUsageEventPayload>
+        }
+        aggregate: {
+          args: Prisma.SnippetUsageEventAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateSnippetUsageEvent>
+        }
+        groupBy: {
+          args: Prisma.SnippetUsageEventGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SnippetUsageEventGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.SnippetUsageEventCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.SnippetUsageEventCountAggregateOutputType> | number
+        }
+      }
+    }
+    AiGeneratedDoc: {
+      payload: Prisma.$AiGeneratedDocPayload<ExtArgs>
+      fields: Prisma.AiGeneratedDocFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.AiGeneratedDocFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.AiGeneratedDocFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>
+        }
+        findFirst: {
+          args: Prisma.AiGeneratedDocFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.AiGeneratedDocFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>
+        }
+        findMany: {
+          args: Prisma.AiGeneratedDocFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>[]
+        }
+        create: {
+          args: Prisma.AiGeneratedDocCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>
+        }
+        createMany: {
+          args: Prisma.AiGeneratedDocCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.AiGeneratedDocCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>[]
+        }
+        delete: {
+          args: Prisma.AiGeneratedDocDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>
+        }
+        update: {
+          args: Prisma.AiGeneratedDocUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>
+        }
+        deleteMany: {
+          args: Prisma.AiGeneratedDocDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.AiGeneratedDocUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.AiGeneratedDocUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>[]
+        }
+        upsert: {
+          args: Prisma.AiGeneratedDocUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$AiGeneratedDocPayload>
+        }
+        aggregate: {
+          args: Prisma.AiGeneratedDocAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateAiGeneratedDoc>
+        }
+        groupBy: {
+          args: Prisma.AiGeneratedDocGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiGeneratedDocGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.AiGeneratedDocCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AiGeneratedDocCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1175,7 +1625,17 @@ export const SnippetScalarFieldEnum = {
   tags: 'tags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  visibility: 'visibility',
+  shareToken: 'shareToken',
+  shareExpiresAt: 'shareExpiresAt',
+  favorite: 'favorite',
+  pinned: 'pinned',
+  lastUsedAt: 'lastUsedAt',
+  copyCount: 'copyCount',
+  viewCount: 'viewCount',
+  privateNotes: 'privateNotes',
+  forkedFromId: 'forkedFromId'
 } as const
 
 export type SnippetScalarFieldEnum = (typeof SnippetScalarFieldEnum)[keyof typeof SnippetScalarFieldEnum]
@@ -1189,7 +1649,10 @@ export const SnippetCollectionScalarFieldEnum = {
   public: 'public',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  visibility: 'visibility',
+  shareToken: 'shareToken',
+  shareExpiresAt: 'shareExpiresAt'
 } as const
 
 export type SnippetCollectionScalarFieldEnum = (typeof SnippetCollectionScalarFieldEnum)[keyof typeof SnippetCollectionScalarFieldEnum]
@@ -1200,6 +1663,7 @@ export const SnippetCollectionItemScalarFieldEnum = {
   collectionId: 'collectionId',
   snippetId: 'snippetId',
   position: 'position',
+  filePath: 'filePath',
   createdAt: 'createdAt'
 } as const
 
@@ -1232,6 +1696,93 @@ export const AiUsageEventScalarFieldEnum = {
 export type AiUsageEventScalarFieldEnum = (typeof AiUsageEventScalarFieldEnum)[keyof typeof AiUsageEventScalarFieldEnum]
 
 
+export const SnippetVersionScalarFieldEnum = {
+  id: 'id',
+  snippetId: 'snippetId',
+  version: 'version',
+  title: 'title',
+  code: 'code',
+  language: 'language',
+  description: 'description',
+  tags: 'tags',
+  public: 'public',
+  visibility: 'visibility',
+  changeNote: 'changeNote',
+  createdAt: 'createdAt'
+} as const
+
+export type SnippetVersionScalarFieldEnum = (typeof SnippetVersionScalarFieldEnum)[keyof typeof SnippetVersionScalarFieldEnum]
+
+
+export const SnippetVariableScalarFieldEnum = {
+  id: 'id',
+  snippetId: 'snippetId',
+  name: 'name',
+  label: 'label',
+  description: 'description',
+  defaultValue: 'defaultValue',
+  required: 'required',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SnippetVariableScalarFieldEnum = (typeof SnippetVariableScalarFieldEnum)[keyof typeof SnippetVariableScalarFieldEnum]
+
+
+export const PlaybookRunScalarFieldEnum = {
+  id: 'id',
+  collectionId: 'collectionId',
+  userId: 'userId',
+  title: 'title',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlaybookRunScalarFieldEnum = (typeof PlaybookRunScalarFieldEnum)[keyof typeof PlaybookRunScalarFieldEnum]
+
+
+export const PlaybookRunItemScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  collectionItemId: 'collectionItemId',
+  snippetId: 'snippetId',
+  position: 'position',
+  status: 'status',
+  notes: 'notes',
+  completedAt: 'completedAt'
+} as const
+
+export type PlaybookRunItemScalarFieldEnum = (typeof PlaybookRunItemScalarFieldEnum)[keyof typeof PlaybookRunItemScalarFieldEnum]
+
+
+export const SnippetUsageEventScalarFieldEnum = {
+  id: 'id',
+  snippetId: 'snippetId',
+  userId: 'userId',
+  eventType: 'eventType',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type SnippetUsageEventScalarFieldEnum = (typeof SnippetUsageEventScalarFieldEnum)[keyof typeof SnippetUsageEventScalarFieldEnum]
+
+
+export const AiGeneratedDocScalarFieldEnum = {
+  id: 'id',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  codeHash: 'codeHash',
+  model: 'model',
+  locale: 'locale',
+  result: 'result',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiGeneratedDocScalarFieldEnum = (typeof AiGeneratedDocScalarFieldEnum)[keyof typeof AiGeneratedDocScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1245,6 +1796,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {
@@ -1447,6 +2006,21 @@ export type PrismaClientOptions = ({
    * ```
    */
   comments?: runtime.SqlCommenterPlugin[]
+  /**
+   * Optional maximum size for the query plan cache. If not provided, a default size will be used.
+   * A value of `0` can be used to disable the cache entirely. A higher cache size can improve
+   * performance for applications that execute a large number of unique queries, while a smaller
+   * cache size can reduce memory usage.
+   * 
+   * @example
+   * ```
+   * const prisma = new PrismaClient({
+   *   adapter,
+   *   queryPlanCacheMaxSize: 100,
+   * })
+   * ```
+   */
+  queryPlanCacheMaxSize?: number
 }
 export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
@@ -1458,6 +2032,12 @@ export type GlobalOmitConfig = {
   snippetCollectionItem?: Prisma.SnippetCollectionItemOmit
   aiSnippetAnalysis?: Prisma.AiSnippetAnalysisOmit
   aiUsageEvent?: Prisma.AiUsageEventOmit
+  snippetVersion?: Prisma.SnippetVersionOmit
+  snippetVariable?: Prisma.SnippetVariableOmit
+  playbookRun?: Prisma.PlaybookRunOmit
+  playbookRunItem?: Prisma.PlaybookRunItemOmit
+  snippetUsageEvent?: Prisma.SnippetUsageEventOmit
+  aiGeneratedDoc?: Prisma.AiGeneratedDocOmit
 }
 
 /* Types for Logging */

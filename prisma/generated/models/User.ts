@@ -187,6 +187,7 @@ export type UserWhereInput = {
   collections?: Prisma.SnippetCollectionListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   snippets?: Prisma.SnippetListRelationFilter
+  playbookRuns?: Prisma.PlaybookRunListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -200,6 +201,7 @@ export type UserOrderByWithRelationInput = {
   collections?: Prisma.SnippetCollectionOrderByRelationAggregateInput
   sessions?: Prisma.SessionOrderByRelationAggregateInput
   snippets?: Prisma.SnippetOrderByRelationAggregateInput
+  playbookRuns?: Prisma.PlaybookRunOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -216,6 +218,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   collections?: Prisma.SnippetCollectionListRelationFilter
   sessions?: Prisma.SessionListRelationFilter
   snippets?: Prisma.SnippetListRelationFilter
+  playbookRuns?: Prisma.PlaybookRunListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -251,6 +254,7 @@ export type UserCreateInput = {
   collections?: Prisma.SnippetCollectionCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -264,6 +268,7 @@ export type UserUncheckedCreateInput = {
   collections?: Prisma.SnippetCollectionUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetUncheckedCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -277,6 +282,7 @@ export type UserUpdateInput = {
   collections?: Prisma.SnippetCollectionUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -290,6 +296,7 @@ export type UserUncheckedUpdateInput = {
   collections?: Prisma.SnippetCollectionUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUncheckedUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -419,6 +426,20 @@ export type UserUpdateOneRequiredWithoutAiUsageEventsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAiUsageEventsInput, Prisma.UserUpdateWithoutAiUsageEventsInput>, Prisma.UserUncheckedUpdateWithoutAiUsageEventsInput>
 }
 
+export type UserCreateNestedOneWithoutPlaybookRunsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlaybookRunsInput, Prisma.UserUncheckedCreateWithoutPlaybookRunsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlaybookRunsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutPlaybookRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutPlaybookRunsInput, Prisma.UserUncheckedCreateWithoutPlaybookRunsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutPlaybookRunsInput
+  upsert?: Prisma.UserUpsertWithoutPlaybookRunsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutPlaybookRunsInput, Prisma.UserUpdateWithoutPlaybookRunsInput>, Prisma.UserUncheckedUpdateWithoutPlaybookRunsInput>
+}
+
 export type UserCreateWithoutAccountsInput = {
   id?: string
   name?: string | null
@@ -429,6 +450,7 @@ export type UserCreateWithoutAccountsInput = {
   collections?: Prisma.SnippetCollectionCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -441,6 +463,7 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   collections?: Prisma.SnippetCollectionUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetUncheckedCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -469,6 +492,7 @@ export type UserUpdateWithoutAccountsInput = {
   collections?: Prisma.SnippetCollectionUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -481,6 +505,7 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   collections?: Prisma.SnippetCollectionUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUncheckedUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -493,6 +518,7 @@ export type UserCreateWithoutSessionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventCreateNestedManyWithoutUserInput
   collections?: Prisma.SnippetCollectionCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -505,6 +531,7 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUncheckedCreateNestedManyWithoutUserInput
   collections?: Prisma.SnippetCollectionUncheckedCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetUncheckedCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -533,6 +560,7 @@ export type UserUpdateWithoutSessionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUpdateManyWithoutUserNestedInput
   collections?: Prisma.SnippetCollectionUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -545,6 +573,7 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUncheckedUpdateManyWithoutUserNestedInput
   collections?: Prisma.SnippetCollectionUncheckedUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUncheckedUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutSnippetsInput = {
@@ -557,6 +586,7 @@ export type UserCreateWithoutSnippetsInput = {
   aiUsageEvents?: Prisma.AiUsageEventCreateNestedManyWithoutUserInput
   collections?: Prisma.SnippetCollectionCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutSnippetsInput = {
@@ -569,6 +599,7 @@ export type UserUncheckedCreateWithoutSnippetsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUncheckedCreateNestedManyWithoutUserInput
   collections?: Prisma.SnippetCollectionUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutSnippetsInput = {
@@ -597,6 +628,7 @@ export type UserUpdateWithoutSnippetsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUpdateManyWithoutUserNestedInput
   collections?: Prisma.SnippetCollectionUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSnippetsInput = {
@@ -609,6 +641,7 @@ export type UserUncheckedUpdateWithoutSnippetsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUncheckedUpdateManyWithoutUserNestedInput
   collections?: Prisma.SnippetCollectionUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutCollectionsInput = {
@@ -621,6 +654,7 @@ export type UserCreateWithoutCollectionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutCollectionsInput = {
@@ -633,6 +667,7 @@ export type UserUncheckedCreateWithoutCollectionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetUncheckedCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutCollectionsInput = {
@@ -661,6 +696,7 @@ export type UserUpdateWithoutCollectionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCollectionsInput = {
@@ -673,6 +709,7 @@ export type UserUncheckedUpdateWithoutCollectionsInput = {
   aiUsageEvents?: Prisma.AiUsageEventUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUncheckedUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAiUsageEventsInput = {
@@ -685,6 +722,7 @@ export type UserCreateWithoutAiUsageEventsInput = {
   collections?: Prisma.SnippetCollectionCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAiUsageEventsInput = {
@@ -697,6 +735,7 @@ export type UserUncheckedCreateWithoutAiUsageEventsInput = {
   collections?: Prisma.SnippetCollectionUncheckedCreateNestedManyWithoutUserInput
   sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
   snippets?: Prisma.SnippetUncheckedCreateNestedManyWithoutUserInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAiUsageEventsInput = {
@@ -725,6 +764,7 @@ export type UserUpdateWithoutAiUsageEventsInput = {
   collections?: Prisma.SnippetCollectionUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAiUsageEventsInput = {
@@ -734,6 +774,75 @@ export type UserUncheckedUpdateWithoutAiUsageEventsInput = {
   emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  collections?: Prisma.SnippetCollectionUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  snippets?: Prisma.SnippetUncheckedUpdateManyWithoutUserNestedInput
+  playbookRuns?: Prisma.PlaybookRunUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutPlaybookRunsInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  aiUsageEvents?: Prisma.AiUsageEventCreateNestedManyWithoutUserInput
+  collections?: Prisma.SnippetCollectionCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  snippets?: Prisma.SnippetCreateNestedManyWithoutUserInput
+}
+
+export type UserUncheckedCreateWithoutPlaybookRunsInput = {
+  id?: string
+  name?: string | null
+  email?: string | null
+  emailVerified?: Date | string | null
+  image?: string | null
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  aiUsageEvents?: Prisma.AiUsageEventUncheckedCreateNestedManyWithoutUserInput
+  collections?: Prisma.SnippetCollectionUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  snippets?: Prisma.SnippetUncheckedCreateNestedManyWithoutUserInput
+}
+
+export type UserCreateOrConnectWithoutPlaybookRunsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlaybookRunsInput, Prisma.UserUncheckedCreateWithoutPlaybookRunsInput>
+}
+
+export type UserUpsertWithoutPlaybookRunsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutPlaybookRunsInput, Prisma.UserUncheckedUpdateWithoutPlaybookRunsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutPlaybookRunsInput, Prisma.UserUncheckedCreateWithoutPlaybookRunsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutPlaybookRunsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutPlaybookRunsInput, Prisma.UserUncheckedUpdateWithoutPlaybookRunsInput>
+}
+
+export type UserUpdateWithoutPlaybookRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  aiUsageEvents?: Prisma.AiUsageEventUpdateManyWithoutUserNestedInput
+  collections?: Prisma.SnippetCollectionUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  snippets?: Prisma.SnippetUpdateManyWithoutUserNestedInput
+}
+
+export type UserUncheckedUpdateWithoutPlaybookRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  aiUsageEvents?: Prisma.AiUsageEventUncheckedUpdateManyWithoutUserNestedInput
   collections?: Prisma.SnippetCollectionUncheckedUpdateManyWithoutUserNestedInput
   sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
   snippets?: Prisma.SnippetUncheckedUpdateManyWithoutUserNestedInput
@@ -750,6 +859,7 @@ export type UserCountOutputType = {
   collections: number
   sessions: number
   snippets: number
+  playbookRuns: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -758,6 +868,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   collections?: boolean | UserCountOutputTypeCountCollectionsArgs
   sessions?: boolean | UserCountOutputTypeCountSessionsArgs
   snippets?: boolean | UserCountOutputTypeCountSnippetsArgs
+  playbookRuns?: boolean | UserCountOutputTypeCountPlaybookRunsArgs
 }
 
 /**
@@ -805,6 +916,13 @@ export type UserCountOutputTypeCountSnippetsArgs<ExtArgs extends runtime.Types.E
   where?: Prisma.SnippetWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountPlaybookRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlaybookRunWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -817,6 +935,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   collections?: boolean | Prisma.User$collectionsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   snippets?: boolean | Prisma.User$snippetsArgs<ExtArgs>
+  playbookRuns?: boolean | Prisma.User$playbookRunsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -851,6 +970,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   collections?: boolean | Prisma.User$collectionsArgs<ExtArgs>
   sessions?: boolean | Prisma.User$sessionsArgs<ExtArgs>
   snippets?: boolean | Prisma.User$snippetsArgs<ExtArgs>
+  playbookRuns?: boolean | Prisma.User$playbookRunsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -864,6 +984,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     collections: Prisma.$SnippetCollectionPayload<ExtArgs>[]
     sessions: Prisma.$SessionPayload<ExtArgs>[]
     snippets: Prisma.$SnippetPayload<ExtArgs>[]
+    playbookRuns: Prisma.$PlaybookRunPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1270,6 +1391,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   collections<T extends Prisma.User$collectionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$collectionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SnippetCollectionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   sessions<T extends Prisma.User$sessionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$sessionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SessionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   snippets<T extends Prisma.User$snippetsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$snippetsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SnippetPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  playbookRuns<T extends Prisma.User$playbookRunsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$playbookRunsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlaybookRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1814,6 +1936,30 @@ export type User$snippetsArgs<ExtArgs extends runtime.Types.Extensions.InternalA
   take?: number
   skip?: number
   distinct?: Prisma.SnippetScalarFieldEnum | Prisma.SnippetScalarFieldEnum[]
+}
+
+/**
+ * User.playbookRuns
+ */
+export type User$playbookRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlaybookRun
+   */
+  select?: Prisma.PlaybookRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlaybookRun
+   */
+  omit?: Prisma.PlaybookRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlaybookRunInclude<ExtArgs> | null
+  where?: Prisma.PlaybookRunWhereInput
+  orderBy?: Prisma.PlaybookRunOrderByWithRelationInput | Prisma.PlaybookRunOrderByWithRelationInput[]
+  cursor?: Prisma.PlaybookRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlaybookRunScalarFieldEnum | Prisma.PlaybookRunScalarFieldEnum[]
 }
 
 /**

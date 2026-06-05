@@ -86,3 +86,33 @@ export type AiSnippetAnalysis = Prisma.AiSnippetAnalysisModel
  * 
  */
 export type AiUsageEvent = Prisma.AiUsageEventModel
+/**
+ * Model SnippetVersion
+ * 
+ */
+export type SnippetVersion = Prisma.SnippetVersionModel
+/**
+ * Model SnippetVariable
+ * 
+ */
+export type SnippetVariable = Prisma.SnippetVariableModel
+/**
+ * Model PlaybookRun
+ * 
+ */
+export type PlaybookRun = Prisma.PlaybookRunModel
+/**
+ * Model PlaybookRunItem
+ * 
+ */
+export type PlaybookRunItem = Prisma.PlaybookRunItemModel
+/**
+ * Model SnippetUsageEvent
+ * 
+ */
+export type SnippetUsageEvent = Prisma.SnippetUsageEventModel
+/**
+ * Model AiGeneratedDoc
+ * 
+ */
+export type AiGeneratedDoc = Prisma.AiGeneratedDocModel

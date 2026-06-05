@@ -46,9 +46,10 @@ model User {
   image         String?
   accounts      Account[]
   aiUsageEvents AiUsageEvent[]
-  collections    SnippetCollection[]
+  collections   SnippetCollection[]
   sessions      Session[]
   snippets      Snippet[]
+  playbookRuns  PlaybookRun[]
 }
 
 model VerificationToken {
@@ -59,22 +60,45 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-
-
 model Snippet {
-  id          String   @id @default(cuid())
-  title       String
-  code        String   @db.Text
-  language    String
-  public      Boolean  @default(false)
-  description String?
-  tags        String[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id              String                  @id @default(cuid())
+  title           String
+  code            String                  @db.Text
+  language        String
+  public          Boolean                 @default(false)
+  description     String?
+  tags            String[]
+  createdAt       DateTime                @default(now())
+  updatedAt       DateTime                @updatedAt
   collectionItems SnippetCollectionItem[]
-  
-  userId      String
-  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Novas colunas de visibilidade e compartilhamento
+  visibility     String            @default("private") // private, unlisted, public
+  shareToken     String?           @unique
+  shareExpiresAt DateTime?
+
+  // Organização pessoal e uso
+  favorite       Boolean           @default(false)
+  pinned         Boolean           @default(false)
+  lastUsedAt     DateTime?
+  copyCount      Int               @default(0)
+  viewCount      Int               @default(0)
+
+  // Notas privadas
+  privateNotes   String?           @db.Text
+
+  // Relações novas
+  versions       SnippetVersion[]
+  variables      SnippetVariable[]
+  usageEventsDetail SnippetUsageEvent[]
+
+  // Fork / Remix
+  forkedFromId   String?
+  forkedFrom     Snippet?          @relation("SnippetForks", fields: [forkedFromId], references: [id], onDelete: SetNull)
+  forks          Snippet[]         @relation("SnippetForks")
 }
 
 model SnippetCollection {
@@ -90,6 +114,14 @@ model SnippetCollection {
   user        User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
   items       SnippetCollectionItem[]
 
+  // Novas colunas de visibilidade e compartilhamento
+  visibility     String                 @default("private") // private, unlisted, public
+  shareToken     String?                @unique
+  shareExpiresAt DateTime?
+
+  // Relações novas
+  runs           PlaybookRun[]
+
   @@index([userId, createdAt])
 }
 
@@ -98,6 +130,7 @@ model SnippetCollectionItem {
   collectionId String
   snippetId    String
   position     Int                @default(0)
+  filePath     String?            // Caminho de arquivo do item no playbook
   createdAt    DateTime           @default(now())
 
   collection   SnippetCollection  @relation(fields: [collectionId], references: [id], onDelete: Cascade)
@@ -134,4 +167,106 @@ model AiUsageEvent {
 
   @@index([userId, createdAt])
   @@index([codeHash])
+}
+
+model SnippetVersion {
+  id          String   @id @default(cuid())
+  snippetId   String
+  snippet     Snippet  @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+
+  version     Int
+  title       String
+  code        String   @db.Text
+  language    String
+  description String?
+  tags        String[]
+  public      Boolean
+  visibility  String   @default("private")
+
+  changeNote  String?
+  createdAt   DateTime @default(now())
+
+  @@unique([snippetId, version])
+  @@index([snippetId, createdAt])
+}
+
+model SnippetVariable {
+  id           String   @id @default(cuid())
+  snippetId    String
+  snippet      Snippet  @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+
+  name         String
+  label        String?
+  description  String?
+  defaultValue String?
+  required     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@unique([snippetId, name])
+  @@index([snippetId])
+}
+
+model PlaybookRun {
+  id           String   @id @default(cuid())
+  collectionId String
+  collection   SnippetCollection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  userId       String
+  user         User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  title        String?
+  status       String   @default("active") // active, completed, abandoned
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  items        PlaybookRunItem[]
+
+  @@index([userId, createdAt])
+  @@index([collectionId])
+}
+
+model PlaybookRunItem {
+  id             String   @id @default(cuid())
+  runId          String
+  run            PlaybookRun @relation(fields: [runId], references: [id], onDelete: Cascade)
+
+  collectionItemId String?
+  snippetId        String?
+  position         Int
+
+  status           String   @default("pending") // pending, done, skipped
+  notes            String?
+  completedAt      DateTime?
+
+  @@index([runId, position])
+}
+
+model SnippetUsageEvent {
+  id        String   @id @default(cuid())
+  snippetId String
+  snippet   Snippet @relation(fields: [snippetId], references: [id], onDelete: Cascade)
+
+  userId    String?
+  eventType String   // view, copy, fork, export, share_opened, ai_generated, template_rendered
+  metadata  Json?
+  createdAt DateTime @default(now())
+
+  @@index([snippetId, createdAt])
+  @@index([userId, createdAt])
+  @@index([eventType, createdAt])
+}
+
+model AiGeneratedDoc {
+  id          String   @id @default(cuid())
+  targetType  String   // snippet, collection
+  targetId    String
+  codeHash    String?
+  model       String
+  locale      String
+  result      Json
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([targetType, targetId])
 }

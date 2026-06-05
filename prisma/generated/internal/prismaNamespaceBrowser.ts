@@ -59,7 +59,13 @@ export const ModelName = {
   SnippetCollection: 'SnippetCollection',
   SnippetCollectionItem: 'SnippetCollectionItem',
   AiSnippetAnalysis: 'AiSnippetAnalysis',
-  AiUsageEvent: 'AiUsageEvent'
+  AiUsageEvent: 'AiUsageEvent',
+  SnippetVersion: 'SnippetVersion',
+  SnippetVariable: 'SnippetVariable',
+  PlaybookRun: 'PlaybookRun',
+  PlaybookRunItem: 'PlaybookRunItem',
+  SnippetUsageEvent: 'SnippetUsageEvent',
+  AiGeneratedDoc: 'AiGeneratedDoc'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -136,7 +142,17 @@ export const SnippetScalarFieldEnum = {
   tags: 'tags',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  visibility: 'visibility',
+  shareToken: 'shareToken',
+  shareExpiresAt: 'shareExpiresAt',
+  favorite: 'favorite',
+  pinned: 'pinned',
+  lastUsedAt: 'lastUsedAt',
+  copyCount: 'copyCount',
+  viewCount: 'viewCount',
+  privateNotes: 'privateNotes',
+  forkedFromId: 'forkedFromId'
 } as const
 
 export type SnippetScalarFieldEnum = (typeof SnippetScalarFieldEnum)[keyof typeof SnippetScalarFieldEnum]
@@ -150,7 +166,10 @@ export const SnippetCollectionScalarFieldEnum = {
   public: 'public',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  userId: 'userId'
+  userId: 'userId',
+  visibility: 'visibility',
+  shareToken: 'shareToken',
+  shareExpiresAt: 'shareExpiresAt'
 } as const
 
 export type SnippetCollectionScalarFieldEnum = (typeof SnippetCollectionScalarFieldEnum)[keyof typeof SnippetCollectionScalarFieldEnum]
@@ -161,6 +180,7 @@ export const SnippetCollectionItemScalarFieldEnum = {
   collectionId: 'collectionId',
   snippetId: 'snippetId',
   position: 'position',
+  filePath: 'filePath',
   createdAt: 'createdAt'
 } as const
 
@@ -193,6 +213,93 @@ export const AiUsageEventScalarFieldEnum = {
 export type AiUsageEventScalarFieldEnum = (typeof AiUsageEventScalarFieldEnum)[keyof typeof AiUsageEventScalarFieldEnum]
 
 
+export const SnippetVersionScalarFieldEnum = {
+  id: 'id',
+  snippetId: 'snippetId',
+  version: 'version',
+  title: 'title',
+  code: 'code',
+  language: 'language',
+  description: 'description',
+  tags: 'tags',
+  public: 'public',
+  visibility: 'visibility',
+  changeNote: 'changeNote',
+  createdAt: 'createdAt'
+} as const
+
+export type SnippetVersionScalarFieldEnum = (typeof SnippetVersionScalarFieldEnum)[keyof typeof SnippetVersionScalarFieldEnum]
+
+
+export const SnippetVariableScalarFieldEnum = {
+  id: 'id',
+  snippetId: 'snippetId',
+  name: 'name',
+  label: 'label',
+  description: 'description',
+  defaultValue: 'defaultValue',
+  required: 'required',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SnippetVariableScalarFieldEnum = (typeof SnippetVariableScalarFieldEnum)[keyof typeof SnippetVariableScalarFieldEnum]
+
+
+export const PlaybookRunScalarFieldEnum = {
+  id: 'id',
+  collectionId: 'collectionId',
+  userId: 'userId',
+  title: 'title',
+  status: 'status',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type PlaybookRunScalarFieldEnum = (typeof PlaybookRunScalarFieldEnum)[keyof typeof PlaybookRunScalarFieldEnum]
+
+
+export const PlaybookRunItemScalarFieldEnum = {
+  id: 'id',
+  runId: 'runId',
+  collectionItemId: 'collectionItemId',
+  snippetId: 'snippetId',
+  position: 'position',
+  status: 'status',
+  notes: 'notes',
+  completedAt: 'completedAt'
+} as const
+
+export type PlaybookRunItemScalarFieldEnum = (typeof PlaybookRunItemScalarFieldEnum)[keyof typeof PlaybookRunItemScalarFieldEnum]
+
+
+export const SnippetUsageEventScalarFieldEnum = {
+  id: 'id',
+  snippetId: 'snippetId',
+  userId: 'userId',
+  eventType: 'eventType',
+  metadata: 'metadata',
+  createdAt: 'createdAt'
+} as const
+
+export type SnippetUsageEventScalarFieldEnum = (typeof SnippetUsageEventScalarFieldEnum)[keyof typeof SnippetUsageEventScalarFieldEnum]
+
+
+export const AiGeneratedDocScalarFieldEnum = {
+  id: 'id',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  codeHash: 'codeHash',
+  model: 'model',
+  locale: 'locale',
+  result: 'result',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type AiGeneratedDocScalarFieldEnum = (typeof AiGeneratedDocScalarFieldEnum)[keyof typeof AiGeneratedDocScalarFieldEnum]
+
+
 export const SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -206,6 +313,14 @@ export const JsonNullValueInput = {
 } as const
 
 export type JsonNullValueInput = (typeof JsonNullValueInput)[keyof typeof JsonNullValueInput]
+
+
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
 export const QueryMode = {

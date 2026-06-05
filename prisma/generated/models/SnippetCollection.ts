@@ -33,6 +33,9 @@ export type SnippetCollectionMinAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  visibility: string | null
+  shareToken: string | null
+  shareExpiresAt: Date | null
 }
 
 export type SnippetCollectionMaxAggregateOutputType = {
@@ -44,6 +47,9 @@ export type SnippetCollectionMaxAggregateOutputType = {
   createdAt: Date | null
   updatedAt: Date | null
   userId: string | null
+  visibility: string | null
+  shareToken: string | null
+  shareExpiresAt: Date | null
 }
 
 export type SnippetCollectionCountAggregateOutputType = {
@@ -55,6 +61,9 @@ export type SnippetCollectionCountAggregateOutputType = {
   createdAt: number
   updatedAt: number
   userId: number
+  visibility: number
+  shareToken: number
+  shareExpiresAt: number
   _all: number
 }
 
@@ -68,6 +77,9 @@ export type SnippetCollectionMinAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  visibility?: true
+  shareToken?: true
+  shareExpiresAt?: true
 }
 
 export type SnippetCollectionMaxAggregateInputType = {
@@ -79,6 +91,9 @@ export type SnippetCollectionMaxAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  visibility?: true
+  shareToken?: true
+  shareExpiresAt?: true
 }
 
 export type SnippetCollectionCountAggregateInputType = {
@@ -90,6 +105,9 @@ export type SnippetCollectionCountAggregateInputType = {
   createdAt?: true
   updatedAt?: true
   userId?: true
+  visibility?: true
+  shareToken?: true
+  shareExpiresAt?: true
   _all?: true
 }
 
@@ -174,6 +192,9 @@ export type SnippetCollectionGroupByOutputType = {
   createdAt: Date
   updatedAt: Date
   userId: string
+  visibility: string
+  shareToken: string | null
+  shareExpiresAt: Date | null
   _count: SnippetCollectionCountAggregateOutputType | null
   _min: SnippetCollectionMinAggregateOutputType | null
   _max: SnippetCollectionMaxAggregateOutputType | null
@@ -206,8 +227,12 @@ export type SnippetCollectionWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"SnippetCollection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SnippetCollection"> | Date | string
   userId?: Prisma.StringFilter<"SnippetCollection"> | string
+  visibility?: Prisma.StringFilter<"SnippetCollection"> | string
+  shareToken?: Prisma.StringNullableFilter<"SnippetCollection"> | string | null
+  shareExpiresAt?: Prisma.DateTimeNullableFilter<"SnippetCollection"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   items?: Prisma.SnippetCollectionItemListRelationFilter
+  runs?: Prisma.PlaybookRunListRelationFilter
 }
 
 export type SnippetCollectionOrderByWithRelationInput = {
@@ -219,12 +244,17 @@ export type SnippetCollectionOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  shareToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  shareExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   user?: Prisma.UserOrderByWithRelationInput
   items?: Prisma.SnippetCollectionItemOrderByRelationAggregateInput
+  runs?: Prisma.PlaybookRunOrderByRelationAggregateInput
 }
 
 export type SnippetCollectionWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  shareToken?: string
   AND?: Prisma.SnippetCollectionWhereInput | Prisma.SnippetCollectionWhereInput[]
   OR?: Prisma.SnippetCollectionWhereInput[]
   NOT?: Prisma.SnippetCollectionWhereInput | Prisma.SnippetCollectionWhereInput[]
@@ -235,9 +265,12 @@ export type SnippetCollectionWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"SnippetCollection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SnippetCollection"> | Date | string
   userId?: Prisma.StringFilter<"SnippetCollection"> | string
+  visibility?: Prisma.StringFilter<"SnippetCollection"> | string
+  shareExpiresAt?: Prisma.DateTimeNullableFilter<"SnippetCollection"> | Date | string | null
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   items?: Prisma.SnippetCollectionItemListRelationFilter
-}, "id">
+  runs?: Prisma.PlaybookRunListRelationFilter
+}, "id" | "shareToken">
 
 export type SnippetCollectionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -248,6 +281,9 @@ export type SnippetCollectionOrderByWithAggregationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  shareToken?: Prisma.SortOrderInput | Prisma.SortOrder
+  shareExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.SnippetCollectionCountOrderByAggregateInput
   _max?: Prisma.SnippetCollectionMaxOrderByAggregateInput
   _min?: Prisma.SnippetCollectionMinOrderByAggregateInput
@@ -265,6 +301,9 @@ export type SnippetCollectionScalarWhereWithAggregatesInput = {
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SnippetCollection"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"SnippetCollection"> | Date | string
   userId?: Prisma.StringWithAggregatesFilter<"SnippetCollection"> | string
+  visibility?: Prisma.StringWithAggregatesFilter<"SnippetCollection"> | string
+  shareToken?: Prisma.StringNullableWithAggregatesFilter<"SnippetCollection"> | string | null
+  shareExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"SnippetCollection"> | Date | string | null
 }
 
 export type SnippetCollectionCreateInput = {
@@ -275,8 +314,12 @@ export type SnippetCollectionCreateInput = {
   public?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutCollectionsInput
   items?: Prisma.SnippetCollectionItemCreateNestedManyWithoutCollectionInput
+  runs?: Prisma.PlaybookRunCreateNestedManyWithoutCollectionInput
 }
 
 export type SnippetCollectionUncheckedCreateInput = {
@@ -288,7 +331,11 @@ export type SnippetCollectionUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
   items?: Prisma.SnippetCollectionItemUncheckedCreateNestedManyWithoutCollectionInput
+  runs?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutCollectionInput
 }
 
 export type SnippetCollectionUpdateInput = {
@@ -299,8 +346,12 @@ export type SnippetCollectionUpdateInput = {
   public?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutCollectionsNestedInput
   items?: Prisma.SnippetCollectionItemUpdateManyWithoutCollectionNestedInput
+  runs?: Prisma.PlaybookRunUpdateManyWithoutCollectionNestedInput
 }
 
 export type SnippetCollectionUncheckedUpdateInput = {
@@ -312,7 +363,11 @@ export type SnippetCollectionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.SnippetCollectionItemUncheckedUpdateManyWithoutCollectionNestedInput
+  runs?: Prisma.PlaybookRunUncheckedUpdateManyWithoutCollectionNestedInput
 }
 
 export type SnippetCollectionCreateManyInput = {
@@ -324,6 +379,9 @@ export type SnippetCollectionCreateManyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
 }
 
 export type SnippetCollectionUpdateManyMutationInput = {
@@ -334,6 +392,9 @@ export type SnippetCollectionUpdateManyMutationInput = {
   public?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SnippetCollectionUncheckedUpdateManyInput = {
@@ -345,6 +406,9 @@ export type SnippetCollectionUncheckedUpdateManyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 export type SnippetCollectionListRelationFilter = {
@@ -366,6 +430,9 @@ export type SnippetCollectionCountOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  shareToken?: Prisma.SortOrder
+  shareExpiresAt?: Prisma.SortOrder
 }
 
 export type SnippetCollectionMaxOrderByAggregateInput = {
@@ -377,6 +444,9 @@ export type SnippetCollectionMaxOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  shareToken?: Prisma.SortOrder
+  shareExpiresAt?: Prisma.SortOrder
 }
 
 export type SnippetCollectionMinOrderByAggregateInput = {
@@ -388,6 +458,9 @@ export type SnippetCollectionMinOrderByAggregateInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  visibility?: Prisma.SortOrder
+  shareToken?: Prisma.SortOrder
+  shareExpiresAt?: Prisma.SortOrder
 }
 
 export type SnippetCollectionScalarRelationFilter = {
@@ -451,6 +524,20 @@ export type SnippetCollectionUpdateOneRequiredWithoutItemsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.SnippetCollectionUpdateToOneWithWhereWithoutItemsInput, Prisma.SnippetCollectionUpdateWithoutItemsInput>, Prisma.SnippetCollectionUncheckedUpdateWithoutItemsInput>
 }
 
+export type SnippetCollectionCreateNestedOneWithoutRunsInput = {
+  create?: Prisma.XOR<Prisma.SnippetCollectionCreateWithoutRunsInput, Prisma.SnippetCollectionUncheckedCreateWithoutRunsInput>
+  connectOrCreate?: Prisma.SnippetCollectionCreateOrConnectWithoutRunsInput
+  connect?: Prisma.SnippetCollectionWhereUniqueInput
+}
+
+export type SnippetCollectionUpdateOneRequiredWithoutRunsNestedInput = {
+  create?: Prisma.XOR<Prisma.SnippetCollectionCreateWithoutRunsInput, Prisma.SnippetCollectionUncheckedCreateWithoutRunsInput>
+  connectOrCreate?: Prisma.SnippetCollectionCreateOrConnectWithoutRunsInput
+  upsert?: Prisma.SnippetCollectionUpsertWithoutRunsInput
+  connect?: Prisma.SnippetCollectionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.SnippetCollectionUpdateToOneWithWhereWithoutRunsInput, Prisma.SnippetCollectionUpdateWithoutRunsInput>, Prisma.SnippetCollectionUncheckedUpdateWithoutRunsInput>
+}
+
 export type SnippetCollectionCreateWithoutUserInput = {
   id?: string
   title: string
@@ -459,7 +546,11 @@ export type SnippetCollectionCreateWithoutUserInput = {
   public?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
   items?: Prisma.SnippetCollectionItemCreateNestedManyWithoutCollectionInput
+  runs?: Prisma.PlaybookRunCreateNestedManyWithoutCollectionInput
 }
 
 export type SnippetCollectionUncheckedCreateWithoutUserInput = {
@@ -470,7 +561,11 @@ export type SnippetCollectionUncheckedCreateWithoutUserInput = {
   public?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
   items?: Prisma.SnippetCollectionItemUncheckedCreateNestedManyWithoutCollectionInput
+  runs?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutCollectionInput
 }
 
 export type SnippetCollectionCreateOrConnectWithoutUserInput = {
@@ -511,6 +606,9 @@ export type SnippetCollectionScalarWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"SnippetCollection"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"SnippetCollection"> | Date | string
   userId?: Prisma.StringFilter<"SnippetCollection"> | string
+  visibility?: Prisma.StringFilter<"SnippetCollection"> | string
+  shareToken?: Prisma.StringNullableFilter<"SnippetCollection"> | string | null
+  shareExpiresAt?: Prisma.DateTimeNullableFilter<"SnippetCollection"> | Date | string | null
 }
 
 export type SnippetCollectionCreateWithoutItemsInput = {
@@ -521,7 +619,11 @@ export type SnippetCollectionCreateWithoutItemsInput = {
   public?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
   user: Prisma.UserCreateNestedOneWithoutCollectionsInput
+  runs?: Prisma.PlaybookRunCreateNestedManyWithoutCollectionInput
 }
 
 export type SnippetCollectionUncheckedCreateWithoutItemsInput = {
@@ -533,6 +635,10 @@ export type SnippetCollectionUncheckedCreateWithoutItemsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   userId: string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
+  runs?: Prisma.PlaybookRunUncheckedCreateNestedManyWithoutCollectionInput
 }
 
 export type SnippetCollectionCreateOrConnectWithoutItemsInput = {
@@ -559,7 +665,11 @@ export type SnippetCollectionUpdateWithoutItemsInput = {
   public?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutCollectionsNestedInput
+  runs?: Prisma.PlaybookRunUpdateManyWithoutCollectionNestedInput
 }
 
 export type SnippetCollectionUncheckedUpdateWithoutItemsInput = {
@@ -571,6 +681,86 @@ export type SnippetCollectionUncheckedUpdateWithoutItemsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  runs?: Prisma.PlaybookRunUncheckedUpdateManyWithoutCollectionNestedInput
+}
+
+export type SnippetCollectionCreateWithoutRunsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  accent?: string
+  public?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
+  user: Prisma.UserCreateNestedOneWithoutCollectionsInput
+  items?: Prisma.SnippetCollectionItemCreateNestedManyWithoutCollectionInput
+}
+
+export type SnippetCollectionUncheckedCreateWithoutRunsInput = {
+  id?: string
+  title: string
+  description?: string | null
+  accent?: string
+  public?: boolean
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  userId: string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
+  items?: Prisma.SnippetCollectionItemUncheckedCreateNestedManyWithoutCollectionInput
+}
+
+export type SnippetCollectionCreateOrConnectWithoutRunsInput = {
+  where: Prisma.SnippetCollectionWhereUniqueInput
+  create: Prisma.XOR<Prisma.SnippetCollectionCreateWithoutRunsInput, Prisma.SnippetCollectionUncheckedCreateWithoutRunsInput>
+}
+
+export type SnippetCollectionUpsertWithoutRunsInput = {
+  update: Prisma.XOR<Prisma.SnippetCollectionUpdateWithoutRunsInput, Prisma.SnippetCollectionUncheckedUpdateWithoutRunsInput>
+  create: Prisma.XOR<Prisma.SnippetCollectionCreateWithoutRunsInput, Prisma.SnippetCollectionUncheckedCreateWithoutRunsInput>
+  where?: Prisma.SnippetCollectionWhereInput
+}
+
+export type SnippetCollectionUpdateToOneWithWhereWithoutRunsInput = {
+  where?: Prisma.SnippetCollectionWhereInput
+  data: Prisma.XOR<Prisma.SnippetCollectionUpdateWithoutRunsInput, Prisma.SnippetCollectionUncheckedUpdateWithoutRunsInput>
+}
+
+export type SnippetCollectionUpdateWithoutRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accent?: Prisma.StringFieldUpdateOperationsInput | string
+  public?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneRequiredWithoutCollectionsNestedInput
+  items?: Prisma.SnippetCollectionItemUpdateManyWithoutCollectionNestedInput
+}
+
+export type SnippetCollectionUncheckedUpdateWithoutRunsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accent?: Prisma.StringFieldUpdateOperationsInput | string
+  public?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  items?: Prisma.SnippetCollectionItemUncheckedUpdateManyWithoutCollectionNestedInput
 }
 
 export type SnippetCollectionCreateManyUserInput = {
@@ -581,6 +771,9 @@ export type SnippetCollectionCreateManyUserInput = {
   public?: boolean
   createdAt?: Date | string
   updatedAt?: Date | string
+  visibility?: string
+  shareToken?: string | null
+  shareExpiresAt?: Date | string | null
 }
 
 export type SnippetCollectionUpdateWithoutUserInput = {
@@ -591,7 +784,11 @@ export type SnippetCollectionUpdateWithoutUserInput = {
   public?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.SnippetCollectionItemUpdateManyWithoutCollectionNestedInput
+  runs?: Prisma.PlaybookRunUpdateManyWithoutCollectionNestedInput
 }
 
 export type SnippetCollectionUncheckedUpdateWithoutUserInput = {
@@ -602,7 +799,11 @@ export type SnippetCollectionUncheckedUpdateWithoutUserInput = {
   public?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   items?: Prisma.SnippetCollectionItemUncheckedUpdateManyWithoutCollectionNestedInput
+  runs?: Prisma.PlaybookRunUncheckedUpdateManyWithoutCollectionNestedInput
 }
 
 export type SnippetCollectionUncheckedUpdateManyWithoutUserInput = {
@@ -613,6 +814,9 @@ export type SnippetCollectionUncheckedUpdateManyWithoutUserInput = {
   public?: Prisma.BoolFieldUpdateOperationsInput | boolean
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  visibility?: Prisma.StringFieldUpdateOperationsInput | string
+  shareToken?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  shareExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
 }
 
 
@@ -622,10 +826,12 @@ export type SnippetCollectionUncheckedUpdateManyWithoutUserInput = {
 
 export type SnippetCollectionCountOutputType = {
   items: number
+  runs: number
 }
 
 export type SnippetCollectionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | SnippetCollectionCountOutputTypeCountItemsArgs
+  runs?: boolean | SnippetCollectionCountOutputTypeCountRunsArgs
 }
 
 /**
@@ -645,6 +851,13 @@ export type SnippetCollectionCountOutputTypeCountItemsArgs<ExtArgs extends runti
   where?: Prisma.SnippetCollectionItemWhereInput
 }
 
+/**
+ * SnippetCollectionCountOutputType without action
+ */
+export type SnippetCollectionCountOutputTypeCountRunsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PlaybookRunWhereInput
+}
+
 
 export type SnippetCollectionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -655,8 +868,12 @@ export type SnippetCollectionSelect<ExtArgs extends runtime.Types.Extensions.Int
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  visibility?: boolean
+  shareToken?: boolean
+  shareExpiresAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.SnippetCollection$itemsArgs<ExtArgs>
+  runs?: boolean | Prisma.SnippetCollection$runsArgs<ExtArgs>
   _count?: boolean | Prisma.SnippetCollectionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["snippetCollection"]>
 
@@ -669,6 +886,9 @@ export type SnippetCollectionSelectCreateManyAndReturn<ExtArgs extends runtime.T
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  visibility?: boolean
+  shareToken?: boolean
+  shareExpiresAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["snippetCollection"]>
 
@@ -681,6 +901,9 @@ export type SnippetCollectionSelectUpdateManyAndReturn<ExtArgs extends runtime.T
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  visibility?: boolean
+  shareToken?: boolean
+  shareExpiresAt?: boolean
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["snippetCollection"]>
 
@@ -693,12 +916,16 @@ export type SnippetCollectionSelectScalar = {
   createdAt?: boolean
   updatedAt?: boolean
   userId?: boolean
+  visibility?: boolean
+  shareToken?: boolean
+  shareExpiresAt?: boolean
 }
 
-export type SnippetCollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "accent" | "public" | "createdAt" | "updatedAt" | "userId", ExtArgs["result"]["snippetCollection"]>
+export type SnippetCollectionOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "title" | "description" | "accent" | "public" | "createdAt" | "updatedAt" | "userId" | "visibility" | "shareToken" | "shareExpiresAt", ExtArgs["result"]["snippetCollection"]>
 export type SnippetCollectionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   items?: boolean | Prisma.SnippetCollection$itemsArgs<ExtArgs>
+  runs?: boolean | Prisma.SnippetCollection$runsArgs<ExtArgs>
   _count?: boolean | Prisma.SnippetCollectionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type SnippetCollectionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -713,6 +940,7 @@ export type $SnippetCollectionPayload<ExtArgs extends runtime.Types.Extensions.I
   objects: {
     user: Prisma.$UserPayload<ExtArgs>
     items: Prisma.$SnippetCollectionItemPayload<ExtArgs>[]
+    runs: Prisma.$PlaybookRunPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -723,6 +951,9 @@ export type $SnippetCollectionPayload<ExtArgs extends runtime.Types.Extensions.I
     createdAt: Date
     updatedAt: Date
     userId: string
+    visibility: string
+    shareToken: string | null
+    shareExpiresAt: Date | null
   }, ExtArgs["result"]["snippetCollection"]>
   composites: {}
 }
@@ -1119,6 +1350,7 @@ export interface Prisma__SnippetCollectionClient<T, Null = never, ExtArgs extend
   readonly [Symbol.toStringTag]: "PrismaPromise"
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   items<T extends Prisma.SnippetCollection$itemsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SnippetCollection$itemsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SnippetCollectionItemPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  runs<T extends Prisma.SnippetCollection$runsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.SnippetCollection$runsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PlaybookRunPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1156,6 +1388,9 @@ export interface SnippetCollectionFieldRefs {
   readonly createdAt: Prisma.FieldRef<"SnippetCollection", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"SnippetCollection", 'DateTime'>
   readonly userId: Prisma.FieldRef<"SnippetCollection", 'String'>
+  readonly visibility: Prisma.FieldRef<"SnippetCollection", 'String'>
+  readonly shareToken: Prisma.FieldRef<"SnippetCollection", 'String'>
+  readonly shareExpiresAt: Prisma.FieldRef<"SnippetCollection", 'DateTime'>
 }
     
 
@@ -1578,6 +1813,30 @@ export type SnippetCollection$itemsArgs<ExtArgs extends runtime.Types.Extensions
   take?: number
   skip?: number
   distinct?: Prisma.SnippetCollectionItemScalarFieldEnum | Prisma.SnippetCollectionItemScalarFieldEnum[]
+}
+
+/**
+ * SnippetCollection.runs
+ */
+export type SnippetCollection$runsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the PlaybookRun
+   */
+  select?: Prisma.PlaybookRunSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the PlaybookRun
+   */
+  omit?: Prisma.PlaybookRunOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PlaybookRunInclude<ExtArgs> | null
+  where?: Prisma.PlaybookRunWhereInput
+  orderBy?: Prisma.PlaybookRunOrderByWithRelationInput | Prisma.PlaybookRunOrderByWithRelationInput[]
+  cursor?: Prisma.PlaybookRunWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PlaybookRunScalarFieldEnum | Prisma.PlaybookRunScalarFieldEnum[]
 }
 
 /**

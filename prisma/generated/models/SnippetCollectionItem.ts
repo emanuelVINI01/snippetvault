@@ -39,6 +39,7 @@ export type SnippetCollectionItemMinAggregateOutputType = {
   collectionId: string | null
   snippetId: string | null
   position: number | null
+  filePath: string | null
   createdAt: Date | null
 }
 
@@ -47,6 +48,7 @@ export type SnippetCollectionItemMaxAggregateOutputType = {
   collectionId: string | null
   snippetId: string | null
   position: number | null
+  filePath: string | null
   createdAt: Date | null
 }
 
@@ -55,6 +57,7 @@ export type SnippetCollectionItemCountAggregateOutputType = {
   collectionId: number
   snippetId: number
   position: number
+  filePath: number
   createdAt: number
   _all: number
 }
@@ -73,6 +76,7 @@ export type SnippetCollectionItemMinAggregateInputType = {
   collectionId?: true
   snippetId?: true
   position?: true
+  filePath?: true
   createdAt?: true
 }
 
@@ -81,6 +85,7 @@ export type SnippetCollectionItemMaxAggregateInputType = {
   collectionId?: true
   snippetId?: true
   position?: true
+  filePath?: true
   createdAt?: true
 }
 
@@ -89,6 +94,7 @@ export type SnippetCollectionItemCountAggregateInputType = {
   collectionId?: true
   snippetId?: true
   position?: true
+  filePath?: true
   createdAt?: true
   _all?: true
 }
@@ -184,6 +190,7 @@ export type SnippetCollectionItemGroupByOutputType = {
   collectionId: string
   snippetId: string
   position: number
+  filePath: string | null
   createdAt: Date
   _count: SnippetCollectionItemCountAggregateOutputType | null
   _avg: SnippetCollectionItemAvgAggregateOutputType | null
@@ -215,6 +222,7 @@ export type SnippetCollectionItemWhereInput = {
   collectionId?: Prisma.StringFilter<"SnippetCollectionItem"> | string
   snippetId?: Prisma.StringFilter<"SnippetCollectionItem"> | string
   position?: Prisma.IntFilter<"SnippetCollectionItem"> | number
+  filePath?: Prisma.StringNullableFilter<"SnippetCollectionItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SnippetCollectionItem"> | Date | string
   collection?: Prisma.XOR<Prisma.SnippetCollectionScalarRelationFilter, Prisma.SnippetCollectionWhereInput>
   snippet?: Prisma.XOR<Prisma.SnippetScalarRelationFilter, Prisma.SnippetWhereInput>
@@ -225,6 +233,7 @@ export type SnippetCollectionItemOrderByWithRelationInput = {
   collectionId?: Prisma.SortOrder
   snippetId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  filePath?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   collection?: Prisma.SnippetCollectionOrderByWithRelationInput
   snippet?: Prisma.SnippetOrderByWithRelationInput
@@ -239,6 +248,7 @@ export type SnippetCollectionItemWhereUniqueInput = Prisma.AtLeast<{
   collectionId?: Prisma.StringFilter<"SnippetCollectionItem"> | string
   snippetId?: Prisma.StringFilter<"SnippetCollectionItem"> | string
   position?: Prisma.IntFilter<"SnippetCollectionItem"> | number
+  filePath?: Prisma.StringNullableFilter<"SnippetCollectionItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SnippetCollectionItem"> | Date | string
   collection?: Prisma.XOR<Prisma.SnippetCollectionScalarRelationFilter, Prisma.SnippetCollectionWhereInput>
   snippet?: Prisma.XOR<Prisma.SnippetScalarRelationFilter, Prisma.SnippetWhereInput>
@@ -249,6 +259,7 @@ export type SnippetCollectionItemOrderByWithAggregationInput = {
   collectionId?: Prisma.SortOrder
   snippetId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  filePath?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.SnippetCollectionItemCountOrderByAggregateInput
   _avg?: Prisma.SnippetCollectionItemAvgOrderByAggregateInput
@@ -265,12 +276,14 @@ export type SnippetCollectionItemScalarWhereWithAggregatesInput = {
   collectionId?: Prisma.StringWithAggregatesFilter<"SnippetCollectionItem"> | string
   snippetId?: Prisma.StringWithAggregatesFilter<"SnippetCollectionItem"> | string
   position?: Prisma.IntWithAggregatesFilter<"SnippetCollectionItem"> | number
+  filePath?: Prisma.StringNullableWithAggregatesFilter<"SnippetCollectionItem"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"SnippetCollectionItem"> | Date | string
 }
 
 export type SnippetCollectionItemCreateInput = {
   id?: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
   collection: Prisma.SnippetCollectionCreateNestedOneWithoutItemsInput
   snippet: Prisma.SnippetCreateNestedOneWithoutCollectionItemsInput
@@ -281,12 +294,14 @@ export type SnippetCollectionItemUncheckedCreateInput = {
   collectionId: string
   snippetId: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
 }
 
 export type SnippetCollectionItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   collection?: Prisma.SnippetCollectionUpdateOneRequiredWithoutItemsNestedInput
   snippet?: Prisma.SnippetUpdateOneRequiredWithoutCollectionItemsNestedInput
@@ -297,6 +312,7 @@ export type SnippetCollectionItemUncheckedUpdateInput = {
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   snippetId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -305,12 +321,14 @@ export type SnippetCollectionItemCreateManyInput = {
   collectionId: string
   snippetId: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
 }
 
 export type SnippetCollectionItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -319,6 +337,7 @@ export type SnippetCollectionItemUncheckedUpdateManyInput = {
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   snippetId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -342,6 +361,7 @@ export type SnippetCollectionItemCountOrderByAggregateInput = {
   collectionId?: Prisma.SortOrder
   snippetId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -354,6 +374,7 @@ export type SnippetCollectionItemMaxOrderByAggregateInput = {
   collectionId?: Prisma.SortOrder
   snippetId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -362,6 +383,7 @@ export type SnippetCollectionItemMinOrderByAggregateInput = {
   collectionId?: Prisma.SortOrder
   snippetId?: Prisma.SortOrder
   position?: Prisma.SortOrder
+  filePath?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -453,17 +475,10 @@ export type SnippetCollectionItemUncheckedUpdateManyWithoutCollectionNestedInput
   deleteMany?: Prisma.SnippetCollectionItemScalarWhereInput | Prisma.SnippetCollectionItemScalarWhereInput[]
 }
 
-export type IntFieldUpdateOperationsInput = {
-  set?: number
-  increment?: number
-  decrement?: number
-  multiply?: number
-  divide?: number
-}
-
 export type SnippetCollectionItemCreateWithoutSnippetInput = {
   id?: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
   collection: Prisma.SnippetCollectionCreateNestedOneWithoutItemsInput
 }
@@ -472,6 +487,7 @@ export type SnippetCollectionItemUncheckedCreateWithoutSnippetInput = {
   id?: string
   collectionId: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
 }
 
@@ -509,12 +525,14 @@ export type SnippetCollectionItemScalarWhereInput = {
   collectionId?: Prisma.StringFilter<"SnippetCollectionItem"> | string
   snippetId?: Prisma.StringFilter<"SnippetCollectionItem"> | string
   position?: Prisma.IntFilter<"SnippetCollectionItem"> | number
+  filePath?: Prisma.StringNullableFilter<"SnippetCollectionItem"> | string | null
   createdAt?: Prisma.DateTimeFilter<"SnippetCollectionItem"> | Date | string
 }
 
 export type SnippetCollectionItemCreateWithoutCollectionInput = {
   id?: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
   snippet: Prisma.SnippetCreateNestedOneWithoutCollectionItemsInput
 }
@@ -523,6 +541,7 @@ export type SnippetCollectionItemUncheckedCreateWithoutCollectionInput = {
   id?: string
   snippetId: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
 }
 
@@ -556,12 +575,14 @@ export type SnippetCollectionItemCreateManySnippetInput = {
   id?: string
   collectionId: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
 }
 
 export type SnippetCollectionItemUpdateWithoutSnippetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   collection?: Prisma.SnippetCollectionUpdateOneRequiredWithoutItemsNestedInput
 }
@@ -570,6 +591,7 @@ export type SnippetCollectionItemUncheckedUpdateWithoutSnippetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -577,6 +599,7 @@ export type SnippetCollectionItemUncheckedUpdateManyWithoutSnippetInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   collectionId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -584,12 +607,14 @@ export type SnippetCollectionItemCreateManyCollectionInput = {
   id?: string
   snippetId: string
   position?: number
+  filePath?: string | null
   createdAt?: Date | string
 }
 
 export type SnippetCollectionItemUpdateWithoutCollectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   snippet?: Prisma.SnippetUpdateOneRequiredWithoutCollectionItemsNestedInput
 }
@@ -598,6 +623,7 @@ export type SnippetCollectionItemUncheckedUpdateWithoutCollectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   snippetId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -605,6 +631,7 @@ export type SnippetCollectionItemUncheckedUpdateManyWithoutCollectionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   snippetId?: Prisma.StringFieldUpdateOperationsInput | string
   position?: Prisma.IntFieldUpdateOperationsInput | number
+  filePath?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
 
@@ -615,6 +642,7 @@ export type SnippetCollectionItemSelect<ExtArgs extends runtime.Types.Extensions
   collectionId?: boolean
   snippetId?: boolean
   position?: boolean
+  filePath?: boolean
   createdAt?: boolean
   collection?: boolean | Prisma.SnippetCollectionDefaultArgs<ExtArgs>
   snippet?: boolean | Prisma.SnippetDefaultArgs<ExtArgs>
@@ -625,6 +653,7 @@ export type SnippetCollectionItemSelectCreateManyAndReturn<ExtArgs extends runti
   collectionId?: boolean
   snippetId?: boolean
   position?: boolean
+  filePath?: boolean
   createdAt?: boolean
   collection?: boolean | Prisma.SnippetCollectionDefaultArgs<ExtArgs>
   snippet?: boolean | Prisma.SnippetDefaultArgs<ExtArgs>
@@ -635,6 +664,7 @@ export type SnippetCollectionItemSelectUpdateManyAndReturn<ExtArgs extends runti
   collectionId?: boolean
   snippetId?: boolean
   position?: boolean
+  filePath?: boolean
   createdAt?: boolean
   collection?: boolean | Prisma.SnippetCollectionDefaultArgs<ExtArgs>
   snippet?: boolean | Prisma.SnippetDefaultArgs<ExtArgs>
@@ -645,10 +675,11 @@ export type SnippetCollectionItemSelectScalar = {
   collectionId?: boolean
   snippetId?: boolean
   position?: boolean
+  filePath?: boolean
   createdAt?: boolean
 }
 
-export type SnippetCollectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "collectionId" | "snippetId" | "position" | "createdAt", ExtArgs["result"]["snippetCollectionItem"]>
+export type SnippetCollectionItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "collectionId" | "snippetId" | "position" | "filePath" | "createdAt", ExtArgs["result"]["snippetCollectionItem"]>
 export type SnippetCollectionItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   collection?: boolean | Prisma.SnippetCollectionDefaultArgs<ExtArgs>
   snippet?: boolean | Prisma.SnippetDefaultArgs<ExtArgs>
@@ -673,6 +704,7 @@ export type $SnippetCollectionItemPayload<ExtArgs extends runtime.Types.Extensio
     collectionId: string
     snippetId: string
     position: number
+    filePath: string | null
     createdAt: Date
   }, ExtArgs["result"]["snippetCollectionItem"]>
   composites: {}
@@ -1103,6 +1135,7 @@ export interface SnippetCollectionItemFieldRefs {
   readonly collectionId: Prisma.FieldRef<"SnippetCollectionItem", 'String'>
   readonly snippetId: Prisma.FieldRef<"SnippetCollectionItem", 'String'>
   readonly position: Prisma.FieldRef<"SnippetCollectionItem", 'Int'>
+  readonly filePath: Prisma.FieldRef<"SnippetCollectionItem", 'String'>
   readonly createdAt: Prisma.FieldRef<"SnippetCollectionItem", 'DateTime'>
 }
     
