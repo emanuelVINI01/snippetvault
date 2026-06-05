@@ -31,7 +31,7 @@ export default function Modal({ children, isOpen, maxWidth = "max-w-lg", onClose
           <ModalOverlay onClose={onClose} />
           <ModalPanel maxWidth={maxWidth}>
             <ModalHeader onClose={onClose} title={title} />
-            <div className="max-h-[calc(100dvh-6rem)] min-w-0 overflow-y-auto px-4 py-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] sm:px-6 sm:pb-5">
+            <div className="max-h-[calc(100dvh-6rem)] min-w-0 overflow-y-auto px-3 py-5 pb-[calc(env(safe-area-inset-bottom)+1.25rem)] sm:px-6 sm:pb-5">
               {children}
             </div>
           </ModalPanel>

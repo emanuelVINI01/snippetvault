@@ -10,6 +10,7 @@ import type { LucideIcon } from "lucide-react";
 import CopyButton from "@/src/components/shared/actions/CopyButton";
 import Link from "next/link";
 import { useLanguage } from "@/src/context/LanguageContext";
+import { dracula, normalizeSnippetLanguage, SyntaxHighlighter } from "@/src/lib/syntax-highlighting";
 
 interface PublicSnippetClientProps {
   snippet: PublicSnippetView;
@@ -77,14 +78,14 @@ export default function PublicSnippetClient({ snippet, analysis }: PublicSnippet
                 )}
               </div>
               <div className="flex min-w-0 flex-col gap-4">
-                <AiCodeCard code={analysis.refactor.code} title={t.ai.refactor}>
+                <AiCodeCard code={analysis.refactor.code} language={analysis.language} title={t.ai.refactor}>
                   <ul className="mb-3 space-y-2 text-sm text-dracula-comment">
                     {analysis.refactor.notes.map((note) => (
                       <li key={note}>{note}</li>
                     ))}
                   </ul>
                 </AiCodeCard>
-                <AiCodeCard code={analysis.example.code} title={analysis.example.title || t.ai.example}>
+                <AiCodeCard code={analysis.example.code} language={analysis.language} title={analysis.example.title || t.ai.example}>
                   <p className="mb-3 text-sm text-dracula-comment">{analysis.example.notes}</p>
                 </AiCodeCard>
               </div>
@@ -133,7 +134,7 @@ function AiCard({
   title: string;
 }) {
   return (
-    <section className="min-w-0 rounded-2xl border border-dracula-card/70 bg-dracula-bg/45 p-4 text-sm leading-relaxed text-dracula-comment">
+    <section className="min-w-0 rounded-2xl border border-dracula-card/70 bg-dracula-bg/45 p-3 sm:p-4 text-sm leading-relaxed text-dracula-comment">
       <h3 className="mb-3 flex items-center gap-2 text-sm font-bold text-dracula-fg">
         <Icon className="h-4 w-4 text-dracula-purple" />
         {title}
@@ -146,12 +147,15 @@ function AiCard({
 function AiCodeCard({
   children,
   code,
+  language,
   title,
 }: {
   children: React.ReactNode;
   code: string;
+  language: string;
   title: string;
 }) {
+  const lang = normalizeSnippetLanguage(language);
   return (
     <section className="min-w-0 overflow-hidden rounded-2xl border border-dracula-card/70 bg-[#282a36]">
       <div className="flex items-center justify-between gap-3 border-b border-dracula-card/60 bg-[#21222c] px-4 py-3">
@@ -161,11 +165,30 @@ function AiCodeCard({
         </h3>
         <CopyButton content={code} iconSize={14} />
       </div>
-      <div className="p-4">
+      <div className="p-3 sm:p-4">
         {children}
-        <pre className="max-h-72 overflow-auto whitespace-pre rounded-xl bg-dracula-bg/65 p-3 text-xs leading-relaxed text-dracula-fg">
-          <code>{code}</code>
-        </pre>
+        <div className="max-h-80 overflow-auto rounded-xl border border-dracula-card/50 bg-[#1e1f29]">
+          <SyntaxHighlighter
+            language={lang}
+            style={dracula}
+            customStyle={{
+              margin: 0,
+              padding: "0.75rem",
+              fontSize: "0.75rem",
+              background: "transparent",
+              lineHeight: "1.5",
+              whiteSpace: "pre-wrap",
+            }}
+            codeTagProps={{
+              style: {
+                fontFamily: "inherit",
+                whiteSpace: "pre-wrap",
+              },
+            }}
+          >
+            {code}
+          </SyntaxHighlighter>
+        </div>
       </div>
     </section>
   );

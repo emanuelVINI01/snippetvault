@@ -19,6 +19,8 @@ type AiSnippetRouteContext = {
   params: Promise<{ id: string }>;
 };
 
+export const maxDuration = 60;
+
 export async function POST(req: Request, { params }: AiSnippetRouteContext) {
   const userId = await getAuthenticatedUserId();
   if (!userId) return unauthorizedResponse();
@@ -29,8 +31,8 @@ export async function POST(req: Request, { params }: AiSnippetRouteContext) {
     if (!snippet) return notFoundResponse();
 
     const body = await req.json().catch(() => ({}));
-    const { locale, checkOnly } = aiSnippetRequestSchema.parse(body);
-    const response = await snippetAiService.analyzeSnippet(userId, snippet, locale, checkOnly);
+    const { locale, checkOnly, forceRefresh } = aiSnippetRequestSchema.parse(body);
+    const response = await snippetAiService.analyzeSnippet(userId, snippet, locale, checkOnly, forceRefresh);
 
     return NextResponse.json(response);
   } catch (error) {

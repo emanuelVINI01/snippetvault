@@ -7,10 +7,10 @@ export class AiApiError extends Error {
 }
 
 class AiApiClient {
-  analyzeSnippet(id: string, locale: "pt" | "en", checkOnly?: boolean): Promise<AiSnippetAssistantResponse> {
+  analyzeSnippet(id: string, locale: "pt" | "en", checkOnly?: boolean, forceRefresh?: boolean): Promise<AiSnippetAssistantResponse> {
     return this.fetchJson(`/api/ai/snippets/${id}`, {
       method: "POST",
-      body: JSON.stringify({ locale, checkOnly }),
+      body: JSON.stringify({ locale, checkOnly, forceRefresh }),
     });
   }
 

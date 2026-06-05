@@ -23,17 +23,24 @@ export class AiConfigurationError extends Error {
 }
 
 class SnippetAiService {
-  async analyzeSnippet(userId: string, snippet: SnippetAiSource, locale: "pt" | "en", checkOnly?: boolean) {
+  async analyzeSnippet(userId: string, snippet: SnippetAiSource, locale: "pt" | "en", checkOnly?: boolean, forceRefresh?: boolean) {
     const normalizedCode = normalizeCodeForHash(snippet.code);
     const codeHash = getSnippetCodeHash(normalizedCode);
     const model = getGeminiModel();
-    let cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
+
+    if (forceRefresh) {
+      try {
+        await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
+      } catch {}
+    }
+
+    let cached = forceRefresh ? null : await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
 
     if (cached) {
       if ((cached.result as any)?.status === "pending") {
         // Another concurrent request is analyzing this snippet. Poll until finished.
         let attempts = 0;
-        while (attempts < 30) {
+        while (attempts < 60) {
           await new Promise((resolve) => setTimeout(resolve, 500));
           cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
           if (!cached) {
@@ -96,7 +103,7 @@ class SnippetAiService {
       // If codeHash already exists due to unique constraint, another request created it concurrently
       if (error.code === "P2002") {
         let attempts = 0;
-        while (attempts < 30) {
+        while (attempts < 60) {
           await new Promise((resolve) => setTimeout(resolve, 500));
           cached = await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
           if (!cached) {
