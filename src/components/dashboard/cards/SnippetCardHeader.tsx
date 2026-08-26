@@ -1,6 +1,7 @@
 import { Globe2, Lock, Eye, Pin, Star } from "lucide-react";
 import { useLanguage } from "@/src/context/LanguageContext";
 import type { Snippet } from "@/src/types/snippet";
+import { getSnippetFilePath } from "@/src/utils/snippets/snippet-path";
 import { getLanguageColor } from "../LanguageColors";
 
 interface SnippetCardHeaderProps {
@@ -20,7 +21,7 @@ export default function SnippetCardHeader({
     switch (snippet.visibility) {
       case "public":
         return (
-          <span title="Público">
+          <span title={t.common.public}>
             <Globe2 className="h-3.5 w-3.5 text-dracula-green" />
           </span>
         );
@@ -33,7 +34,7 @@ export default function SnippetCardHeader({
       case "private":
       default:
         return (
-          <span title="Privado">
+          <span title={t.common.private}>
             <Lock className="h-3.5 w-3.5 text-dracula-comment" />
           </span>
         );
@@ -43,6 +44,9 @@ export default function SnippetCardHeader({
   return (
     <div className="flex items-start justify-between gap-3 px-4 pb-3 pt-4">
       <div className="min-w-0 flex-1">
+        <p className="truncate font-mono text-[10px] font-medium tracking-tight text-dracula-purple/70">
+          {getSnippetFilePath(snippet.title, snippet.language)}
+        </p>
         <div className="flex items-center gap-1.5">
           <h3 className="truncate text-sm font-semibold leading-snug text-dracula-fg" title={snippet.title}>
             {snippet.title}

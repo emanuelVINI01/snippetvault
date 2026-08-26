@@ -1,5 +1,8 @@
 # SnippetVault
 
+[![CI](https://github.com/emanuelVINI01/snippetvault/actions/workflows/ci.yml/badge.svg)](https://github.com/emanuelVINI01/snippetvault/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-bd93f9.svg)](LICENSE)
+
 SnippetVault is a full-stack code snippet manager for developers who want a fast private vault for reusable code, plus public sharing when a snippet is worth sending to someone else. It combines GitHub authentication, a CRUD dashboard, public snippet search, syntax highlighting, responsive modals, and a compact Dracula-inspired interface.
 
 ![SnippetVault landing page](images/landing/landing-desktop.png)
@@ -142,6 +145,9 @@ app/
   login/page.tsx
   snippet/[id]/page.tsx
   page.tsx
+  icon.svg
+  apple-icon.png
+  favicon.ico
 src/
   auth.ts
   prisma.ts
@@ -168,6 +174,7 @@ images/
   mobile/
 public/
   snippet_dash.png
+  flags/
 ```
 
 ## Environment Variables
@@ -204,14 +211,26 @@ npm run dev
 
 Open `http://localhost:3000`.
 
+If you have PostgreSQL installed locally, `setup-postgres-prisma.sh` automates creating the role/database, writing `.env.local`, and running the Prisma scripts below in one shot:
+
+```bash
+sudo bash setup-postgres-prisma.sh
+```
+
 ## Scripts
 
 ```bash
-npm run dev
-npm run build
-npm run start
-npm run lint
+npm run dev              # Start the dev server
+npm run build             # Production build
+npm run start             # Start the production server
+npm run lint               # Run ESLint
+npm run prisma:generate    # Regenerate the Prisma client
+npm run prisma:push        # Push the schema to the database
 ```
+
+## Continuous Integration
+
+Every push and pull request runs through [GitHub Actions](.github/workflows/ci.yml): install, lint, and build. See the badge at the top of this README for the current status.
 
 ## API Routes
 
@@ -234,6 +253,10 @@ npm run lint
 ## Notes
 
 SnippetVault is designed as a real developer tool rather than a minimal CRUD demo. The interface is dark-first, touch-friendly, and compact. Public snippets are readable on desktop and mobile, while dashboard actions remain accessible on touch devices.
+
+## Contributing
+
+Issues and pull requests are welcome. See [CONTRIBUTING.md](CONTRIBUTING.md) for the workflow and [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) for community guidelines.
 
 ## License
 

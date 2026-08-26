@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { LogIn, LockKeyhole } from "lucide-react";
 import Logo from "@/src/components/shared/brand/Logo";
-import LanguageToggle from "@/src/components/shared/i18n/LanguageToggle";
+import LanguageSwitcher from "@/src/components/shared/i18n/LanguageSwitcher";
 import { useLanguage } from "@/src/context/LanguageContext";
 import MobileBottomNav from "@/src/components/shared/navigation/MobileBottomNav";
 
@@ -24,7 +24,7 @@ export default function LoginClient({ signInAction }: LoginClientProps) {
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
           <Logo />
-          <LanguageToggle />
+          <LanguageSwitcher />
         </div>
       </motion.nav>
 

@@ -19,13 +19,13 @@ export default function AiUsagePanel() {
       <div className="relative p-5 sm:p-6">
         <motion.div
           aria-hidden="true"
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dracula-cyan to-transparent"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-dracula-purple to-transparent"
           animate={{ x: ["-100%", "100%"] }}
           transition={{ duration: 3.8, repeat: Infinity, ease: "linear" }}
         />
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
           <div>
-            <span className="inline-flex items-center gap-2 rounded-full border border-dracula-cyan/25 bg-dracula-cyan/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-dracula-cyan">
+            <span className="inline-flex items-center gap-2 rounded-full border border-dracula-purple/25 bg-dracula-purple/10 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-dracula-purple">
               <Bot className="h-3.5 w-3.5" />
               {t.ai.usageBadge}
             </span>
@@ -69,10 +69,12 @@ function UsageMetric({
   value: string;
 }) {
   return (
-    <div className="rounded-2xl border border-dracula-card/70 bg-dracula-bg/45 p-4">
-      <Icon className="mb-3 h-5 w-5 text-dracula-purple" />
-      <p className="text-xs uppercase tracking-widest text-dracula-comment">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-dracula-fg">{value}</p>
+    <div className="rounded-xl border border-dracula-card/70 bg-dracula-bg/45 p-4">
+      <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-xl bg-dracula-purple/10">
+        <Icon className="h-5 w-5 text-dracula-purple" />
+      </div>
+      <p className="text-3xl font-bold tracking-tight text-dracula-fg">{value}</p>
+      <p className="mt-1 text-xs font-semibold uppercase tracking-widest text-dracula-subtle">{label}</p>
     </div>
   );
 }

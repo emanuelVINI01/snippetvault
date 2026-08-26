@@ -3,39 +3,84 @@
 :root {
   --font-jetbrains: "JetBrains Mono";
   --font-fira: "Fira Code";
-  --dracula-bg: #282a36;
-  --dracula-surface: #343746;
-  --dracula-card: #44475a;
-  --dracula-border: #44475a;
-  --dracula-fg: #f8f8f2;
-  --dracula-comment: #a7b0c8;
-  --dracula-cyan: #8be9fd;
-  --dracula-purple: #bd93f9;
-  --dracula-green: #50fa7b;
+
+  /* Shared neutral ramp (identical across sibling projects) */
+  --bg: #191a21;
+  --surface: #21222c;
+  --card: #282a36;
+  --card-hover: #2f3244;
+  --border: #44475a;
+  --border-soft: rgba(68, 71, 90, 0.5);
+  --fg: #f8f8f2;
+  --fg-muted: #a7b0c8;
+  --fg-subtle: #6c7086;
+
+  /* Shared semantic colors (identical across sibling projects) */
+  --success: #50fa7b;
+  --error: #ff5555;
+  --warning: #ffb86c;
+  --info: #8be9fd;
+
+  /* SnippetVault accent: Dracula purple, the conventional "keyword" hue */
+  --accent: #bd93f9;
   --dracula-pink: #ff79c6;
-  --dracula-red: #ff5555;
-  --dracula-orange: #ffb86c;
   --dracula-yellow: #f1fa8c;
 
-  --background: var(--dracula-bg);
-  --foreground: var(--dracula-fg);
-  --comment: var(--dracula-comment);
-  --purple: var(--dracula-purple);
-  --red: var(--dracula-red);
-  --green: var(--dracula-green);
-  --cyan: var(--dracula-cyan);
-  --current-line: var(--dracula-card);
+  /* Legacy Dracula token names kept as aliases so existing utility classes
+     resolve through the shared ramp above without a repo-wide rename. */
+  --dracula-bg: var(--bg);
+  --dracula-surface: var(--surface);
+  --dracula-card: var(--border);
+  --dracula-card-hover: var(--card-hover);
+  --dracula-border: var(--border);
+  --dracula-border-soft: var(--border-soft);
+  --dracula-fg: var(--fg);
+  --dracula-comment: var(--fg-muted);
+  --dracula-subtle: var(--fg-subtle);
+  --dracula-purple: var(--accent);
+  --dracula-green: var(--success);
+  --dracula-red: var(--error);
+  --dracula-orange: var(--warning);
+  --dracula-cyan: var(--info);
+
+  --background: var(--bg);
+  --foreground: var(--fg);
+  --comment: var(--fg-muted);
+  --purple: var(--accent);
+  --red: var(--error);
+  --green: var(--success);
+  --cyan: var(--info);
+  --current-line: var(--border);
 }
 
 @theme inline {
+  /* Shared neutral ramp + semantic colors, exposed as Tailwind utilities
+     (bg-bg, text-fg-muted, border-border, bg-accent, text-success, ...) */
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-card: var(--card);
+  --color-card-hover: var(--card-hover);
+  --color-border: var(--border);
+  --color-border-soft: var(--border-soft);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-success: var(--success);
+  --color-error: var(--error);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-accent: var(--accent);
+
   --color-background: var(--dracula-bg);
   --color-foreground: var(--dracula-fg);
   --color-dracula-bg: var(--dracula-bg);
   --color-dracula-surface: var(--dracula-surface);
   --color-dracula-card: var(--dracula-card);
+  --color-dracula-card-hover: var(--dracula-card-hover);
   --color-dracula-border: var(--dracula-border);
   --color-dracula-fg:      var(--dracula-fg);
   --color-dracula-comment: var(--dracula-comment);
+  --color-dracula-subtle: var(--dracula-subtle);
   --color-dracula-cyan:    var(--dracula-cyan);
   --color-dracula-purple:  var(--dracula-purple);
   --color-dracula-green:   var(--dracula-green);
@@ -53,8 +98,8 @@
   --color-cyan:          var(--dracula-cyan);
   --color-current-line:  var(--dracula-card);
 
-  --font-mono: var(--font-jetbrains), var(--font-fira), monospace;
-  --font-sans: var(--font-jetbrains), var(--font-fira), monospace;
+  --font-mono: var(--font-jetbrains-mono), var(--font-fira-code), var(--font-jetbrains), var(--font-fira), ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
+  --font-sans: var(--font-jetbrains-mono), var(--font-fira-code), var(--font-jetbrains), var(--font-fira), ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace;
 
   --animate-modal-in: modal-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   --animate-fade-in:  fadeIn 0.4s ease-out forwards;
@@ -77,7 +122,7 @@ body {
   overflow-x: hidden;
   background: var(--dracula-bg);
   color: var(--dracula-fg);
-  font-family: var(--font-jetbrains), var(--font-fira), monospace;
+  font-family: var(--font-mono);
   position: relative;
 }
 
@@ -148,6 +193,20 @@ a {
   border: 1px solid rgba(68, 71, 90, 0.68);
   backdrop-filter: blur(18px);
   -webkit-backdrop-filter: blur(18px);
+}
+
+/* SnippetVault visual motif: an editor gutter / line-number rail.
+   A faint vertical rule plus repeating number-like ticks, meant to sit
+   behind feature grids or the hero code-preview surface. */
+.gutter-rail-bg {
+  content: "";
+  opacity: 0.07;
+  background-image:
+    linear-gradient(90deg, transparent 31px, var(--dracula-subtle) 31px, var(--dracula-subtle) 32px, transparent 32px),
+    repeating-linear-gradient(180deg, var(--dracula-subtle) 0px, var(--dracula-subtle) 2px, transparent 2px, transparent 20px);
+  background-size: 100% 100%, 22px 20px;
+  background-repeat: no-repeat, repeat-y;
+  background-position: left top;
 }
 
 @keyframes blink {

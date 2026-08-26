@@ -3,13 +3,15 @@
 import { motion } from "framer-motion";
 import { Code2, Terminal } from "lucide-react";
 import { useLanguage } from "@/src/context/LanguageContext";
+import GutterBackdrop from "@/src/components/shared/layout/GutterBackdrop";
 
 export default function CodePreview() {
   const { t } = useLanguage();
 
   return (
-    <section className="border-y border-dracula-card/30 bg-dracula-card/10 px-4 py-24 sm:px-6">
-      <div className="mx-auto flex max-w-6xl flex-col items-center gap-12 lg:flex-row">
+    <section className="relative overflow-hidden border-y border-dracula-card/30 bg-dracula-card/10 px-4 py-24 sm:px-6">
+      <GutterBackdrop />
+      <div className="relative z-10 mx-auto flex max-w-6xl flex-col items-center gap-12 lg:flex-row">
         <motion.div
           initial={{ opacity: 0, x: -26 }}
           whileInView={{ opacity: 1, x: 0 }}

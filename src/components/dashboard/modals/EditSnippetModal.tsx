@@ -42,6 +42,14 @@ import { AnimatePresence, motion } from "framer-motion";
 import CodeDiffViewer from "../editor/CodeDiffViewer";
 import { Eye, Copy } from "lucide-react";
 
+interface SnippetVersion {
+  id: string;
+  version: number;
+  code: string;
+  createdAt: string;
+  changeNote?: string | null;
+}
+
 function EditSnippetModalContent({
   onClose,
   onUpdated,
@@ -57,8 +65,8 @@ function EditSnippetModalContent({
   const [activeTab, setActiveTab] = useState<"editor" | "versions" | "notes">("editor");
 
   // Versions state
-  const [versions, setVersions] = useState<any[]>([]);
-  const [selectedVersion, setSelectedVersion] = useState<any | null>(null);
+  const [versions, setVersions] = useState<SnippetVersion[]>([]);
+  const [selectedVersion, setSelectedVersion] = useState<SnippetVersion | null>(null);
   const [loadingVersions, setLoadingVersions] = useState(false);
   const [restoring, setRestoring] = useState(false);
 

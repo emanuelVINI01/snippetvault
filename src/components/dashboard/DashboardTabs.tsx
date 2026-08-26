@@ -29,7 +29,7 @@ export default function DashboardTabs({ onChange, value }: DashboardTabsProps) {
             key={tabValue}
             onClick={() => onChange(tabValue)}
             className={`relative min-w-0 rounded-xl px-2 py-3 text-xs font-semibold transition-colors sm:text-sm ${
-              active ? "text-dracula-fg" : "text-dracula-comment hover:text-dracula-cyan"
+              active ? "text-dracula-fg" : "text-dracula-comment hover:text-dracula-purple"
             }`}
           >
             {active && (

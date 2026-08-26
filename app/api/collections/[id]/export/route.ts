@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 import { getAuthenticatedUserId } from "@/src/lib/api/auth";
 import { handleApiError, notFoundResponse, unauthorizedResponse } from "@/src/lib/api/responses";
-import { prisma } from "@/src/prisma";
+import { CollectionService } from "@/src/services/collections/collection-service";
+import { getFileExtension } from "@/src/utils/snippets/snippet-path";
 import AdmZip from "adm-zip";
 
 type ExportRouteContext = {
@@ -17,15 +18,7 @@ export async function GET(req: Request, { params }: ExportRouteContext) {
     const { searchParams } = new URL(req.url);
     const format = searchParams.get("format") || "markdown";
 
-    const collection = await prisma.snippetCollection.findFirst({
-      where: { id, userId },
-      include: {
-        items: {
-          orderBy: { position: "asc" },
-          include: { snippet: true },
-        },
-      },
-    });
+    const collection = await CollectionService.getForExport(id, userId);
 
     if (!collection) return notFoundResponse();
 
@@ -60,7 +53,7 @@ export async function GET(req: Request, { params }: ExportRouteContext) {
         let entryPath = item.filePath;
         if (!entryPath) {
           const cleanSnippetTitle = item.snippet.title.replace(/[^a-zA-Z0-9_-]/g, "_");
-          const ext = getLanguageExtension(item.snippet.language);
+          const ext = getFileExtension(item.snippet.language);
           entryPath = `steps/${index + 1}_${cleanSnippetTitle}.${ext}`;
         } else {
           entryPath = sanitizeZipPath(entryPath);
@@ -106,24 +99,6 @@ export async function GET(req: Request, { params }: ExportRouteContext) {
   } catch (error) {
     return handleApiError(error);
   }
-}
-
-function getLanguageExtension(lang: string): string {
-  const mapping: Record<string, string> = {
-    typescript: "ts",
-    javascript: "js",
-    python: "py",
-    bash: "sh",
-    shell: "sh",
-    json: "json",
-    html: "html",
-    css: "css",
-    markdown: "md",
-    rust: "rs",
-    go: "go",
-  };
-  const lower = lang.toLowerCase();
-  return mapping[lower] || "txt";
 }
 
 function sanitizeZipPath(pathStr: string): string {

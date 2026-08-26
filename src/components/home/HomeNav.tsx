@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { LayoutDashboard, LogIn } from "lucide-react";
 import Link from "next/link";
-import LanguageToggle from "@/src/components/shared/i18n/LanguageToggle";
+import LanguageSwitcher from "@/src/components/shared/i18n/LanguageSwitcher";
 import Logo from "@/src/components/shared/brand/Logo";
 import { useLanguage } from "@/src/context/LanguageContext";
 
@@ -27,7 +27,7 @@ export default function HomeNav({ isAuthenticated }: HomeNavProps) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Logo />
         <div className="flex items-center gap-2">
-          <LanguageToggle />
+          <LanguageSwitcher />
           <Link
             href={href}
             className="inline-flex h-9 items-center gap-2 rounded-lg border border-dracula-purple/30 bg-dracula-purple/15 px-3 text-xs font-semibold uppercase tracking-widest text-dracula-purple transition-colors hover:border-dracula-purple/60 hover:bg-dracula-purple/25 sm:px-4"

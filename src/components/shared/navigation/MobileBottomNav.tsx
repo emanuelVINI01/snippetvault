@@ -73,7 +73,7 @@ export default function MobileBottomNav() {
               href={href}
               aria-current={isActive ? "page" : undefined}
               className={`relative flex h-full min-w-0 flex-col items-center justify-between rounded-xl px-0.5 py-1.5 text-[9px] font-semibold uppercase tracking-tight transition-colors sm:px-1 sm:text-[10px] ${
-                isActive ? "text-dracula-fg" : "text-dracula-comment hover:text-dracula-cyan"
+                isActive ? "text-dracula-fg" : "text-dracula-comment hover:text-dracula-purple"
               }`}
             >
               {isActive && (

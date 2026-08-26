@@ -13,6 +13,15 @@ import Link from "next/link";
 import { useLanguage } from "@/src/context/LanguageContext";
 import { dracula, normalizeSnippetLanguage, SyntaxHighlighter } from "@/src/lib/syntax-highlighting";
 
+interface RelatedSnippet {
+  id: string;
+  title: string;
+  language: string;
+  description?: string | null;
+  tags: string[];
+  createdAt: string;
+}
+
 interface PublicSnippetClientProps {
   snippet: PublicSnippetView;
   analysis: AiSnippetAnalysis | null;
@@ -20,21 +29,15 @@ interface PublicSnippetClientProps {
 
 export default function PublicSnippetClient({ snippet, analysis }: PublicSnippetClientProps) {
   const { language, t } = useLanguage();
-  const [related, setRelated] = useState<any[]>([]);
-  const [relatedLoading, setRelatedLoading] = useState(false);
+  const [related, setRelated] = useState<RelatedSnippet[]>([]);
 
   useEffect(() => {
-    if (snippet?.id) {
-      setRelatedLoading(true);
-      fetch(`/api/snippets/${snippet.id}/related`)
-        .then((res) => {
-          if (res.ok) return res.json();
-          return [];
-        })
-        .then((data) => setRelated(data))
-        .catch((err) => console.error("Error fetching related snippets:", err))
-        .finally(() => setRelatedLoading(false));
-    }
+    if (!snippet?.id) return;
+
+    fetch(`/api/snippets/${snippet.id}/related`)
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => setRelated(data))
+      .catch((err) => console.error("Error fetching related snippets:", err));
   }, [snippet?.id]);
 
   return (

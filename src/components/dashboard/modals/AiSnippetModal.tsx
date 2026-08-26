@@ -11,10 +11,6 @@ import {
   Wand2,
   ShieldAlert,
   Terminal,
-  Activity,
-  FileCode,
-  Lock,
-  ChevronDown
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
@@ -72,7 +68,7 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
           if (res.analysis) {
             setResponse(res);
           }
-        } catch (requestError) {
+        } catch {
           // Silent fallback on checking error, user can still run manually
         } finally {
           setLoading(false);
@@ -297,7 +293,7 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
                             <table className="w-full table-fixed border-collapse select-none">
                               <tbody>
                                 {response.analysis.explanations?.lineByLine?.length ? (
-                                  response.analysis.explanations.lineByLine.map((lineItem: any, idx: number) => (
+                                  response.analysis.explanations.lineByLine.map((lineItem, idx) => (
                                     <tr key={idx} className="hover:bg-dracula-card/10 text-dracula-fg border-b border-dracula-card/30">
                                       <td className="w-8 text-right pr-2 text-dracula-comment/40 border-r border-dracula-card/30 select-none">
                                         {idx + 1}
@@ -382,7 +378,7 @@ export default function AiSnippetModal({ isOpen, onClose, snippet }: AiSnippetMo
 
                         <div className="space-y-3">
                           {response.analysis.securityReport?.findings?.length ? (
-                            response.analysis.securityReport.findings.map((finding: any, idx: number) => (
+                            response.analysis.securityReport.findings.map((finding, idx) => (
                               <div key={idx} className="rounded-xl border border-dracula-card/65 bg-dracula-card/10 p-3.5">
                                 <h4 className="text-xs font-bold text-dracula-fg flex items-center gap-1.5">
                                   <span className="h-1.5 w-1.5 rounded-full bg-dracula-red" />

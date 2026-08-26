@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { LogOut, RefreshCw } from "lucide-react";
-import LanguageToggle from "@/src/components/shared/i18n/LanguageToggle";
+import LanguageSwitcher from "@/src/components/shared/i18n/LanguageSwitcher";
 import Logo from "@/src/components/shared/brand/Logo";
 import { useLanguage } from "@/src/context/LanguageContext";
 
@@ -23,7 +23,7 @@ export default function DashboardHeader({ onRefresh }: DashboardHeaderProps) {
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Logo />
         <div className="flex items-center gap-3">
-          <LanguageToggle />
+          <LanguageSwitcher />
           <button
             onClick={onRefresh}
             className="rounded-lg p-2 text-dracula-comment transition-colors hover:bg-dracula-card hover:text-dracula-fg"

@@ -1,8 +1,23 @@
-import React, { useState, useEffect } from "react";
-import { X, Play, CheckCircle2, AlertCircle, HelpCircle, Copy, Check, ChevronDown, ChevronUp } from "lucide-react";
+import React, { useState, useEffect, useCallback } from "react";
+import { Play, ChevronDown, ChevronUp } from "lucide-react";
 import Modal from "./Modal";
 import type { SnippetCollection } from "@/src/types/collection";
 import CopyButton from "@/src/components/shared/actions/CopyButton";
+
+interface PlaybookRunItemData {
+  id: string;
+  snippetId: string;
+  status: "pending" | "done" | "skipped";
+  notes?: string | null;
+}
+
+interface PlaybookRunData {
+  id: string;
+  title: string;
+  status: "active" | "completed" | "abandoned";
+  createdAt: string;
+  items: PlaybookRunItemData[];
+}
 
 interface PlaybookRunModalProps {
   isOpen: boolean;
@@ -11,27 +26,27 @@ interface PlaybookRunModalProps {
 }
 
 export default function PlaybookRunModal({ isOpen, onClose, collection }: PlaybookRunModalProps) {
-  const [runs, setRuns] = useState<any[]>([]);
-  const [activeRun, setActiveRun] = useState<any | null>(null);
+  const [runs, setRuns] = useState<PlaybookRunData[]>([]);
+  const [activeRun, setActiveRun] = useState<PlaybookRunData | null>(null);
   const [loading, setLoading] = useState(false);
   const [busy, setBusy] = useState(false);
   const [expandedStep, setExpandedStep] = useState<number | null>(0);
   const [stepNotes, setStepNotes] = useState<Record<string, string>>({});
 
-  const fetchRuns = async () => {
+  const fetchRuns = useCallback(async () => {
     setLoading(true);
     try {
       const res = await fetch(`/api/collections/${collection.id}/runs`);
       if (res.ok) {
-        const data = await res.json();
+        const data: PlaybookRunData[] = await res.json();
         setRuns(data);
         // Auto-select the first active run if there is one
-        const active = data.find((r: any) => r.status === "active");
+        const active = data.find((r) => r.status === "active");
         if (active) {
           setActiveRun(active);
           // Initialize notes
           const notes: Record<string, string> = {};
-          active.items.forEach((item: any) => {
+          active.items.forEach((item) => {
             notes[item.id] = item.notes || "";
           });
           setStepNotes(notes);
@@ -44,13 +59,13 @@ export default function PlaybookRunModal({ isOpen, onClose, collection }: Playbo
     } finally {
       setLoading(false);
     }
-  };
+  }, [collection.id]);
 
   useEffect(() => {
     if (isOpen) {
       fetchRuns();
     }
-  }, [isOpen, collection.id]);
+  }, [isOpen, fetchRuns]);
 
   const startNewRun = async () => {
     setBusy(true);
@@ -126,8 +141,8 @@ export default function PlaybookRunModal({ isOpen, onClose, collection }: Playbo
 
   // Calculate progress metrics
   const totalSteps = activeRun?.items?.length || 0;
-  const completedSteps = activeRun?.items?.filter((i: any) => i.status === "done").length || 0;
-  const skippedSteps = activeRun?.items?.filter((i: any) => i.status === "skipped").length || 0;
+  const completedSteps = activeRun?.items?.filter((i) => i.status === "done").length || 0;
+  const skippedSteps = activeRun?.items?.filter((i) => i.status === "skipped").length || 0;
   const progressPercent = totalSteps > 0 ? Math.round(((completedSteps + skippedSteps) / totalSteps) * 100) : 0;
 
   return (
@@ -251,7 +266,7 @@ export default function PlaybookRunModal({ isOpen, onClose, collection }: Playbo
               <div className="space-y-2 max-h-[380px] overflow-y-auto pr-1">
                 {collection.items.map((collItem, idx) => {
                   // Find matching run item
-                  const runItem = activeRun.items.find((i: any) => i.snippetId === collItem.snippet.id);
+                  const runItem = activeRun.items.find((i) => i.snippetId === collItem.snippet.id);
                   if (!runItem) return null;
 
                   const isExpanded = expandedStep === idx;

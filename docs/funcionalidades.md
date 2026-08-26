@@ -38,7 +38,7 @@ Página para compartilhamento de snippets individuais (`/snippet/[id]`).
 
 ## 2. Modais de Ação
 
-Os modais herdam o comportamento responsivo do componente base [Modal.tsx](file:///home/emanuel/%C3%81rea%20de%20trabalho/devs_ntx/snippetvault/src/components/dashboard/modals/Modal.tsx) (`z-[60]` para sobrepor o menu mobile e paddings reduzidos em telas pequenas).
+Os modais herdam o comportamento responsivo do componente base [Modal.tsx](../src/components/dashboard/modals/Modal.tsx) (`z-[60]` para sobrepor o menu mobile e paddings reduzidos em telas pequenas).
 
 * **CreateSnippetModal:** Formulário completo para criar snippets (Título, Linguagem, Código, Descrição, Tags e checkbox de visibilidade pública).
 * **EditSnippetModal:** Carrega os metadados existentes permitindo a alteração de qualquer campo do snippet.

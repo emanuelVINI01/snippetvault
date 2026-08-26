@@ -76,6 +76,16 @@ class CollectionRepository {
     });
   }
 
+  /** Same shape as getById, but returns null instead of throwing when the
+   * collection doesn't exist or isn't owned by the user (export route
+   * needs a graceful 404, not a 500). */
+  getForExport(id: string, userId: string) {
+    return prisma.snippetCollection.findFirst({
+      where: { id, userId },
+      include: COLLECTION_INCLUDE,
+    });
+  }
+
   private async assertOwnedCollectionAndSnippet(
     collectionId: string,
     snippetId: string,

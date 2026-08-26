@@ -25,7 +25,7 @@ export default function ShareButton({ snippetId, className, iconSize = 14 }: Sha
       copied={copied}
       icon={Link}
       iconSize={iconSize}
-      idleClassName="text-dracula-comment hover:bg-dracula-cyan/10 hover:text-dracula-cyan"
+      idleClassName="text-dracula-comment hover:bg-dracula-purple/10 hover:text-dracula-purple"
       onClick={copy}
       title={copied ? t.common.copied : t.common.shareSnippet}
     />

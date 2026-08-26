@@ -1,6 +1,6 @@
-import { prisma } from "@/src/prisma";
 import { getAuthenticatedUserId } from "@/src/lib/api/auth";
 import { internalErrorResponse, notFoundResponse } from "@/src/lib/api/responses";
+import { SnippetService } from "@/src/services/snippets/snippet-service";
 import { NextResponse } from "next/server";
 
 export async function GET(
@@ -12,14 +12,7 @@ export async function GET(
     const userId = await getAuthenticatedUserId();
 
     // Fetch original snippet details
-    const snippet = await prisma.snippet.findUnique({
-      where: { id },
-      include: {
-        collectionItems: {
-          select: { collectionId: true }
-        }
-      }
-    });
+    const snippet = await SnippetService.getByIdWithCollections(id);
 
     if (!snippet) {
       return notFoundResponse();
@@ -34,39 +27,12 @@ export async function GET(
     const hasCollections = collectionIds.length > 0;
 
     // Fetch snippets matching either the same language, shared tags, or same collections
-    const candidates = await prisma.snippet.findMany({
-      where: {
-        id: { not: id },
-        OR: [
-          { userId: userId || "" },
-          { public: true },
-          { visibility: "public" },
-          { visibility: "unlisted" }
-        ],
-        AND: [
-          {
-            OR: [
-              { language: { equals: snippet.language, mode: "insensitive" } },
-              { tags: { hasSome: snippet.tags } },
-              ...(hasCollections
-                ? [
-                    {
-                      collectionItems: {
-                        some: {
-                          collectionId: { in: collectionIds }
-                        }
-                      }
-                    }
-                  ]
-                : [])
-            ]
-          }
-        ]
-      },
-      take: 10,
-      orderBy: {
-        createdAt: "desc"
-      }
+    const candidates = await SnippetService.findRelatedCandidates({
+      excludeId: id,
+      userId,
+      language: snippet.language,
+      tags: snippet.tags,
+      collectionIds,
     });
 
     // Score candidates based on similarity:

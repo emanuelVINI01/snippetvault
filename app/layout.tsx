@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Footer from "@/src/components/home/footer/Footer";
 import Providers from "@/src/components/shared/layout/Providers";
+import { firaCode, jetbrainsMono } from "@/src/lib/fonts";
 import { siteConfig } from "@/src/lib/site";
 
 export const metadata: Metadata = {
@@ -59,7 +60,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className="h-full antialiased"
+      className={`h-full antialiased ${jetbrainsMono.variable} ${firaCode.variable}`}
     >
       <body className="min-h-full">
         <Providers>

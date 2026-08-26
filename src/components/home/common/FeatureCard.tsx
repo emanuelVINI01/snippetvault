@@ -17,9 +17,10 @@ export default function FeatureCard({ description, index, title }: FeatureCardPr
     <motion.div
       initial={{ opacity: 0, y: 22 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -3 }}
       viewport={{ once: true, margin: "-70px" }}
       transition={{ delay: index * 0.055, duration: 0.35, ease: "easeOut" }}
-      className={`group rounded-2xl border border-dracula-card/80 bg-dracula-surface/55 p-6 shadow-lg shadow-black/10 backdrop-blur transition-all duration-300 hover:-translate-y-1 hover:shadow-dracula-purple/10 ${style.borderClass}`}
+      className="group rounded-xl border border-dracula-card/80 bg-dracula-surface/55 p-6 backdrop-blur transition-colors duration-300 hover:border-dracula-purple/50"
     >
       <div className={`mb-6 flex h-12 w-12 items-center justify-center rounded-xl ${style.bgClass}`}>
         <Icon className={`h-6 w-6 ${style.iconClass}`} />

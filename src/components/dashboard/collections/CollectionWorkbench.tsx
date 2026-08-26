@@ -8,6 +8,7 @@ import { useCollections } from "@/src/hooks/collections/use-collections";
 import { collectionApiClient } from "@/src/services/collections/collection-api-client";
 import type { SnippetCollection } from "@/src/types/collection";
 import type { Snippet } from "@/src/types/snippet";
+import { getPlaybookPath } from "@/src/utils/snippets/snippet-path";
 
 interface CollectionWorkbenchProps {
   snippets: Snippet[];
@@ -150,11 +151,14 @@ function CollectionCard({
   };
 
   return (
-    <article className="overflow-hidden rounded-2xl border border-dracula-card/70 bg-dracula-card/20">
+    <article className="overflow-hidden rounded-xl border border-dracula-card/70 bg-dracula-card/20 transition-colors hover:border-dracula-purple/40">
       <div className="h-1" style={{ background: getAccentColor(collection.accent) }} />
       <div className="p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
+            <p className="truncate font-mono text-[10px] font-medium tracking-tight text-dracula-purple/70">
+              {getPlaybookPath(collection.title)}
+            </p>
             <h3 className="truncate text-lg font-bold text-dracula-fg">{collection.title}</h3>
             {collection.description && (
               <p className="mt-1 line-clamp-2 text-sm text-dracula-comment">{collection.description}</p>
@@ -223,7 +227,7 @@ function CollectionCard({
           <button
             onClick={addSnippet}
             disabled={!selectedSnippet}
-            className="rounded-xl bg-dracula-cyan px-3 py-2 text-sm font-bold text-dracula-bg disabled:opacity-50"
+            className="rounded-xl bg-dracula-purple px-3 py-2 text-sm font-bold text-dracula-bg transition-all hover:brightness-110 disabled:opacity-50"
           >
             <Plus className="h-4 w-4" />
           </button>

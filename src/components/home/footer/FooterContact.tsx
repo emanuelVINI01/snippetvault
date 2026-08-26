@@ -18,7 +18,7 @@ export default function FooterContact() {
           href={siteConfig.creatorUrl}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex w-fit items-center gap-2 rounded-lg border border-dracula-cyan/20 bg-dracula-cyan/10 px-3 py-2 text-dracula-fg transition-colors hover:border-dracula-cyan/50 hover:text-dracula-cyan"
+          className="inline-flex w-fit items-center gap-2 rounded-lg border border-dracula-purple/20 bg-dracula-purple/10 px-3 py-2 text-dracula-fg transition-colors hover:border-dracula-purple/50 hover:text-dracula-purple"
         >
           <ExternalLink className="h-4 w-4" />
           {t.common.repository}

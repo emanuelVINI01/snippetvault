@@ -60,8 +60,8 @@ export default function CreateSnippetModal({ isOpen, onClose, onCreated }: Creat
         tags: data.tags || [],
       });
       setImportUrl("");
-    } catch (err: any) {
-      setImportError(err.message || t.form.importError);
+    } catch (err) {
+      setImportError(err instanceof Error ? err.message : t.form.importError);
     } finally {
       setImportLoading(false);
     }

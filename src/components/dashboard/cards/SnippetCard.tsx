@@ -33,7 +33,7 @@ export default function SnippetCard({
       exit={{ opacity: 0, y: -12 }}
       whileHover={{ y: -3 }}
       transition={{ duration: 0.22, ease: "easeOut" }}
-      className="group flex min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-dracula-card bg-dracula-card/25 transition-shadow duration-200 hover:border-dracula-purple/40 hover:shadow-xl hover:shadow-dracula-purple/10"
+      className="group flex min-w-0 max-w-full flex-col overflow-hidden rounded-xl border border-dracula-card bg-dracula-card/25 transition-colors duration-200 hover:border-dracula-purple/50"
     >
       <SnippetCardHeader
         snippet={snippet}

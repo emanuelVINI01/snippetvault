@@ -11,21 +11,21 @@ export default function FooterProjectLinks() {
   return (
     <div>
       <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-dracula-fg">
-        <Sparkles className="h-3.5 w-3.5 text-dracula-cyan" />
+        <Sparkles className="h-3.5 w-3.5 text-dracula-purple" />
         {t.common.project}
       </div>
       <div className="grid gap-2 text-sm">
-        <Link href="/" className="transition-colors hover:text-dracula-cyan">
+        <Link href="/" className="transition-colors hover:text-dracula-purple">
           {t.common.appName}
         </Link>
-        <Link href="/dashboard" className="transition-colors hover:text-dracula-cyan">
+        <Link href="/dashboard" className="transition-colors hover:text-dracula-purple">
           {t.common.dashboard}
         </Link>
         <a
           href={siteConfig.url}
           target="_blank"
           rel="noreferrer"
-          className="inline-flex w-fit items-center gap-1.5 transition-colors hover:text-dracula-cyan"
+          className="inline-flex w-fit items-center gap-1.5 transition-colors hover:text-dracula-purple"
         >
           {t.common.website}
           <ExternalLink className="h-3 w-3" />

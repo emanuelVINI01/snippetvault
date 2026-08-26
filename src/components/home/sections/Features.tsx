@@ -1,6 +1,7 @@
 "use client";
 
 import { useLanguage } from "@/src/context/LanguageContext";
+import GutterBackdrop from "@/src/components/shared/layout/GutterBackdrop";
 import FeatureCard from "../common/FeatureCard";
 import SectionHeading from "../common/SectionHeading";
 
@@ -8,8 +9,9 @@ export default function Features() {
   const { t } = useLanguage();
 
   return (
-    <section id="features" className="scroll-mt-20 px-4 py-24 sm:px-6">
-      <div className="mx-auto max-w-6xl">
+    <section id="features" className="relative scroll-mt-20 px-4 py-24 sm:px-6">
+      <GutterBackdrop />
+      <div className="relative z-10 mx-auto max-w-6xl">
         <SectionHeading subtitle={t.home.featuresSubtitle}>
           {t.home.featuresTitlePrefix}{" "}
           <span className="text-dracula-purple">{t.home.featuresTitleHighlight}</span>

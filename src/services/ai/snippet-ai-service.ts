@@ -1,11 +1,18 @@
 import { createHash } from "crypto";
 import { GoogleGenAI } from "@google/genai";
 import { prisma } from "@/src/prisma";
+import { Prisma } from "@/prisma/generated/client";
 import {
   aiSnippetAnalysisSchema,
   type AiSnippetAnalysis,
 } from "@/src/lib/validations/ai";
 import type { AiUsageSummary } from "@/src/types/ai";
+
+function isPendingResult(result: unknown): boolean {
+  return Boolean(
+    result && typeof result === "object" && (result as { status?: string }).status === "pending",
+  );
+}
 
 const DEFAULT_AI_DAILY_LIMIT = 50;
 const DEFAULT_GEMINI_MODEL = "gemini-2.5-flash";
@@ -53,7 +60,7 @@ class SnippetAiService {
       let cached = forceRefresh ? null : await prisma.aiSnippetAnalysis.findUnique({ where: { codeHash } });
 
       if (cached) {
-        if ((cached.result as any)?.status === "pending") {
+        if (isPendingResult(cached.result)) {
           // Another concurrent request is analyzing this snippet. Poll until finished.
           let attempts = 0;
           while (attempts < 60) {
@@ -63,14 +70,14 @@ class SnippetAiService {
               // The other request failed and deleted the pending record.
               break;
             }
-            if ((cached.result as any)?.status !== "pending") {
+            if (!isPendingResult(cached.result)) {
               break;
             }
             attempts++;
           }
         }
 
-        if (cached && (cached.result as any)?.status !== "pending") {
+        if (cached && !isPendingResult(cached.result)) {
           await this.recordUsageEvent({
             cacheHit: true,
             codeHash,
@@ -88,7 +95,7 @@ class SnippetAiService {
           };
         }
 
-        if (cached && (cached.result as any)?.status === "pending") {
+        if (cached && isPendingResult(cached.result)) {
           try {
             await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
           } catch {}
@@ -115,9 +122,9 @@ class SnippetAiService {
           },
         });
         pendingRecordCreated = true;
-      } catch (error: any) {
+      } catch (error) {
         // If codeHash already exists due to unique constraint, another request created it concurrently
-        if (error.code === "P2002") {
+        if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2002") {
           let attempts = 0;
           while (attempts < 60) {
             await new Promise((resolve) => setTimeout(resolve, 500));
@@ -125,13 +132,13 @@ class SnippetAiService {
             if (!cached) {
               break;
             }
-            if ((cached.result as any)?.status !== "pending") {
+            if (!isPendingResult(cached.result)) {
               break;
             }
             attempts++;
           }
 
-          if (cached && (cached.result as any)?.status !== "pending") {
+          if (cached && !isPendingResult(cached.result)) {
             await this.recordUsageEvent({
               cacheHit: true,
               codeHash,
@@ -149,7 +156,7 @@ class SnippetAiService {
             };
           }
 
-          if (cached && (cached.result as any)?.status === "pending") {
+          if (cached && isPendingResult(cached.result)) {
             try {
               await prisma.aiSnippetAnalysis.delete({ where: { codeHash } });
             } catch {}
@@ -267,7 +274,7 @@ class SnippetAiService {
         } catch {}
       }
 
-      let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
+      const cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
         where: { targetType: "tests", targetId: snippet.id, locale, codeHash }
       });
 
@@ -380,7 +387,7 @@ class SnippetAiService {
         } catch {}
       }
 
-      let cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
+      const cached = forceRefresh ? null : await prisma.aiGeneratedDoc.findFirst({
         where: { targetType: "documentation", targetId: snippet.id, locale, codeHash }
       });
 

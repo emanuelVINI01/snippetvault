@@ -4,9 +4,9 @@ O objetivo é transformar a landing page atual em uma página mais robusta e inf
 
 ## Mudanças Propostas
 
-### Landing Page ([app/page.tsx](file:///home/emanuel/Secret%C3%A1ria/devs/snippetvault/app/page.tsx))
+### Landing Page ([app/page.tsx](./app/page.tsx))
 
-#### [MODIFY] [page.tsx](file:///home/emanuel/Secret%C3%A1ria/devs/snippetvault/app/page.tsx)
+#### [MODIFY] [page.tsx](./app/page.tsx)
 - **Seção de Features**: Adicionar um grid detalhando Busca Instantânea, Organização por Tags, Suporte Multi-Linguagem, Segurança (Vault), Acesso de Qualquer Lugar e Foco em Desenvolvedores.
 - **Seção "Como Funciona"**: Um passo-a-passo visual (Login -> Salvar -> Buscar).
 - **Seção de Pré-visualização de Código**: Um bloco de código "vivo" demonstrando o realismo do editor/visualizador.

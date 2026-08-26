@@ -1,8 +1,8 @@
 "use client";
 
-import { Keyboard } from "lucide-react";
 import Link from "next/link";
 import { useLanguage } from "@/src/context/LanguageContext";
+import LogoMark from "@/src/components/shared/brand/LogoMark";
 
 export default function FooterBrand() {
   const { t } = useLanguage();
@@ -10,8 +10,8 @@ export default function FooterBrand() {
   return (
     <div className="max-w-md">
       <Link href="/" className="inline-flex items-center gap-3 text-dracula-fg">
-        <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-dracula-purple/40 bg-dracula-purple/10 shadow-[0_0_22px_rgba(189,147,249,0.18)]">
-          <Keyboard className="h-5 w-5 text-dracula-purple" />
+        <span className="flex h-10 w-10 items-center justify-center rounded-lg shadow-[0_0_22px_rgba(189,147,249,0.18)]">
+          <LogoMark size={40} />
         </span>
         <span className="font-semibold tracking-tight">{t.common.appName}</span>
       </Link>

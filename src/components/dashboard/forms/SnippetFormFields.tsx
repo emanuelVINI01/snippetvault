@@ -2,7 +2,6 @@
 
 import { useLanguage } from "@/src/context/LanguageContext";
 import type { useSnippetForm } from "@/src/hooks/snippets/use-snippet-form";
-import PublicSnippetToggle from "./PublicSnippetToggle";
 import SnippetCodeField from "./SnippetCodeField";
 import SnippetTextField from "./SnippetTextField";
 import SnippetTitleLanguageFields from "./SnippetTitleLanguageFields";

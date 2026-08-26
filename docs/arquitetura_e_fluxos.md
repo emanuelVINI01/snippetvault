@@ -25,7 +25,7 @@ sequenceDiagram
     App-->>Usuario: Retorna Cookie de Sessão e redireciona para /dashboard
 ```
 
-* **Restrição de Acesso:** Rotas privadas de API e a página `/dashboard` verificam a sessão do usuário usando a função [getAuthenticatedUserId](file:///home/emanuel/%C3%81rea%20de%20trabalho/devs_ntx/snippetvault/src/lib/api/auth.ts). Requisições sem sessão válida recebem resposta `401 Unauthorized`.
+* **Restrição de Acesso:** Rotas privadas de API e a página `/dashboard` verificam a sessão do usuário usando a função [getAuthenticatedUserId](../src/lib/api/auth.ts). Requisições sem sessão válida recebem resposta `401 Unauthorized`.
 
 ---
 
@@ -35,8 +35,8 @@ Quando um usuário abre o assistente de IA ou visualiza um snippet público, a a
 
 ### Passo 2.1: Normalização e Hashing de Código
 Para evitar que diferenças de quebra de linha (Windows `\r\n` vs Linux `\n`) ou espaços no final do arquivo alterem a assinatura do código, o SnippetVault executa:
-1. **Normalização:** A função [normalizeCodeForHash](file:///home/emanuel/%C3%81rea%20de%20trabalho/devs_ntx/snippetvault/src/services/ai/snippet-ai-service.ts#L161) substitui todos os caracteres `\r\n` por `\n` e executa um `.trim()` no código para limpar espaços vazios no início e final do script.
-2. **Hash SHA-256:** A função [getSnippetCodeHash](file:///home/emanuel/%C3%81rea%20de%20trabalho/devs_ntx/snippetvault/src/services/ai/snippet-ai-service.ts#L165) gera um hash SHA-256 único e curto (64 caracteres) que identifica univocamente aquela estrutura de código.
+1. **Normalização:** A função [normalizeCodeForHash](../src/services/ai/snippet-ai-service.ts) substitui todos os caracteres `\r\n` por `\n` e executa um `.trim()` no código para limpar espaços vazios no início e final do script.
+2. **Hash SHA-256:** A função [getSnippetCodeHash](../src/services/ai/snippet-ai-service.ts) gera um hash SHA-256 único e curto (64 caracteres) que identifica univocamente aquela estrutura de código.
 
 ---
 
@@ -102,14 +102,14 @@ As rotas da Vercel no plano gratuito têm um tempo máximo de resposta padrão d
 ```typescript
 export const maxDuration = 60;
 ```
-no arquivo [app/api/ai/snippets/[id]/route.ts](file:///home/emanuel/%C3%81rea%20de%20trabalho/devs_ntx/snippetvault/app/api/ai/snippets/%5Bid%5D/route.ts). Isso instrui a Vercel a estender a duração limite da função serveless para 60 segundos, prevenindo erros de Gateway Timeout 504.
+no arquivo [app/api/ai/snippets/[id]/route.ts](../app/api/ai/snippets/[id]/route.ts). Isso instrui a Vercel a estender a duração limite da função serveless para 60 segundos, prevenindo erros de Gateway Timeout 504.
 
 ---
 
 ## 5. Cota Diária de Uso da IA (`AI_DAILY_LIMIT`)
 
 * **Definição:** O limite diário é controlado no arquivo `.env` pela variável `AI_DAILY_LIMIT` (padrão: 50 chamadas).
-* **Cálculo da Cota:** Ao chamar o método [getUsageSummary](file:///home/emanuel/%C3%81rea%20de%20trabalho/devs_ntx/snippetvault/src/services/ai/snippet-ai-service.ts#L81), o sistema busca na tabela `AiUsageEvent` todos os registros com `cacheHit = false` (chamadas que acionaram o Gemini de verdade) associados ao `userId` no período do dia atual (janela que reinicia às `00:00:00 UTC` e vai até `23:59:59 UTC`).
+* **Cálculo da Cota:** Ao chamar o método [getUsageSummary](../src/services/ai/snippet-ai-service.ts), o sistema busca na tabela `AiUsageEvent` todos os registros com `cacheHit = false` (chamadas que acionaram o Gemini de verdade) associados ao `userId` no período do dia atual (janela que reinicia às `00:00:00 UTC` e vai até `23:59:59 UTC`).
 * **Cache Hits são Grátis:** As requisições que encontram o cache no banco de dados registram `cacheHit = true` e **não descontam** da cota diária do usuário.
 * **Bloqueio Limite:** Se o usuário atingir seu limite diário e tentar analisar um snippet novo, o sistema retorna um erro `429 Too Many Requests` com a mensagem explicativa. No entanto, se o snippet solicitado já possuir análise em cache, ela será exibida instantaneamente sem restrições.
 

@@ -41,7 +41,7 @@ export default async function PublicSnippetPage({ params }: SnippetPageProps) {
     where: { codeHash },
   });
 
-  const analysis = aiAnalysisRecord && (aiAnalysisRecord.result as any)?.status !== "pending"
+  const analysis = aiAnalysisRecord && (aiAnalysisRecord.result as { status?: string } | null)?.status !== "pending"
     ? aiSnippetAnalysisSchema.parse(aiAnalysisRecord.result)
     : null;
 

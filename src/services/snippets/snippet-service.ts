@@ -305,6 +305,61 @@ class SnippetRepository {
     });
   }
 
+  getByIdWithCollections(id: string) {
+    return prisma.snippet.findUnique({
+      where: { id },
+      include: {
+        collectionItems: {
+          select: { collectionId: true },
+        },
+      },
+    });
+  }
+
+  findRelatedCandidates(params: {
+    excludeId: string;
+    userId: string | null;
+    language: string;
+    tags: string[];
+    collectionIds: string[];
+  }) {
+    const { excludeId, userId, language, tags, collectionIds } = params;
+    const hasCollections = collectionIds.length > 0;
+
+    return prisma.snippet.findMany({
+      where: {
+        id: { not: excludeId },
+        OR: [
+          { userId: userId || "" },
+          { public: true },
+          { visibility: "public" },
+          { visibility: "unlisted" },
+        ],
+        AND: [
+          {
+            OR: [
+              { language: { equals: language, mode: "insensitive" } },
+              { tags: { hasSome: tags } },
+              ...(hasCollections
+                ? [
+                    {
+                      collectionItems: {
+                        some: {
+                          collectionId: { in: collectionIds },
+                        },
+                      },
+                    },
+                  ]
+                : []),
+            ],
+          },
+        ],
+      },
+      take: 10,
+      orderBy: { createdAt: "desc" },
+    });
+  }
+
   getVariables(snippetId: string, userId: string) {
     return prisma.snippetVariable.findMany({
       where: {

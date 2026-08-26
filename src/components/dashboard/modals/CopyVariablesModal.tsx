@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { X, Eye, EyeOff, Check, Copy } from "lucide-react";
+import React, { useState } from "react";
+import { Eye, EyeOff, Check, Copy } from "lucide-react";
 import Modal from "./Modal";
 
 interface CopyVariablesModalProps {
@@ -19,8 +19,12 @@ export default function CopyVariablesModal({
   const [showMask, setShowMask] = useState<Record<string, boolean>>({});
   const [copied, setCopied] = useState(false);
 
-  // Initialize values
-  useEffect(() => {
+  // Reset the form fields whenever the modal transitions from closed to open.
+  // (Adjusting state during render on a prop change, per React's guidance -
+  // https://react.dev/learn/you-might-not-need-an-effect - instead of an effect.)
+  const [wasOpen, setWasOpen] = useState(isOpen);
+  if (isOpen !== wasOpen) {
+    setWasOpen(isOpen);
     if (isOpen) {
       const initialValues: Record<string, string> = {};
       const initialMask: Record<string, boolean> = {};
@@ -28,23 +32,18 @@ export default function CopyVariablesModal({
         initialValues[v] = "";
         // Auto-mask sensitive field names
         const lower = v.toLowerCase();
-        if (
+        initialMask[v] =
           lower.includes("key") ||
           lower.includes("pass") ||
           lower.includes("pwd") ||
           lower.includes("token") ||
-          lower.includes("secret")
-        ) {
-          initialMask[v] = true;
-        } else {
-          initialMask[v] = false;
-        }
+          lower.includes("secret");
       });
       setValues(initialValues);
       setShowMask(initialMask);
       setCopied(false);
     }
-  }, [isOpen, variables]);
+  }
 
   const handleChange = (name: string, val: string) => {
     setValues((prev) => ({ ...prev, [name]: val }));

@@ -24,7 +24,7 @@ Toda vez que um snippet é criado ou editado (por exemplo, quando o usuário alt
 * **Restauração Segura:** O usuário pode navegar pelo histórico e clicar em "Restaurar". Ao fazer isso, o sistema tira um snapshot do estado atual (gerando uma nova versão) e restaura o código e metadados da versão antiga selecionada.
 
 ### Visualizador de Diferenças (Diff Viewer):
-Construímos um algoritmo nativo de LCS (Longest Common Subsequence) em TypeScript puro no componente [CodeDiffViewer](file:///home/emanuel/Área de trabalho/devs_ntx/snippetvault/src/components/dashboard/editor/CodeDiffViewer.tsx). Ele compara linha por linha dois textos e gera um diff visual de adições e remoções no estilo Git:
+Construímos um algoritmo nativo de LCS (Longest Common Subsequence) em TypeScript puro no componente [CodeDiffViewer](../src/components/dashboard/editor/CodeDiffViewer.tsx). Ele compara linha por linha dois textos e gera um diff visual de adições e remoções no estilo Git:
 * Linhas adicionadas recebem fundo verde e sinal de `+`.
 * Linhas removidas recebem fundo vermelho e sinal de `-`.
 * Linhas idênticas são exibidas normalmente sem marcações.
@@ -35,7 +35,7 @@ Construímos um algoritmo nativo de LCS (Longest Common Subsequence) em TypeScri
 
 ### Como funciona:
 Se o código do seu snippet contém variáveis no formato `{{NOME_DA_VARIAVEL}}` (ex: `const token = "{{API_TOKEN}}"`), o sistema detecta automaticamente esses placeholders.
-1. **Modal de Cópia Inteligente:** Em vez de copiar o código cru, ao clicar em "Copiar com Variáveis", abre-se o [CopyVariablesModal](file:///home/emanuel/Área de trabalho/devs_ntx/snippetvault/src/components/dashboard/modals/CopyVariablesModal.tsx).
+1. **Modal de Cópia Inteligente:** Em vez de copiar o código cru, ao clicar em "Copiar com Variáveis", abre-se o [CopyVariablesModal](../src/components/dashboard/modals/CopyVariablesModal.tsx).
 2. **Preenchimento Temporário:** O usuário digita os valores para cada variável.
 3. **Mecanismo de Máscara (Segurança):** Variáveis que contêm termos sensíveis como `KEY`, `TOKEN`, `PASSWORD`, `SECRET`, `PWD` ou `PASS` em seu nome têm seu campo do formulário ocultado com bolinhas (`type="password"`) para evitar exposição visual na tela (ombro-a-ombro/shoulder surfing).
 4. **Cópia Substituída:** Os valores digitados são injetados temporariamente no código antes de copiá-lo para a área de transferência do usuário, mantendo o código original inalterado no banco de dados.

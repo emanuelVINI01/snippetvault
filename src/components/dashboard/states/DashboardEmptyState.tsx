@@ -17,7 +17,7 @@ export default function DashboardEmptyState({ onCreate }: DashboardEmptyStatePro
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -12 }}
-      className="flex flex-1 flex-col items-center justify-center gap-5 py-24 text-center"
+      className="flex flex-1 flex-col items-center justify-center gap-5 rounded-xl border border-dashed border-dracula-card py-24 text-center"
     >
       <div className="flex h-16 w-16 items-center justify-center rounded-2xl border border-dracula-card bg-dracula-card/50">
         <Package className="h-8 w-8 text-dracula-comment" />
