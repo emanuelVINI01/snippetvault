@@ -12,25 +12,44 @@ import { cache } from "react";
 import { prisma } from "@/src/prisma";
 import { getSnippetCodeHash, normalizeCodeForHash } from "@/src/services/ai/snippet-ai-service";
 import { aiSnippetAnalysisSchema } from "@/src/lib/validations/ai";
+import type { PublicSnippetSource } from "@/src/types/public-snippet";
 
 type SnippetPageProps = {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ token?: string }>;
 };
 
 const getPublicSnippet = cache(async (id: string) => {
   return SnippetService.getPublicById(id);
 });
 
-export async function generateMetadata({ params }: SnippetPageProps): Promise<Metadata> {
+const getSnippetByToken = cache(async (token: string) => {
+  return SnippetService.getSnippetByShareToken(token);
+});
+
+// A valid, non-expired share token authorizes access to a private snippet;
+// the token itself is the proof, so this deliberately bypasses `getPublicById`'s
+// visibility filter. Falls back to the normal public lookup otherwise.
+async function resolveSnippet(id: string, token?: string): Promise<PublicSnippetSource | null> {
+  if (token) {
+    const shared = await getSnippetByToken(token);
+    if (shared && shared.id === id) return shared as PublicSnippetSource;
+  }
+  return (await getPublicSnippet(id)) as PublicSnippetSource | null;
+}
+
+export async function generateMetadata({ params, searchParams }: SnippetPageProps): Promise<Metadata> {
   const { id } = await params;
-  const snippet = await getPublicSnippet(id);
+  const { token } = await searchParams;
+  const snippet = await resolveSnippet(id, token);
 
   return snippet ? getPublicSnippetMetadata(snippet) : getMissingSnippetMetadata();
 }
 
-export default async function PublicSnippetPage({ params }: SnippetPageProps) {
+export default async function PublicSnippetPage({ params, searchParams }: SnippetPageProps) {
   const { id } = await params;
-  const snippet = await getPublicSnippet(id);
+  const { token } = await searchParams;
+  const snippet = await resolveSnippet(id, token);
 
   if (!snippet) {
     notFound();

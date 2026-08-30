@@ -7,7 +7,7 @@ class LanguagePreferenceService {
     const storedLanguage = this.getStored();
     if (storedLanguage) return storedLanguage;
 
-    return navigator.language.toLowerCase().startsWith("en") ? "en" : "pt";
+    return navigator.language.toLowerCase().startsWith("pt") ? "pt" : "en";
   }
 
   save(language: Language) {

@@ -8,14 +8,26 @@ import { getSnippetUrl } from "@/src/utils/snippets/routes";
 
 interface ShareButtonProps {
   snippetId: string;
+  visibility?: "private" | "unlisted" | "public";
   className?: string;
   iconSize?: number;
 }
 
-export default function ShareButton({ snippetId, className, iconSize = 14 }: ShareButtonProps) {
+export default function ShareButton({ snippetId, visibility = "public", className, iconSize = 14 }: ShareButtonProps) {
   const { t } = useLanguage();
   const { copied, copy } = useClipboardAction({
-    getText: () => getSnippetUrl(snippetId, window.location.origin),
+    getText: async () => {
+      const baseUrl = getSnippetUrl(snippetId, window.location.origin);
+
+      if (visibility !== "private") return baseUrl;
+
+      // Private snippets have no public route — mint/reuse a share token so the
+      // link itself carries the authorization to view it.
+      const res = await fetch(`/api/snippets/${snippetId}/share-token`, { method: "POST" });
+      if (!res.ok) throw new Error("Failed to generate share token");
+      const { shareToken } = await res.json();
+      return `${baseUrl}?token=${shareToken}`;
+    },
   });
 
   return (

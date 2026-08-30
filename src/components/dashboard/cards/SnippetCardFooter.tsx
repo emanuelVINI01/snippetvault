@@ -59,7 +59,7 @@ function SnippetActions({
   return (
     <div className="flex shrink-0 items-center gap-1 opacity-100 transition-opacity sm:opacity-0 sm:group-hover:opacity-100">
       <CopyButton content={snippet.code} iconSize={14} />
-      {snippet.public && <ShareButton snippetId={snippet.id} iconSize={14} />}
+      <ShareButton snippetId={snippet.id} visibility={snippet.visibility} iconSize={14} />
       <button
         onClick={openAi}
         className="rounded-lg p-1.5 text-dracula-comment transition-colors hover:bg-dracula-pink/10 hover:text-dracula-pink"

@@ -16,13 +16,12 @@ export default function PublicSnippetActions({ snippet }: PublicSnippetActionsPr
           <Code2 className="h-4 w-4" />
           {snippet.language}
         </div>
-        {snippet.public && (
-          <ShareButton
-            snippetId={snippet.id}
-            iconSize={18}
-            className="border border-dracula-card/60 bg-dracula-card/30 p-2"
-          />
-        )}
+        <ShareButton
+          snippetId={snippet.id}
+          visibility={snippet.visibility}
+          iconSize={18}
+          className="border border-dracula-card/60 bg-dracula-card/30 p-2"
+        />
       </div>
       <SnippetTags tags={snippet.tags} />
     </div>

@@ -12,6 +12,7 @@ export interface PublicSnippetView {
   description?: string | null;
   tags: string[];
   public: boolean;
+  visibility: "private" | "unlisted" | "public";
   createdAt: string;
   user?: PublicSnippetAuthor | null;
 }

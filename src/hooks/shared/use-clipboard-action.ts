@@ -3,7 +3,7 @@
 import { MouseEvent, MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
 
 interface ClipboardActionOptions {
-  getText: () => string;
+  getText: () => string | Promise<string>;
   resetDelayMs?: number;
 }
 
@@ -22,7 +22,7 @@ export function useClipboardAction({
       event.stopPropagation();
 
       try {
-        await navigator.clipboard.writeText(getText());
+        await navigator.clipboard.writeText(await getText());
         setCopied(true);
         scheduleReset(resetTimer, resetDelayMs, setCopied);
       } catch {

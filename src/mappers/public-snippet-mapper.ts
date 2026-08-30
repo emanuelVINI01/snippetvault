@@ -9,6 +9,7 @@ export function mapPublicSnippetView(snippet: PublicSnippetSource): PublicSnippe
     description: snippet.description,
     tags: snippet.tags,
     public: snippet.public,
+    visibility: snippet.visibility,
     createdAt: snippet.createdAt.toISOString(),
     user: snippet.user,
   };
